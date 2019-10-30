@@ -29,13 +29,11 @@ Other basic workflow steps:
   - run `mvn install` in parent project
 - developing the application
   - edit code in the ui module
-  - run `mvn jetty:run` in ui module
-  - open http://localhost:8080/
+  - run `mvn wildfly:run -Pproduction` in ui module (currently dev mode build does not work)
+  - open http://localhost:8080/bookstore-starter-flow-ui-1.1-SNAPSHOT
 - creating a production mode war
   - run `mvn package -Pproduction` in the ui module or in the parent module
 - running in production mode
-  - run `mvn jetty:run -Pproduction` in ui module
-  - open http://localhost:8080/
 
 ### Branching information:
 * `master` the latest version of the starter, using the latest platform version
