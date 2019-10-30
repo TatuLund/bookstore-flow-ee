@@ -1,5 +1,10 @@
 package com.vaadin.samples;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+import com.vaadin.cdi.annotation.NormalRouteScoped;
+import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -15,14 +20,19 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinServletService;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.samples.authentication.AccessControlFactory;
+//import com.vaadin.samples.authentication.AccessControlFactory;
+import com.vaadin.samples.authentication.AccessControl;
 
+//@NormalRouteScoped
+//@RouteScopeOwner(MainLayout.class)
+@Dependent
 public class Menu extends FlexLayout {
 
     private static final String SHOW_TABS = "show-tabs";
     private Tabs tabs;
 
-    public Menu() {
+    @Inject
+    public Menu(AccessControl accessControl) {
         setClassName("menu-bar");
 
         // Button for toggling the menu visibility on small screens
@@ -65,8 +75,7 @@ public class Menu extends FlexLayout {
         // logout menu item
         Button logoutButton = new Button("Logout",
                 VaadinIcon.SIGN_OUT.create());
-        logoutButton.addClickListener(event -> AccessControlFactory
-                .getInstance().createAccessControl().signOut());
+        logoutButton.addClickListener(event -> accessControl.signOut());
 
         logoutButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         add(logoutButton);

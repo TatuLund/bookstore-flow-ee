@@ -1,9 +1,14 @@
 package com.vaadin.samples;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.server.ServiceInitEvent;
-import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.samples.authentication.AccessControl;
-import com.vaadin.samples.authentication.AccessControlFactory;
+//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.authentication.LoginScreen;
 
 /**
@@ -12,12 +17,13 @@ import com.vaadin.samples.authentication.LoginScreen;
  * It is registered in a file named
  * com.vaadin.flow.server.VaadinServiceInitListener in META-INF/services.
  */
-public class BookstoreInitListener implements VaadinServiceInitListener {
-    @Override
-    public void serviceInit(ServiceInitEvent initEvent) {
-        final AccessControl accessControl = AccessControlFactory.getInstance()
-                .createAccessControl();
+@VaadinSessionScoped
+public class BookstoreInitListener {
 
+	@Inject
+	AccessControl accessControl;
+	
+    private void onServiceInit(@Observes ServiceInitEvent initEvent) {
         initEvent.getSource().addUIInitListener(uiInitEvent -> {
             uiInitEvent.getUI().addBeforeEnterListener(enterEvent -> {
                 if (!accessControl.isUserSignedIn() && !LoginScreen.class
@@ -25,5 +31,5 @@ public class BookstoreInitListener implements VaadinServiceInitListener {
                     enterEvent.rerouteTo(LoginScreen.class);
             });
         });
-    }
+    }	
 }

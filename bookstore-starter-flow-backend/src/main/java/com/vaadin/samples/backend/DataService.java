@@ -10,7 +10,7 @@ import com.vaadin.samples.backend.mock.MockDataService;
 /**
  * Back-end service interface for retrieving and updating product data.
  */
-public abstract class DataService implements Serializable {
+public interface DataService extends Serializable {
 
     public abstract Collection<Product> getAllProducts();
 
@@ -26,8 +26,8 @@ public abstract class DataService implements Serializable {
 
     public abstract void deleteCategory(int categoryId);
 
-    public static DataService get() {
-        return MockDataService.getInstance();
-    }
+//    public static DataService get() {
+//        return MockDataService.getInstance();
+//    }
 
 }

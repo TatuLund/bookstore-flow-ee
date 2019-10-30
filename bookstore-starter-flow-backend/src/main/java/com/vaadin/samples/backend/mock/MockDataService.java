@@ -1,7 +1,12 @@
 package com.vaadin.samples.backend.mock;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
@@ -11,9 +16,10 @@ import com.vaadin.samples.backend.data.Product;
  * Mock data model. This implementation has very simplistic locking and does not
  * notify users of modifications.
  */
-public class MockDataService extends DataService {
+@ApplicationScoped
+public class MockDataService implements DataService {
 
-    private static MockDataService INSTANCE;
+//    private static MockDataService INSTANCE;
 
     private List<Product> products;
     private List<Category> categories;
@@ -27,12 +33,12 @@ public class MockDataService extends DataService {
         nextCategoryId = categories.size() + 1;
     }
 
-    public synchronized static DataService getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new MockDataService();
-        }
-        return INSTANCE;
-    }
+//    public synchronized static DataService getInstance() {
+//        if (INSTANCE == null) {
+//            INSTANCE = new MockDataService();
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public synchronized List<Product> getAllProducts() {

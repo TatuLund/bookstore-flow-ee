@@ -1,12 +1,18 @@
 package com.vaadin.samples.crud;
 
+import com.vaadin.cdi.annotation.NormalRouteScoped;
+import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.UI;
+import com.vaadin.samples.MainLayout;
 import com.vaadin.samples.authentication.AccessControl;
-import com.vaadin.samples.authentication.AccessControlFactory;
+//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
 import java.io.Serializable;
+
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
 /**
  * This class provides an interface for the logical operations between the CRUD
@@ -17,19 +23,30 @@ import java.io.Serializable;
  * the system separately, and to e.g. provide alternative views for the same
  * data.
  */
+//@NormalRouteScoped
+//@RouteScopeOwner(MainLayout.class)
+@Dependent
 public class SampleCrudLogic implements Serializable {
 
     private SampleCrudView view;
 
-    public SampleCrudLogic(SampleCrudView simpleCrudView) {
-        view = simpleCrudView;
+    private DataService dataService;    
+    private AccessControl accessControl; 
+    
+    @Inject
+    public SampleCrudLogic(DataService dataService, AccessControl accessControl) {
+    	this.dataService = dataService;
+    	this.accessControl = accessControl;
     }
 
+    public void setView(SampleCrudView simpleCrudView) {
+    	view = simpleCrudView;
+    }
+    
     public void init() {
         editProduct(null);
         // Hide and disable if not admin
-        if (!AccessControlFactory.getInstance().createAccessControl()
-                .isUserInRole(AccessControl.ADMIN_ROLE_NAME)) {
+        if (!accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)) {
             view.setNewProductEnabled(false);
         }
     }
@@ -73,7 +90,7 @@ public class SampleCrudLogic implements Serializable {
     }
 
     private Product findProduct(int productId) {
-        return DataService.get().getProductById(productId);
+        return dataService.getProductById(productId);
     }
 
     public void saveProduct(Product product) {
@@ -108,8 +125,7 @@ public class SampleCrudLogic implements Serializable {
     }
 
     public void rowSelected(Product product) {
-        if (AccessControlFactory.getInstance().createAccessControl()
-                .isUserInRole(AccessControl.ADMIN_ROLE_NAME)) {
+        if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)) {
             editProduct(product);
         }
     }

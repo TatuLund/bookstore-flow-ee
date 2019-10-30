@@ -10,13 +10,19 @@
 
     <artifactId>bookstore-starter-flow-backend</artifactId>
     <name>bookstore-starter-flow-backend</name>
-    <packaging>jar</packaging>
+    <packaging>ejb</packaging>
 
     <dependencies>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
+
+       	<dependency>
+           	<groupId>javax</groupId>
+           	<artifactId>javaee-api</artifactId>
+           	<scope>provided</scope>
+       	</dependency>
 
         <!-- Testing -->
         <dependency>

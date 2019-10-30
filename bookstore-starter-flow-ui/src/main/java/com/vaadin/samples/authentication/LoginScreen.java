@@ -1,5 +1,7 @@
 package com.vaadin.samples.authentication;
 
+import javax.inject.Inject;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
@@ -24,8 +26,9 @@ public class LoginScreen extends FlexLayout {
 
     private AccessControl accessControl;
 
-    public LoginScreen() {
-        accessControl = AccessControlFactory.getInstance().createAccessControl();
+    @Inject
+    public LoginScreen(AccessControl accessControl) {
+        this.accessControl = accessControl;
         buildUI();
     }
 

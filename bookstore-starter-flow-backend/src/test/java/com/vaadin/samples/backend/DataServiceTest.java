@@ -8,16 +8,18 @@ import com.vaadin.samples.backend.mock.MockDataService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import javax.inject.Inject;
+
 /**
  * Simple unit test for the back-end data service.
  */
 public class DataServiceTest {
 
+	@Inject
     private DataService service;
 
     @Before
     public void setUp() throws Exception {
-        service = MockDataService.getInstance();
     }
 
     @Test

@@ -14,14 +14,23 @@
 
     <dependencies>
         <!-- Versions for these are configured in the parent POM -->
+       	<dependency>
+           	<groupId>javax</groupId>
+           	<artifactId>javaee-api</artifactId>
+           	<scope>provided</scope>
+       	</dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-cdi</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>bookstore-starter-flow-backend</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>bookstore-starter-flow-my-component</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -81,14 +90,22 @@
     <build>
         <defaultGoal>jetty:run</defaultGoal>
         <plugins>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.4.15.v20190215</version>
-                <configuration>
-                    <scanIntervalSeconds>2</scanIntervalSeconds>
-                </configuration>
-            </plugin>
+<!--             <plugin> -->
+<!--                 <groupId>org.eclipse.jetty</groupId> -->
+<!--                 <artifactId>jetty-maven-plugin</artifactId> -->
+<!--                 <version>9.4.15.v20190215</version> -->
+<!--                 <configuration> -->
+<!--                     <scanIntervalSeconds>2</scanIntervalSeconds> -->
+<!--                 </configuration> -->
+<!--             </plugin> -->
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>2.0.0.Final</version>
+				<configuration>
+   					<version>16.0.0.Final</version>
+				</configuration>
+			</plugin>
 
             <!--
                 Take care of synchronizing java dependencies and imports.

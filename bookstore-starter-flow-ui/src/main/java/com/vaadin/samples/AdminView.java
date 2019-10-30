@@ -2,6 +2,11 @@ package com.vaadin.samples;
 
 import java.util.ArrayList;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+import com.vaadin.cdi.annotation.NormalRouteScoped;
+import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -27,6 +32,8 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
  * <p>
  * Allows CRUD operations for the book categories.
  */
+@NormalRouteScoped
+@RouteScopeOwner(MainLayout.class)
 public class AdminView extends VerticalLayout {
 
     public static final String VIEW_NAME = "admin";
@@ -34,11 +41,14 @@ public class AdminView extends VerticalLayout {
     private final IronList<Category> categoriesListing;
     private final ListDataProvider<Category> dataProvider;
     private final Button newCategoryButton;
-
-    public AdminView() {
+    private DataService dataService;
+    
+    @Inject   
+    public AdminView(DataService dataService) {
+    	this.dataService = dataService;
         categoriesListing = new IronList<>();
 
-        dataProvider = new ListDataProvider<Category>(new ArrayList<>(DataService.get().getAllCategories())) {
+        dataProvider = new ListDataProvider<Category>(new ArrayList<>(dataService.getAllCategories())) {
             @Override
             public Object getId(Category item) {
                 return item.getId();
@@ -59,12 +69,13 @@ public class AdminView extends VerticalLayout {
 
     private Component createCategoryEditor(Category category) {
         TextField nameField = new TextField();
+        nameField.addThemeName("yellowBg");
         if (category.getId() < 0) {
             nameField.focus();
         }
 
         Button deleteButton = new Button(VaadinIcon.MINUS_CIRCLE_O.create(), event -> {
-            DataService.get().deleteCategory(category.getId());
+            dataService.deleteCategory(category.getId());
             dataProvider.getItems().remove(category);
             dataProvider.refreshAll();
             Notification.show("Category Deleted.");
@@ -76,7 +87,7 @@ public class AdminView extends VerticalLayout {
         binder.setBean(category);
         binder.addValueChangeListener(event -> {
             if (binder.isValid()) {
-                DataService.get().updateCategory(category);
+                dataService.updateCategory(category);
                 deleteButton.setEnabled(true);
                 newCategoryButton.setEnabled(true);
                 Notification.show("Category Saved.");

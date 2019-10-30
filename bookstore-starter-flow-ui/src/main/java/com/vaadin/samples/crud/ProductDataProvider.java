@@ -3,17 +3,30 @@ package com.vaadin.samples.crud;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+import com.vaadin.cdi.annotation.NormalRouteScoped;
+import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.samples.MainLayout;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
+//@NormalRouteScoped
+//@RouteScopeOwner(MainLayout.class)
+@Dependent
 public class ProductDataProvider extends ListDataProvider<Product> {
 
+	private DataService dataService;
+	
     /** Text filter that can be changed separately. */
     private String filterText = "";
 
-    public ProductDataProvider() {
-        super(DataService.get().getAllProducts());
+	@Inject
+    public ProductDataProvider(DataService dataService) {
+        super(dataService.getAllProducts());
+        this.dataService = dataService;
     }
 
     /**
@@ -25,7 +38,7 @@ public class ProductDataProvider extends ListDataProvider<Product> {
     public void save(Product product) {
         boolean newProduct = product.isNewProduct();
 
-        DataService.get().updateProduct(product);
+        dataService.updateProduct(product);
         if (newProduct) {
             refreshAll();
         } else {
@@ -40,7 +53,7 @@ public class ProductDataProvider extends ListDataProvider<Product> {
      *            the product to be deleted
      */
     public void delete(Product product) {
-        DataService.get().deleteProduct(product.getId());
+        dataService.deleteProduct(product.getId());
         refreshAll();
     }
 

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Version;
+import com.vaadin.samples.HelloWorld;
 import com.vaadin.samples.MainLayout;
 
 @Route(value = "About", layout = MainLayout.class)
@@ -18,6 +19,7 @@ public class AboutView extends HorizontalLayout {
         add(VaadinIcon.INFO_CIRCLE.create());
         add(new Span(" This application is using Vaadin Flow "
                 + Version.getFullVersion() + "."));
+        add(new HelloWorld());
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);

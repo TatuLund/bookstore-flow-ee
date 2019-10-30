@@ -1,5 +1,7 @@
 package com.vaadin.samples;
 
+import javax.inject.Inject;
+
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
@@ -14,7 +16,8 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.samples.about.AboutView;
-import com.vaadin.samples.authentication.AccessControlFactory;
+import com.vaadin.samples.authentication.AccessControl;
+//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.crud.SampleCrudView;
 
 /**
@@ -23,14 +26,20 @@ import com.vaadin.samples.crud.SampleCrudView;
 @Theme(value = Lumo.class)
 @PWA(name = "Bookstore Starter", shortName = "Bookstore")
 @CssImport("./styles/shared-styles.css")
+@CssImport(value = "./styles/vaadin-text-field-yellow-bg.css", themeFor = "vaadin-text-field")
 public class MainLayout extends FlexLayout implements RouterLayout {
-    private Menu menu;
 
+	@Inject
+	private Menu menu;
+	
+	@Inject
+	private AccessControl accessControl;
+	
     public MainLayout() {
         setSizeFull();
         setClassName("main-layout");
 
-        menu = new Menu();
+//        menu = new Menu();
         menu.addView(SampleCrudView.class, SampleCrudView.VIEW_NAME,
                 VaadinIcon.EDIT.create());
         menu.addView(AboutView.class, AboutView.VIEW_NAME,
@@ -45,8 +54,7 @@ public class MainLayout extends FlexLayout implements RouterLayout {
 
         attachEvent.getUI()
                 .addShortcutListener(
-                        () -> AccessControlFactory.getInstance()
-                                .createAccessControl().signOut(),
+                        () -> accessControl.signOut(),
                         Key.KEY_L, KeyModifier.CONTROL);
 
         // add the admin view menu item if/when it is registered dynamically

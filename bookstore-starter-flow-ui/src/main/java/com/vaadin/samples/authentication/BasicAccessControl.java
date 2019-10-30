@@ -1,5 +1,8 @@
 package com.vaadin.samples.authentication;
 
+import javax.enterprise.context.Dependent;
+
+import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -8,6 +11,7 @@ import com.vaadin.flow.server.VaadinSession;
  * accepts any string as a password, and considers the user "admin" as the only
  * administrator.
  */
+@VaadinSessionScoped
 public class BasicAccessControl implements AccessControl {
 
     @Override

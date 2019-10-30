@@ -1,5 +1,7 @@
 package com.vaadin.samples.crud;
 
+import javax.inject.Inject;
+
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
@@ -34,22 +36,27 @@ public class SampleCrudView extends HorizontalLayout
     private ProductForm form;
     private TextField filter;
 
-    private SampleCrudLogic viewLogic = new SampleCrudLogic(this);
+    private SampleCrudLogic viewLogic;
+
     private Button newProduct;
-
-    private ProductDataProvider dataProvider = new ProductDataProvider();
-
-    public SampleCrudView() {
+    
+    private ProductDataProvider dataProvider;
+    
+    @Inject
+    public SampleCrudView(ProductDataProvider dataProvider, DataService dataService, SampleCrudLogic viewLogic) {
+        this.dataProvider = dataProvider;
+        this.viewLogic = viewLogic;
+        viewLogic.setView(this);
         setSizeFull();
         HorizontalLayout topLayout = createTopBar();
-
+        
         grid = new ProductGrid();
         grid.setDataProvider(dataProvider);
         grid.asSingleSelect().addValueChangeListener(
                 event -> viewLogic.rowSelected(event.getValue()));
 
         form = new ProductForm(viewLogic);
-        form.setCategories(DataService.get().getAllCategories());
+        form.setCategories(dataService.getAllCategories());
 
         VerticalLayout barAndGridLayout = new VerticalLayout();
         barAndGridLayout.add(topLayout);
