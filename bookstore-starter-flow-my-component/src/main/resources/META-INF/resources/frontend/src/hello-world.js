@@ -9,11 +9,11 @@ class HelloWorld extends ThemableMixin(PolymerElement) {
 <style include="shared-styles">
                 :host {
                     display: block;
-                    height: 100%;
+                    height: 50px;
                 }
             </style>
 <div>
- Hello World!
+<h1>Bookstore</h1>
 </div>
 `;
     }
