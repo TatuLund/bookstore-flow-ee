@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import com.vaadin.samples.backend.data.Availability;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
+@ApplicationScoped
 public class MockDataGenerator {
     private static int nextCategoryId = 1;
     private static int nextProductId = 1;
@@ -37,7 +40,7 @@ public class MockDataGenerator {
             "speaking to a big audience", "creating software", "giant needles",
             "elephants", "keeping your wife happy" };
 
-    static List<Category> createCategories() {
+    public List<Category> createCategories() {
         List<Category> categories = new ArrayList<Category>();
         for (String name : categoryNames) {
             Category c = createCategory(name);
@@ -47,7 +50,7 @@ public class MockDataGenerator {
 
     }
 
-    static List<Product> createProducts(List<Category> categories) {
+    public List<Product> createProducts(List<Category> categories) {
         List<Product> products = new ArrayList<Product>();
         for (int i = 0; i < 100; i++) {
             Product p = createProduct(categories);
@@ -57,14 +60,14 @@ public class MockDataGenerator {
         return products;
     }
 
-    private static Category createCategory(String name) {
+    private Category createCategory(String name) {
         Category c = new Category();
         c.setId(nextCategoryId++);
         c.setName(name);
         return c;
     }
 
-    private static Product createProduct(List<Category> categories) {
+    private Product createProduct(List<Category> categories) {
         Product p = new Product();
         p.setId(nextProductId++);
         p.setProductName(generateName());
@@ -80,7 +83,7 @@ public class MockDataGenerator {
         return p;
     }
 
-    private static Set<Category> getCategory(List<Category> categories,
+    private Set<Category> getCategory(List<Category> categories,
             int min, int max) {
         int nr = random.nextInt(max) + min;
         HashSet<Category> productCategories = new HashSet<Category>();
@@ -92,7 +95,7 @@ public class MockDataGenerator {
         return productCategories;
     }
 
-    private static String generateName() {
+    private String generateName() {
         return word1[random.nextInt(word1.length)] + " "
                 + word2[random.nextInt(word2.length)];
     }

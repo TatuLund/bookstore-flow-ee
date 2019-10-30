@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.vaadin.samples.backend.DataService;
@@ -26,9 +27,10 @@ public class MockDataService implements DataService {
     private int nextProductId = 0;
     private int nextCategoryId = 0;
 
-    private MockDataService() {
-        categories = MockDataGenerator.createCategories();
-        products = MockDataGenerator.createProducts(categories);
+    @Inject    
+    public MockDataService(MockDataGenerator mockDataGenerator) {
+        categories = mockDataGenerator.createCategories();
+        products = mockDataGenerator.createProducts(categories);
         nextProductId = products.size() + 1;
         nextCategoryId = categories.size() + 1;
     }

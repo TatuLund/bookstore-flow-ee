@@ -6,7 +6,7 @@
     <groupId>com.vaadin</groupId>
     <artifactId>bookstore-starter-flow</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>bookstore-starter-flow-parent</name>
 
     <properties>

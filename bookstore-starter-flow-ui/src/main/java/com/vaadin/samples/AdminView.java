@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import com.vaadin.cdi.annotation.NormalRouteScoped;
 import com.vaadin.cdi.annotation.RouteScopeOwner;
+import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -32,7 +33,7 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
  * <p>
  * Allows CRUD operations for the book categories.
  */
-@NormalRouteScoped
+@RouteScoped
 @RouteScopeOwner(MainLayout.class)
 public class AdminView extends VerticalLayout {
 

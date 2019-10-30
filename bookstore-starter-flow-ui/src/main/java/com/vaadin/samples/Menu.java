@@ -20,11 +20,8 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinServletService;
 import com.vaadin.flow.server.VaadinSession;
-//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.authentication.AccessControl;
 
-//@NormalRouteScoped
-//@RouteScopeOwner(MainLayout.class)
 @Dependent
 public class Menu extends FlexLayout {
 

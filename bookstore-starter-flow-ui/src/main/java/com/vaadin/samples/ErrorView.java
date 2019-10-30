@@ -1,7 +1,5 @@
 package com.vaadin.samples;
 
-import com.vaadin.cdi.annotation.NormalRouteScoped;
-import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
  * View shown when trying to navigate to a view that does not exist using
  */
 
-//@NormalRouteScoped
-//@RouteScopeOwner(MainLayout.class)
 @ParentLayout(MainLayout.class)
 public class ErrorView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
 

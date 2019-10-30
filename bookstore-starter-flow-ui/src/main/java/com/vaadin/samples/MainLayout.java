@@ -17,7 +17,6 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.samples.about.AboutView;
 import com.vaadin.samples.authentication.AccessControl;
-//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.crud.SampleCrudView;
 
 /**
@@ -29,17 +28,17 @@ import com.vaadin.samples.crud.SampleCrudView;
 @CssImport(value = "./styles/vaadin-text-field-yellow-bg.css", themeFor = "vaadin-text-field")
 public class MainLayout extends FlexLayout implements RouterLayout {
 
-	@Inject
 	private Menu menu;
 	
-	@Inject
 	private AccessControl accessControl;
 	
-    public MainLayout() {
+	@Inject
+    public MainLayout(Menu menu, AccessControl accessControl) {
+		this.menu = menu;
+		this.accessControl = accessControl;
         setSizeFull();
         setClassName("main-layout");
 
-//        menu = new Menu();
         menu.addView(SampleCrudView.class, SampleCrudView.VIEW_NAME,
                 VaadinIcon.EDIT.create());
         menu.addView(AboutView.class, AboutView.VIEW_NAME,

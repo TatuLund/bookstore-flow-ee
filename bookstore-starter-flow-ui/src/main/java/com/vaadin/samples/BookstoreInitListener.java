@@ -1,14 +1,10 @@
 package com.vaadin.samples;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.samples.authentication.AccessControl;
-//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.authentication.LoginScreen;
 
 /**
@@ -17,7 +13,6 @@ import com.vaadin.samples.authentication.LoginScreen;
  * It is registered in a file named
  * com.vaadin.flow.server.VaadinServiceInitListener in META-INF/services.
  */
-@VaadinSessionScoped
 public class BookstoreInitListener {
 
 	@Inject

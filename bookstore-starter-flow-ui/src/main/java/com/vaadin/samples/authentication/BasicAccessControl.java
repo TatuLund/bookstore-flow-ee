@@ -1,7 +1,5 @@
 package com.vaadin.samples.authentication;
 
-import javax.enterprise.context.Dependent;
-
 import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
