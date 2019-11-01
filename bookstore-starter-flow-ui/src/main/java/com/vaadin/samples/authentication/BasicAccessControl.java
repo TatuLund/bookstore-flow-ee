@@ -1,5 +1,7 @@
 package com.vaadin.samples.authentication;
 
+import javax.inject.Inject;
+
 import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
@@ -12,6 +14,9 @@ import com.vaadin.flow.server.VaadinSession;
 @VaadinSessionScoped
 public class BasicAccessControl implements AccessControl {
 
+	@Inject
+	CurrentUser currentUser;
+	
     @Override
     public boolean signIn(String username, String password) {
         if (username == null || username.isEmpty())
@@ -20,13 +25,13 @@ public class BasicAccessControl implements AccessControl {
         if (!username.equals(password))
             return false;
 
-        CurrentUser.set(username);
+        currentUser.set(username);
         return true;
     }
 
     @Override
     public boolean isUserSignedIn() {
-        return !CurrentUser.get().isEmpty();
+        return !currentUser.get().isEmpty();
     }
 
     @Override
@@ -42,7 +47,7 @@ public class BasicAccessControl implements AccessControl {
 
     @Override
     public String getPrincipalName() {
-        return CurrentUser.get();
+        return currentUser.get();
     }
 
     @Override
