@@ -15,8 +15,11 @@ The project can be imported into the IDE of your choice, with Java 8 or 11 insta
 The project consists of the following three modules:
 
 - parent project: common metadata and configuration
-- bookstore-starter-flow-ui: main application module that includes views
-- bookstore-starter-flow-backend: POJO classes and mock services being used in the ui
+- bookstore-starter-flow-ui: main application module that includes views (war)
+- bookstore-starter-flow-my-component: sub module for custom components (jar)
+- bookstore-starter-flow-backend: POJO classes and mock services being used in the ui (jar)
+- bookstore-starter-flow-it: TestBench test examples (ToDo: update to work)
+- bookstore-starter-flow-ear: EAR packaging
 
 ## Workflow
 
