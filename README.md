@@ -29,15 +29,12 @@ Other basic workflow steps:
   - run `mvn install` in parent project
 - developing the application
   - edit code in the ui module
-  - run `mvn wildfly:run -Pproduction` in ui module (currently dev mode build does not work)
+  - run `mvn wildfly:run` in ui module (currently dev mode build does not work, hence production settings used)
   - open http://localhost:8080/bookstore-starter-flow-ui-1.1-SNAPSHOT
 - creating a production mode war
-  - run `mvn package -Pproduction` in the ui module or in the parent module
+  - run `mvn package` in the ui module or in the parent module
 - running in production mode
-
+  - production mode is used by default
+   
 ### Branching information:
 * `master` the latest version of the starter, using the latest platform version
-* `v10` the version for Vaadin 10
-* `v11` the version for Vaadin 11
-* `v12` the version for Vaadin 12
-* `v13` the version for Vaadin 13

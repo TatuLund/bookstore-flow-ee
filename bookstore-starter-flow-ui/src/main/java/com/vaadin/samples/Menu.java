@@ -3,8 +3,6 @@ package com.vaadin.samples;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.vaadin.cdi.annotation.NormalRouteScoped;
-import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

@@ -18,6 +18,8 @@ public class BookstoreInitListener {
 	@Inject
 	AccessControl accessControl;
 	
+	// ServiceInitEvent CDI event is dispatched by CDI add-on upon 
+	// VaadinService start, no listener registration is needed when using this
     private void onServiceInit(@Observes ServiceInitEvent initEvent) {
         initEvent.getSource().addUIInitListener(uiInitEvent -> {
             uiInitEvent.getUI().addBeforeEnterListener(enterEvent -> {

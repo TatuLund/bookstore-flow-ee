@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
-import com.vaadin.samples.backend.mock.MockDataService;
 
 /**
  * Back-end service interface for retrieving and updating product data.
@@ -25,9 +24,5 @@ public interface DataService extends Serializable {
     public abstract void updateCategory(Category category);
 
     public abstract void deleteCategory(int categoryId);
-
-//    public static DataService get() {
-//        return MockDataService.getInstance();
-//    }
 
 }

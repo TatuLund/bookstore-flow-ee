@@ -3,23 +3,22 @@ package com.vaadin.samples.backend;
 import org.junit.Before;
 import org.junit.Test;
 import com.vaadin.samples.backend.data.Product;
+import com.vaadin.samples.backend.mock.MockDataGenerator;
 import com.vaadin.samples.backend.mock.MockDataService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
-import javax.inject.Inject;
 
 /**
  * Simple unit test for the back-end data service.
  */
 public class DataServiceTest {
 
-	@Inject
-    private DataService service;
+    private MockDataService service;
 
     @Before
     public void setUp() throws Exception {
+    	service = new MockDataService(new MockDataGenerator());
     }
 
     @Test

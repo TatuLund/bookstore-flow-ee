@@ -12,6 +12,10 @@
     <name>bookstore-starter-flow-ui</name>
     <packaging>war</packaging>
 
+    <properties>
+        <vaadin.productionMode>true</vaadin.productionMode>
+    </properties>
+
     <dependencies>
         <!-- Versions for these are configured in the parent POM -->
        	<dependency>
@@ -44,6 +48,11 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-server-production-mode</artifactId>
         </dependency>
 
         <dependency>
@@ -90,14 +99,6 @@
     <build>
         <defaultGoal>jetty:run</defaultGoal>
         <plugins>
-<!--             <plugin> -->
-<!--                 <groupId>org.eclipse.jetty</groupId> -->
-<!--                 <artifactId>jetty-maven-plugin</artifactId> -->
-<!--                 <version>9.4.15.v20190215</version> -->
-<!--                 <configuration> -->
-<!--                     <scanIntervalSeconds>2</scanIntervalSeconds> -->
-<!--                 </configuration> -->
-<!--             </plugin> -->
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-maven-plugin</artifactId>
@@ -119,6 +120,7 @@
                     <execution>
                         <goals>
                             <goal>prepare-frontend</goal>
+                            <goal>build-frontend</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -126,38 +128,38 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <!-- Production mode is activated using -Pproduction -->
-            <id>production</id>
-            <properties>
-                <vaadin.productionMode>true</vaadin.productionMode>
-            </properties>
+<!--     <profiles> -->
+<!--         <profile> -->
+<!--             Production mode is activated using -Pproduction -->
+<!--             <id>production</id> -->
+<!--             <properties> -->
+<!--                 <vaadin.productionMode>true</vaadin.productionMode> -->
+<!--             </properties> -->
 
-            <dependencies>
-                <dependency>
-                    <groupId>com.vaadin</groupId>
-                    <artifactId>flow-server-production-mode</artifactId>
-                </dependency>
-            </dependencies>
+<!--             <dependencies> -->
+<!--                 <dependency> -->
+<!--                     <groupId>com.vaadin</groupId> -->
+<!--                     <artifactId>flow-server-production-mode</artifactId> -->
+<!--                 </dependency> -->
+<!--             </dependencies> -->
 
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.vaadin</groupId>
-                        <artifactId>vaadin-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>build-frontend</goal>
-                                </goals>
-                                <phase>compile</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+<!--             <build> -->
+<!--                 <plugins> -->
+<!--                     <plugin> -->
+<!--                         <groupId>com.vaadin</groupId> -->
+<!--                         <artifactId>vaadin-maven-plugin</artifactId> -->
+<!--                         <executions> -->
+<!--                             <execution> -->
+<!--                                 <goals> -->
+<!--                                     <goal>build-frontend</goal> -->
+<!--                                 </goals> -->
+<!--                                 <phase>compile</phase> -->
+<!--                             </execution> -->
+<!--                         </executions> -->
+<!--                     </plugin> -->
+<!--                 </plugins> -->
+<!--             </build> -->
+<!--         </profile> -->
+<!--     </profiles> -->
 
 </project>

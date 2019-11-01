@@ -1,13 +1,10 @@
 package com.vaadin.samples.backend.mock;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
@@ -20,27 +17,18 @@ import com.vaadin.samples.backend.data.Product;
 @ApplicationScoped
 public class MockDataService implements DataService {
 
-//    private static MockDataService INSTANCE;
-
     private List<Product> products;
     private List<Category> categories;
     private int nextProductId = 0;
     private int nextCategoryId = 0;
 
-    @Inject    
-    public MockDataService(MockDataGenerator mockDataGenerator) {
+    @Inject
+	public MockDataService(MockDataGenerator mockDataGenerator) {
         categories = mockDataGenerator.createCategories();
         products = mockDataGenerator.createProducts(categories);
         nextProductId = products.size() + 1;
         nextCategoryId = categories.size() + 1;
     }
-
-//    public synchronized static DataService getInstance() {
-//        if (INSTANCE == null) {
-//            INSTANCE = new MockDataService();
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public synchronized List<Product> getAllProducts() {

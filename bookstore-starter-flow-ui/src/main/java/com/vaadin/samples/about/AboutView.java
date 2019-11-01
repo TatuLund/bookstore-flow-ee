@@ -10,7 +10,7 @@ import com.vaadin.flow.server.Version;
 import com.vaadin.samples.HelloWorld;
 import com.vaadin.samples.MainLayout;
 
-@Route(value = "About", layout = MainLayout.class)
+@Route(value = "About", layout = MainLayout.class) // Routes are automatically managed beans
 @PageTitle("About")
 public class AboutView extends VerticalLayout {
 

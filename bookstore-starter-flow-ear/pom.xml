@@ -31,6 +31,10 @@
 			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
+        <dependency>
+             <groupId>com.vaadin</groupId>
+             <artifactId>flow-server-production-mode</artifactId>
+        </dependency>
 	</dependencies>
   
 	<build>
@@ -44,21 +48,18 @@
 					<version>7</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
-						<webModule>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>bookstore-starter-flow-ui</artifactId>
-							<uri>bookstore-starter-flow-ui.war</uri>
-							<bundleFileName>bookstore-starter-flow-ui.war</bundleFileName>
-							<contextRoot>/bookstore</contextRoot>
-						</webModule>
-						<jarModule>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>bookstore-starter-flow-my-component</artifactId>
-						</jarModule>
 						<jarModule>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>bookstore-starter-flow-backend</artifactId>
 						</jarModule>
+						<jarModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>bookstore-starter-flow-my-component</artifactId>
+						</jarModule>
+						<webModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>bookstore-starter-flow-ui</artifactId>
+						</webModule>
 					</modules>					
 				</configuration>
 			</plugin>
@@ -70,19 +71,6 @@
    					<version>15.0.0.Final</version>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-frontend</goal>
-                            <goal>build-frontend</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 		</plugins>
 	</build>
 </project>

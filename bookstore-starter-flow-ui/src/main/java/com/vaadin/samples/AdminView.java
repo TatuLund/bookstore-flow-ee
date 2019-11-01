@@ -2,10 +2,8 @@ package com.vaadin.samples;
 
 import java.util.ArrayList;
 
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.vaadin.cdi.annotation.NormalRouteScoped;
 import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Component;
@@ -22,7 +20,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.Route;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
 
