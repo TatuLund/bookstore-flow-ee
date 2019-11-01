@@ -29,10 +29,10 @@ Other basic workflow steps:
   - run `mvn install` in parent project
 - developing the application
   - edit code in the ui module
-  - run `mvn wildfly:run` in ui module (currently dev mode build does not work, hence production settings used)
-  - open http://localhost:8080/bookstore-starter-flow-ui-1.1-SNAPSHOT
+  - run `mvn wildfly:run` in ear module 
+  - open http://localhost:8080/bookstore-starter-flow-ui/
 - creating a production mode war
-  - run `mvn package` in the ui module or in the parent module
+  - run `mvn package` ear module
 - running in production mode
   - production mode is used by default
    

@@ -15,12 +15,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>bookstore-starter-flow-my-component</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
 			<artifactId>bookstore-starter-flow-backend</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
@@ -31,10 +25,6 @@
 			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
-        <dependency>
-             <groupId>com.vaadin</groupId>
-             <artifactId>flow-server-production-mode</artifactId>
-        </dependency>
 	</dependencies>
   
 	<build>
@@ -51,10 +41,6 @@
 						<jarModule>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>bookstore-starter-flow-backend</artifactId>
-						</jarModule>
-						<jarModule>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>bookstore-starter-flow-my-component</artifactId>
 						</jarModule>
 						<webModule>
 							<groupId>${project.groupId}</groupId>
