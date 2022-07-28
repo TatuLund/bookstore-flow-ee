@@ -2,7 +2,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-ordered-layout/src/vaadin-vertical-layout.js';
 import {ThemableMixin} from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class HelloWorld extends ThemableMixin(PolymerElement) {
+class BookstoreTitle extends ThemableMixin(PolymerElement) {
 
     static get template() {
         return html `
@@ -19,7 +19,7 @@ class HelloWorld extends ThemableMixin(PolymerElement) {
     }
 
     static get is() {
-        return 'hello-world';
+        return 'bookstore-title';
     }
 
     static get properties() {
@@ -49,4 +49,4 @@ class HelloWorld extends ThemableMixin(PolymerElement) {
     }
 }
 
-customElements.define(HelloWorld.is, HelloWorld);
+customElements.define(BookstoreTitle.is, BookstoreTitle);

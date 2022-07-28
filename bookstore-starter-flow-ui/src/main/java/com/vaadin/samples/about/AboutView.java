@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Version;
-import com.vaadin.samples.HelloWorld;
+import com.vaadin.samples.BookstoreTitle;
 import com.vaadin.samples.MainLayout;
 
 @Route(value = "About", layout = MainLayout.class) // Routes are automatically managed beans
@@ -25,7 +25,7 @@ public class AboutView extends VerticalLayout {
         hl.setSizeFull();
         hl.setJustifyContentMode(JustifyContentMode.CENTER);
         hl.setAlignItems(Alignment.CENTER);
-        add(new HelloWorld(),hl);
+        add(new BookstoreTitle(),hl);
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);

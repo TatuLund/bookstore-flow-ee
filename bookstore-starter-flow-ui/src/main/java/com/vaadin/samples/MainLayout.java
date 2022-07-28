@@ -31,6 +31,8 @@ public class MainLayout extends FlexLayout implements RouterLayout {
 	private Menu menu;
 	
 	private AccessControl accessControl;
+
+	private Command addAdminMenuItemCommand;
 	
 	@Inject
     public MainLayout(Menu menu, AccessControl accessControl) {
@@ -57,8 +59,10 @@ public class MainLayout extends FlexLayout implements RouterLayout {
                         Key.KEY_L, KeyModifier.CONTROL);
 
         // add the admin view menu item if/when it is registered dynamically
-        Command addAdminMenuItemCommand = () -> menu.addView(AdminView.class,
-                AdminView.VIEW_NAME, VaadinIcon.DOCTOR.create());
+        if (addAdminMenuItemCommand == null) {
+            addAdminMenuItemCommand = () -> menu.addView(AdminView.class,
+                     AdminView.VIEW_NAME, VaadinIcon.DOCTOR.create());
+        }
         RouteConfiguration sessionScopedConfiguration = RouteConfiguration
                 .forSessionScope();
         if (sessionScopedConfiguration.isRouteRegistered(AdminView.class)) {
