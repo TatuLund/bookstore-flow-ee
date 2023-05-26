@@ -1,7 +1,7 @@
 package com.vaadin.samples.crud;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
@@ -19,10 +19,8 @@ public class ProductGrid extends Grid<Product> {
     public ProductGrid() {
         setSizeFull();
 
-        addColumn(Product::getProductName)
-                .setHeader("Product name")
-                .setFlexGrow(20)
-                .setSortable(true);
+        addColumn(Product::getProductName).setHeader("Product name")
+                .setFlexGrow(20).setSortable(true);
 
         // Format and add " €" to price
         final DecimalFormat decimalFormat = new DecimalFormat();
@@ -30,36 +28,40 @@ public class ProductGrid extends Grid<Product> {
         decimalFormat.setMinimumFractionDigits(2);
 
         // To change the text alignment of the column, a template is used.
-        final String priceTemplate = "<div style='text-align: right'>[[item.price]]</div>";
-        addColumn(TemplateRenderer.<Product>of(priceTemplate)
-                .withProperty("price", product -> decimalFormat.format(product.getPrice()) + " €"))
-                .setHeader("Price")
-                .setComparator(Comparator.comparing(Product::getPrice))
-                .setFlexGrow(3);
+        final String priceTemplate = "<div style='text-align: right'>${item.price}</div>";
+        addColumn(LitRenderer.<Product> of(priceTemplate).withProperty("price",
+                product -> decimalFormat.format(product.getPrice()) + " €"))
+                        .setHeader("Price")
+                        .setComparator(Comparator.comparing(Product::getPrice))
+                        .setFlexGrow(3);
 
         // Add an traffic light icon in front of availability
         // Three css classes with the same names of three availability values,
-        // Available, Coming and Discontinued, are defined in shared-styles.css and are
+        // Available, Coming and Discontinued, are defined in shared-styles.css
+        // and are
         // used here in availabilityTemplate.
-        final String availabilityTemplate = "<iron-icon icon=\"vaadin:circle\" class-name=\"[[item.availability]]\"></iron-icon> [[item.availability]]";
-        addColumn(TemplateRenderer.<Product>of(availabilityTemplate)
-                .withProperty("availability", product -> product.getAvailability().toString()))
-                .setHeader("Availability")
-                .setComparator(Comparator.comparing(Product::getAvailability))
-                .setFlexGrow(5);
+        final String availabilityTemplate = "<vaadin-icon icon=\"vaadin:circle\" class=\"${item.availability}\"></vaadin-icon> ${item.availability}";
+        addColumn(LitRenderer.<Product> of(availabilityTemplate).withProperty(
+                "availability",
+                product -> product.getAvailability().toString()))
+                        .setHeader("Availability")
+                        .setComparator(
+                                Comparator.comparing(Product::getAvailability))
+                        .setFlexGrow(5);
 
         // To change the text alignment of the column, a template is used.
-        final String stockCountTemplate = "<div style='text-align: right'>[[item.stockCount]]</div>";
-        addColumn(TemplateRenderer.<Product>of(stockCountTemplate)
-                .withProperty("stockCount", product -> product.getStockCount() == 0 ? "-" : Integer.toString(product.getStockCount())))
-                .setHeader("Stock count")
-                .setComparator(Comparator.comparingInt(Product::getStockCount))
-                .setFlexGrow(3);
+        final String stockCountTemplate = "<div style='text-align: right'>${item.stockCount}</div>";
+        addColumn(LitRenderer.<Product> of(stockCountTemplate).withProperty(
+                "stockCount",
+                product -> product.getStockCount() == 0 ? "-"
+                        : Integer.toString(product.getStockCount())))
+                                .setHeader("Stock count")
+                                .setComparator(Comparator
+                                        .comparingInt(Product::getStockCount))
+                                .setFlexGrow(3);
 
         // Show all categories the product is in, separated by commas
-        addColumn(this::formatCategories)
-                .setHeader("Category")
-                .setFlexGrow(12);
+        addColumn(this::formatCategories).setHeader("Category").setFlexGrow(12);
     }
 
     public Product getSelectedRow() {

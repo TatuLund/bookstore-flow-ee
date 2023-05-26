@@ -1,11 +1,11 @@
 package com.vaadin.samples;
 
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.samples.authentication.AccessControl;
 import com.vaadin.samples.authentication.LoginScreen;
+
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
 /**
  * This class is used to listen to BeforeEnter event of all UIs in order to
@@ -15,11 +15,11 @@ import com.vaadin.samples.authentication.LoginScreen;
  */
 public class BookstoreInitListener {
 
-	@Inject
-	AccessControl accessControl;
-	
-	// ServiceInitEvent CDI event is dispatched by CDI add-on upon 
-	// VaadinService start, no listener registration is needed when using this
+    @Inject
+    AccessControl accessControl;
+
+    // ServiceInitEvent CDI event is dispatched by CDI add-on upon
+    // VaadinService start, no listener registration is needed when using this
     private void onServiceInit(@Observes ServiceInitEvent initEvent) {
         initEvent.getSource().addUIInitListener(uiInitEvent -> {
             uiInitEvent.getUI().addBeforeEnterListener(enterEvent -> {
@@ -28,5 +28,5 @@ public class BookstoreInitListener {
                     enterEvent.rerouteTo(LoginScreen.class);
             });
         });
-    }	
+    }
 }

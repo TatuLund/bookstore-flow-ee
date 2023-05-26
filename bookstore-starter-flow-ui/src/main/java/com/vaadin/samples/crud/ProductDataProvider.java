@@ -3,9 +3,7 @@ package com.vaadin.samples.crud;
 import java.util.Locale;
 import java.util.Objects;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-
+import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.NormalRouteScoped;
 import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -13,17 +11,21 @@ import com.vaadin.samples.MainLayout;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
+
 //@NormalRouteScoped
 //@RouteScopeOwner(MainLayout.class)
 @Dependent
+@CdiComponent
 public class ProductDataProvider extends ListDataProvider<Product> {
 
-	private DataService dataService;
-	
+    private DataService dataService;
+
     /** Text filter that can be changed separately. */
     private String filterText = "";
 
-	@Inject
+    @Inject
     public ProductDataProvider(DataService dataService) {
         super(dataService.getAllProducts());
         this.dataService = dataService;

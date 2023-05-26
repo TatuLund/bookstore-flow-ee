@@ -1,51 +1,51 @@
 package com.vaadin.samples;
 
-import javax.inject.Inject;
-
+import com.vaadin.cdi.annotation.CdiComponent;
+import com.vaadin.cdi.annotation.UIScoped;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.router.RouteBaseData;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.Command;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.samples.about.AboutView;
 import com.vaadin.samples.authentication.AccessControl;
-import com.vaadin.samples.crud.SampleCrudView;
+import com.vaadin.samples.crud.SampleCrudViewImpl;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
 /**
  * The main layout. Contains the navigation menu.
  */
-@Theme(value = Lumo.class)
-@PWA(name = "Bookstore Starter", shortName = "Bookstore")
-@CssImport("./styles/shared-styles.css")
-@CssImport(value = "./styles/vaadin-text-field-yellow-bg.css", themeFor = "vaadin-text-field")
+@Dependent
+@CdiComponent
 public class MainLayout extends FlexLayout implements RouterLayout {
 
-	private Menu menu;
-	
-	private AccessControl accessControl;
+    private Menu menu;
 
-	private Command addAdminMenuItemCommand;
-	
-	@Inject
+    private AccessControl accessControl;
+
+    private Command addAdminMenuItemCommand;
+
+    @Inject
     public MainLayout(Menu menu, AccessControl accessControl) {
-		this.menu = menu;
-		this.accessControl = accessControl;
+        this.accessControl = accessControl;
+        this.menu = menu;
         setSizeFull();
         setClassName("main-layout");
-
-        menu.addView(SampleCrudView.class, SampleCrudView.VIEW_NAME,
+        menu.addView(SampleCrudViewImpl.class, SampleCrudViewImpl.VIEW_NAME,
                 VaadinIcon.EDIT.create());
         menu.addView(AboutView.class, AboutView.VIEW_NAME,
                 VaadinIcon.INFO_CIRCLE.create());
-
         add(menu);
     }
 
@@ -53,15 +53,13 @@ public class MainLayout extends FlexLayout implements RouterLayout {
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
 
-        attachEvent.getUI()
-                .addShortcutListener(
-                        () -> accessControl.signOut(),
-                        Key.KEY_L, KeyModifier.CONTROL);
+        attachEvent.getUI().addShortcutListener(() -> accessControl.signOut(),
+                Key.KEY_L, KeyModifier.CONTROL);
 
         // add the admin view menu item if/when it is registered dynamically
         if (addAdminMenuItemCommand == null) {
             addAdminMenuItemCommand = () -> menu.addView(AdminView.class,
-                     AdminView.VIEW_NAME, VaadinIcon.DOCTOR.create());
+                    AdminView.VIEW_NAME, VaadinIcon.DOCTOR.create());
         }
         RouteConfiguration sessionScopedConfiguration = RouteConfiguration
                 .forSessionScope();

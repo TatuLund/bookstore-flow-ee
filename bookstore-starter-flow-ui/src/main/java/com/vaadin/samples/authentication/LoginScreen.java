@@ -1,7 +1,8 @@
 package com.vaadin.samples.authentication;
 
-import javax.inject.Inject;
-
+import com.vaadin.cdi.annotation.CdiComponent;
+import com.vaadin.cdi.annotation.RouteScopeOwner;
+import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
@@ -13,15 +14,20 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.samples.AdminView;
 import com.vaadin.samples.MainLayout;
+
+import jakarta.inject.Inject;
 
 /**
  * UI content when the user is not logged in yet.
  */
 @Route("Login")
 @PageTitle("Login")
-@CssImport("./styles/shared-styles.css")
+@RouteScoped
+@CdiComponent
 public class LoginScreen extends FlexLayout {
 
     private AccessControl accessControl;
@@ -63,9 +69,9 @@ public class LoginScreen extends FlexLayout {
         H1 loginInfoHeader = new H1("Login Information");
         loginInfoHeader.setWidth("100%");
         Span loginInfoText = new Span(
-                "Log in as \"admin\" to have full access. Log in with any " +
-                        "other username to have read-only access. For all " +
-                        "users, the password is same as the username.");
+                "Log in as \"admin\" to have full access. Log in with any "
+                        + "other username to have read-only access. For all "
+                        + "users, the password is same as the username.");
         loginInfoText.setWidth("100%");
         loginInformation.add(loginInfoHeader);
         loginInformation.add(loginInfoText);
@@ -75,6 +81,9 @@ public class LoginScreen extends FlexLayout {
 
     private void login(LoginForm.LoginEvent event) {
         if (accessControl.signIn(event.getUsername(), event.getPassword())) {
+            VaadinServletRequest request = (VaadinServletRequest) VaadinService
+                    .getCurrentRequest();
+            request.getHttpServletRequest().changeSessionId();
             registerAdminViewIfApplicable();
             getUI().get().navigate("");
         } else {
@@ -84,9 +93,11 @@ public class LoginScreen extends FlexLayout {
 
     private void registerAdminViewIfApplicable() {
         // register the admin view dynamically only for any admin user logged in
-        if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME) && 
-                !RouteConfiguration.forSessionScope().isRouteRegistered(AdminView.class)) {
-            RouteConfiguration.forSessionScope().setRoute(AdminView.VIEW_NAME, AdminView.class, MainLayout.class);
+        if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)
+                && !RouteConfiguration.forSessionScope()
+                        .isRouteRegistered(AdminView.class)) {
+            RouteConfiguration.forSessionScope().setRoute(AdminView.VIEW_NAME,
+                    AdminView.class, MainLayout.class);
             // as logout will purge the session route registry, no need to
             // unregister the view on logout
         }

@@ -2,8 +2,7 @@ package com.vaadin.samples;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
+import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Component;
@@ -12,16 +11,18 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.ironlist.IronList;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
+
+import jakarta.inject.Inject;
 
 import static com.vaadin.samples.AdminView.VIEW_NAME;
 
@@ -32,28 +33,31 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
  */
 @RouteScoped
 @RouteScopeOwner(MainLayout.class)
+@CdiComponent
 public class AdminView extends VerticalLayout {
 
     public static final String VIEW_NAME = "admin";
 
-    private final IronList<Category> categoriesListing;
+    private final VirtualList<Category> categoriesListing;
     private final ListDataProvider<Category> dataProvider;
     private final Button newCategoryButton;
     private DataService dataService;
-    
-    @Inject   
-    public AdminView(DataService dataService) {
-    	this.dataService = dataService;
-        categoriesListing = new IronList<>();
 
-        dataProvider = new ListDataProvider<Category>(new ArrayList<>(dataService.getAllCategories())) {
+    @Inject
+    public AdminView(DataService dataService) {
+        this.dataService = dataService;
+        categoriesListing = new VirtualList<>();
+
+        dataProvider = new ListDataProvider<Category>(
+                new ArrayList<>(dataService.getAllCategories())) {
             @Override
             public Object getId(Category item) {
                 return item.getId();
             }
         };
         categoriesListing.setDataProvider(dataProvider);
-        categoriesListing.setRenderer(new ComponentRenderer<>(this::createCategoryEditor));
+        categoriesListing.setRenderer(
+                new ComponentRenderer<>(this::createCategoryEditor));
 
         newCategoryButton = new Button("Add New Category", event -> {
             Category category = new Category();
@@ -62,7 +66,8 @@ public class AdminView extends VerticalLayout {
         });
         newCategoryButton.setDisableOnClick(true);
 
-        add(new H2("Hello Admin"), new H4("Edit Categories"), newCategoryButton, categoriesListing);
+        add(new H2("Hello Admin"), new H4("Edit Categories"), newCategoryButton,
+                categoriesListing);
     }
 
     private Component createCategoryEditor(Category category) {
@@ -72,15 +77,17 @@ public class AdminView extends VerticalLayout {
             nameField.focus();
         }
 
-        Button deleteButton = new Button(VaadinIcon.MINUS_CIRCLE_O.create(), event -> {
-            dataService.deleteCategory(category.getId());
-            dataProvider.getItems().remove(category);
-            dataProvider.refreshAll();
-            Notification.show("Category Deleted.");
-        });
+        Button deleteButton = new Button(VaadinIcon.MINUS_CIRCLE_O.create(),
+                event -> {
+                    dataService.deleteCategory(category.getId());
+                    dataProvider.getItems().remove(category);
+                    dataProvider.refreshAll();
+                    Notification.show("Category Deleted.");
+                });
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
-        BeanValidationBinder<Category> binder = new BeanValidationBinder<>(Category.class);
+        BeanValidationBinder<Category> binder = new BeanValidationBinder<>(
+                Category.class);
         binder.forField(nameField).bind("name");
         binder.setBean(category);
         binder.addValueChangeListener(event -> {

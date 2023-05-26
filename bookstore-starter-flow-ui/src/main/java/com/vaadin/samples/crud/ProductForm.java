@@ -45,7 +45,7 @@ public class ProductForm extends Div {
     private Button cancel;
     private Button delete;
 
-    private SampleCrudLogic viewLogic;
+    private SampleCrudPresenter presenter;
     private Binder<Product> binder;
     private Product currentProduct;
 
@@ -89,14 +89,14 @@ public class ProductForm extends Div {
         }
     }
 
-    public ProductForm(SampleCrudLogic sampleCrudLogic) {
+    public ProductForm(SampleCrudPresenter sampleCrudLogic) {
         setClassName("product-form");
 
         content = new VerticalLayout();
         content.setSizeUndefined();
         add(content);
 
-        viewLogic = sampleCrudLogic;
+        presenter = sampleCrudLogic;
 
         productName = new TextField("Product name");
         productName.setWidth("100%");
@@ -152,7 +152,7 @@ public class ProductForm extends Div {
         save.addClickListener(event -> {
             if (currentProduct != null
                     && binder.writeBeanIfValid(currentProduct)) {
-                viewLogic.saveProduct(currentProduct);
+                presenter.saveProduct(currentProduct);
             }
         });
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
@@ -160,22 +160,23 @@ public class ProductForm extends Div {
         discard = new Button("Discard changes");
         discard.setWidth("100%");
         discard.addClickListener(
-                event -> viewLogic.editProduct(currentProduct));
+                event -> presenter.editProduct(currentProduct));
 
         cancel = new Button("Cancel");
         cancel.setWidth("100%");
-        cancel.addClickListener(event -> viewLogic.cancelProduct());
+        cancel.addClickListener(event -> presenter.cancelProduct());
         cancel.addClickShortcut(Key.ESCAPE);
         getElement()
-                .addEventListener("keydown", event -> viewLogic.cancelProduct())
+                .addEventListener("keydown", event -> presenter.cancelProduct())
                 .setFilter("event.key == 'Escape'");
 
         delete = new Button("Delete");
         delete.setWidth("100%");
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_PRIMARY);
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
+                ButtonVariant.LUMO_PRIMARY);
         delete.addClickListener(event -> {
             if (currentProduct != null) {
-                viewLogic.deleteProduct(currentProduct);
+                presenter.deleteProduct(currentProduct);
             }
         });
 

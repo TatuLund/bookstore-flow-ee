@@ -3,12 +3,12 @@ package com.vaadin.samples.backend.mock;
 import java.util.Collections;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * Mock data model. This implementation has very simplistic locking and does not
@@ -23,7 +23,7 @@ public class MockDataService implements DataService {
     private int nextCategoryId = 0;
 
     @Inject
-	public MockDataService(MockDataGenerator mockDataGenerator) {
+    public MockDataService(MockDataGenerator mockDataGenerator) {
         categories = mockDataGenerator.createCategories();
         products = mockDataGenerator.createProducts(categories);
         nextProductId = products.size() + 1;
@@ -55,8 +55,8 @@ public class MockDataService implements DataService {
             }
         }
 
-        throw new IllegalArgumentException("No product with id " + p.getId()
-                + " found");
+        throw new IllegalArgumentException(
+                "No product with id " + p.getId() + " found");
     }
 
     @Override
@@ -81,7 +81,8 @@ public class MockDataService implements DataService {
     public void deleteCategory(int categoryId) {
         if (categories.removeIf(category -> category.getId() == categoryId)) {
             getAllProducts().forEach(product -> {
-                product.getCategory().removeIf(category -> category.getId() == categoryId);
+                product.getCategory()
+                        .removeIf(category -> category.getId() == categoryId);
             });
         }
     }
@@ -90,8 +91,8 @@ public class MockDataService implements DataService {
     public synchronized void deleteProduct(int productId) {
         Product p = getProductById(productId);
         if (p == null) {
-            throw new IllegalArgumentException("Product with id " + productId
-                    + " not found");
+            throw new IllegalArgumentException(
+                    "Product with id " + productId + " not found");
         }
         products.remove(p);
     }

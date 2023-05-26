@@ -1,21 +1,22 @@
 package com.vaadin.samples.authentication;
 
-import javax.enterprise.context.Dependent;
+import java.io.Serializable;
 
-import com.vaadin.cdi.annotation.VaadinSessionScoped;
-import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinService;
+import com.vaadin.cdi.annotation.CdiComponent;
+
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.SessionScoped;
 
 /**
  * Class for retrieving and setting the name of the current user of the current
  * session (without using JAAS).
  */
-@Dependent
-public final class CurrentUser {
+@SessionScoped
+public class CurrentUser implements Serializable {
 
-	private String currentUser;
-	
-    private CurrentUser() {
+    private String currentUser;
+
+    public CurrentUser() {
     }
 
     /**

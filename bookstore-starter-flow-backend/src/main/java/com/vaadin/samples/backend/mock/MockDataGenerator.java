@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import com.vaadin.samples.backend.data.Availability;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
+
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class MockDataGenerator {
@@ -73,8 +73,8 @@ public class MockDataGenerator {
         p.setProductName(generateName());
 
         p.setPrice(new BigDecimal((random.nextInt(250) + 50) / 10.0));
-        p.setAvailability(Availability.values()[random.nextInt(Availability
-                .values().length)]);
+        p.setAvailability(Availability.values()[random
+                .nextInt(Availability.values().length)]);
         if (p.getAvailability() == Availability.AVAILABLE) {
             p.setStockCount(random.nextInt(523));
         }
@@ -83,13 +83,13 @@ public class MockDataGenerator {
         return p;
     }
 
-    private Set<Category> getCategory(List<Category> categories,
-            int min, int max) {
+    private Set<Category> getCategory(List<Category> categories, int min,
+            int max) {
         int nr = random.nextInt(max) + min;
         HashSet<Category> productCategories = new HashSet<Category>();
         for (int i = 0; i < nr; i++) {
-            productCategories.add(categories.get(random.nextInt(categories
-                    .size())));
+            productCategories
+                    .add(categories.get(random.nextInt(categories.size())));
         }
 
         return productCategories;

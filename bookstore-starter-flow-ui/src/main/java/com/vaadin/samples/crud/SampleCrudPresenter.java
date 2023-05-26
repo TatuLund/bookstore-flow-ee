@@ -1,5 +1,6 @@
 package com.vaadin.samples.crud;
 
+import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.NormalRouteScoped;
 import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.UI;
@@ -9,10 +10,10 @@ import com.vaadin.samples.authentication.AccessControl;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
-import java.io.Serializable;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import java.io.Serializable;
 
 /**
  * This class provides an interface for the logical operations between the CRUD
@@ -23,26 +24,27 @@ import javax.inject.Inject;
  * the system separately, and to e.g. provide alternative views for the same
  * data.
  */
-//@NormalRouteScoped
-//@RouteScopeOwner(MainLayout.class)
+// @NormalRouteScoped
+// @RouteScopeOwner(MainLayout.class)
 @Dependent
-public class SampleCrudLogic implements Serializable {
+public class SampleCrudPresenter implements Serializable {
 
     private SampleCrudView view;
 
-    private DataService dataService;    
-    private AccessControl accessControl; 
-    
+    private DataService dataService;
+    private AccessControl accessControl;
+
     @Inject
-    public SampleCrudLogic(DataService dataService, AccessControl accessControl) {
-    	this.dataService = dataService;
-    	this.accessControl = accessControl;
+    public SampleCrudPresenter(DataService dataService,
+            AccessControl accessControl) {
+        this.dataService = dataService;
+        this.accessControl = accessControl;
     }
 
     public void setView(SampleCrudView simpleCrudView) {
-    	view = simpleCrudView;
+        view = simpleCrudView;
     }
-    
+
     public void init() {
         editProduct(null);
         // Hide and disable if not admin
@@ -67,7 +69,7 @@ public class SampleCrudLogic implements Serializable {
             fragmentParameter = productId;
         }
 
-        UI.getCurrent().navigate(SampleCrudView.class, fragmentParameter);
+        UI.getCurrent().navigate(SampleCrudViewImpl.class, fragmentParameter);
     }
 
     public void enter(String productId) {
@@ -106,7 +108,6 @@ public class SampleCrudLogic implements Serializable {
         view.clearSelection();
         view.removeProduct(product);
         setFragmentParameter("");
-        view.showSaveNotification(product.getProductName() + " removed");
     }
 
     public void editProduct(Product product) {

@@ -1,22 +1,27 @@
 package com.vaadin.samples.authentication;
 
-import javax.inject.Inject;
-
+import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
+
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 
 /**
  * Default mock implementation of {@link AccessControl}. This implementation
  * accepts any string as a password, and considers the user "admin" as the only
  * administrator.
  */
-@VaadinSessionScoped
+@SessionScoped
 public class BasicAccessControl implements AccessControl {
 
-	@Inject
-	CurrentUser currentUser;
-	
+    @Inject
+    CurrentUser currentUser;
+
+    public BasicAccessControl() {    
+    }
+
     @Override
     public boolean signIn(String username, String password) {
         if (username == null || username.isEmpty())

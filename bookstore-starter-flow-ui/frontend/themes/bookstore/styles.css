@@ -88,6 +88,10 @@
         box-shadow: none;
     }
 
+	.menu-bar vaadin-side-nav {
+		display: none;
+	}
+
     .menu-bar vaadin-tabs {
         transform: translateX(calc(-100% - var(--top-bar-margin)));
         position: absolute;
@@ -98,8 +102,14 @@
         background: var(--lumo-base-color);
     }
 
-    .menu-bar .show-tabs {
-        transform: translateX(calc(0% - var(--top-bar-margin)));
+    .menu-bar vaadin-side-nav.show-tabs {
+    	display: block;
+		position: absolute;
+    	top: 50px;
+   		z-index: 1;
+    	border: 1px solid var(--lumo-contrast-20pct);
+    	background: white;
+    	box-shadow: var(--lumo-box-shadow-s);
     }
 
     .menu-button {
