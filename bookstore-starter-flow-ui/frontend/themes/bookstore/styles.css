@@ -66,6 +66,15 @@
     box-shadow: var(--overlay-box-shadow);
 }
 
+vaadin-confirm-dialog-overlay::part(header) {
+	background-color: var(--lumo-warning-color-10pct);
+    color: var(--lumo-warning-text-color);
+}
+
+vaadin-confirm-dialog-overlay::part(message) {
+    padding-top: var(--lumo-size-s);
+}
+
 /* On narrow screens, move the side bar to the top,
  * except for the link-tabs, which are hidden but
  * can be opened via a button.

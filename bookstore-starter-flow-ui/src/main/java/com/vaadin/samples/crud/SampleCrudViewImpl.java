@@ -137,6 +137,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         confirm.setHeader("Confirm");
         confirm.setText(product.getProductName() + " will be deleted.");
         confirm.setCancelable(true);
+        confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
             dataProvider.delete(product);
             showSaveNotification(product.getProductName() + " removed");

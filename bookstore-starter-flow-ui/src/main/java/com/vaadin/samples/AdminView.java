@@ -72,7 +72,6 @@ public class AdminView extends VerticalLayout {
 
     private Component createCategoryEditor(Category category) {
         TextField nameField = new TextField();
-        nameField.addThemeName("yellowBg");
         if (category.getId() < 0) {
             nameField.focus();
         }
