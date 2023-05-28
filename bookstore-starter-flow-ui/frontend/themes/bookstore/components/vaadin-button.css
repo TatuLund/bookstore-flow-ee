@@ -1,0 +1,6 @@
+:host([theme~='warning']) {
+	background-color: var(--_lumo-button-primary-background-color, var(--lumo-warning-color));
+    color: var(--_lumo-button-primary-color, var(--lumo-warning-contrast-color));
+    font-weight: 600;
+    min-width: calc(var(--lumo-button-size) * 2.5);
+}
