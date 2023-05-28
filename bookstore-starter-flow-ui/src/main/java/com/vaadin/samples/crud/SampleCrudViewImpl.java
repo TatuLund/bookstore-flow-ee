@@ -13,6 +13,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.router.BeforeLeaveEvent.ContinueNavigationAction;
+import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
@@ -33,8 +36,8 @@ import jakarta.inject.Inject;
 @RouteAlias(value = "", layout = MainLayout.class)
 @RouteScoped
 @CdiComponent
-public class SampleCrudViewImpl extends HorizontalLayout
-        implements HasUrlParameter<String>, SampleCrudView {
+public class SampleCrudViewImpl extends HorizontalLayout implements
+        HasUrlParameter<String>, SampleCrudView, BeforeLeaveObserver {
 
     public static final String VIEW_NAME = "Inventory";
     private ProductGrid grid;
@@ -161,5 +164,13 @@ public class SampleCrudViewImpl extends HorizontalLayout
     public void setParameter(BeforeEvent event,
             @OptionalParameter String parameter) {
         presenter.enter(parameter);
+    }
+
+    @Override
+    public void beforeLeave(BeforeLeaveEvent event) {
+        if (form.hasChanges()) {
+            ContinueNavigationAction action = event.postpone();
+            form.confirmDiscard(() -> action.proceed());
+        }
     }
 }

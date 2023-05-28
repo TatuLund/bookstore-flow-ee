@@ -32,16 +32,19 @@ public class MockDataService implements DataService {
 
     @Override
     public synchronized List<Product> getAllProducts() {
+        sleep(5);
         return Collections.unmodifiableList(products);
     }
 
     @Override
     public synchronized List<Category> getAllCategories() {
+        sleep(3);
         return Collections.unmodifiableList(categories);
     }
 
     @Override
     public synchronized void updateProduct(Product p) {
+        sleep(2);
         if (p.getId() < 0) {
             // New product
             p.setId(nextProductId++);
@@ -61,6 +64,7 @@ public class MockDataService implements DataService {
 
     @Override
     public synchronized Product getProductById(int productId) {
+        sleep(1);
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getId() == productId) {
                 return products.get(i);
@@ -71,6 +75,7 @@ public class MockDataService implements DataService {
 
     @Override
     public void updateCategory(Category category) {
+        sleep(2);
         if (category.getId() < 0) {
             category.setId(nextCategoryId++);
             categories.add(category);
@@ -79,6 +84,7 @@ public class MockDataService implements DataService {
 
     @Override
     public void deleteCategory(int categoryId) {
+        sleep(2);
         if (categories.removeIf(category -> category.getId() == categoryId)) {
             getAllProducts().forEach(product -> {
                 product.getCategory()
@@ -89,11 +95,19 @@ public class MockDataService implements DataService {
 
     @Override
     public synchronized void deleteProduct(int productId) {
+        sleep(2);
         Product p = getProductById(productId);
         if (p == null) {
             throw new IllegalArgumentException(
                     "Product with id " + productId + " not found");
         }
         products.remove(p);
+    }
+
+    private void sleep(int x) {
+        try {
+            Thread.sleep(x * 100);
+        } catch (InterruptedException e) {
+        }
     }
 }

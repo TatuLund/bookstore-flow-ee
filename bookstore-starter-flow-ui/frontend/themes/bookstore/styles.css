@@ -81,6 +81,26 @@ vaadin-confirm-dialog-overlay::part(message) {
     padding-top: var(--lumo-size-s);
 }
 
+vaadin-connection-indicator {
+    position: fixed;
+    z-index: 251;
+    top: 50%;
+    width: 20%;
+    left: 40%;
+}
+
+.v-loading-indicator {
+    position: unset !important;
+    height: 10px;
+    z-index: unset !important;
+    left: unset !important;
+    top: unset !important;
+    right: unset !important;
+    background: var(--lumo-primary-color-50pct);
+    border-radius: var(--lumo-border-radius-m);
+    border: 1px solid var(--lumo-primary-color);
+}
+
 /* On narrow screens, move the side bar to the top,
  * except for the link-tabs, which are hidden but
  * can be opened via a button.

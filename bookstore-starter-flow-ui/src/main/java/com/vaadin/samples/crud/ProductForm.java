@@ -25,6 +25,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToBigDecimalConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.samples.backend.data.Availability;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
@@ -49,6 +50,8 @@ public class ProductForm extends Dialog {
     private SampleCrudPresenter presenter;
     private Binder<Product> binder;
     private Product currentProduct;
+
+    private boolean hasChanges;
 
     private static class PriceConverter extends StringToBigDecimalConverter {
 
@@ -142,7 +145,7 @@ public class ProductForm extends Dialog {
         // enable/disable save button while editing
         binder.addStatusChangeListener(event -> {
             boolean isValid = !event.hasValidationErrors();
-            boolean hasChanges = binder.hasChanges();
+            hasChanges = binder.hasChanges();
             save.setEnabled(hasChanges && isValid);
             discard.setEnabled(hasChanges);
         });
@@ -160,8 +163,10 @@ public class ProductForm extends Dialog {
 
         discard = new Button("Discard changes");
         discard.setWidth("100%");
-        discard.addClickListener(
-                event -> presenter.editProduct(currentProduct));
+        discard.addClickListener(event -> {
+            hasChanges = false;
+            presenter.editProduct(currentProduct);
+        });
 
         cancel = new Button("Cancel");
         cancel.setWidth("100%");
@@ -182,10 +187,10 @@ public class ProductForm extends Dialog {
         });
 
         content.add(save, discard, delete, cancel);
-        
+
         addDialogCloseActionListener(e -> {
             if (binder.hasChanges()) {
-                confirmDiscard();
+                confirmDiscard(() -> close());
             } else {
                 close();
             }
@@ -205,16 +210,21 @@ public class ProductForm extends Dialog {
         binder.readBean(product);
     }
 
-    public void confirmDiscard() {
+    public void confirmDiscard(SerializableRunnable action) {
         ConfirmDialog confirm = new ConfirmDialog();
         confirm.setConfirmText("Discard");
         confirm.setHeader("Discard changes");
-        confirm.setText("There are unsaved changes.");        
+        confirm.setText("There are unsaved changes.");
         confirm.setCancelable(true);
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
-            close();
+            hasChanges = false;
+            action.run();
         });
         confirm.open();
+    }
+
+    public boolean hasChanges() {
+        return hasChanges;
     }
 }

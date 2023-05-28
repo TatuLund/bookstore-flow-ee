@@ -1,5 +1,6 @@
 package com.vaadin.samples.crud;
 
+import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.samples.backend.data.Product;
 
 public interface SampleCrudView {
