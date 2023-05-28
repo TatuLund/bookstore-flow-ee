@@ -12,7 +12,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -31,7 +32,7 @@ import com.vaadin.samples.backend.data.Product;
 /**
  * A form for editing a single product.
  */
-public class ProductForm extends Div {
+public class ProductForm extends Dialog {
 
     private VerticalLayout content;
 
@@ -181,6 +182,12 @@ public class ProductForm extends Div {
         });
 
         content.add(save, discard, delete, cancel);
+        
+        addDialogCloseActionListener(e -> {
+            if (binder.hasChanges()) {
+                confirmDiscard();
+            }
+        });
     }
 
     public void setCategories(Collection<Category> categories) {
@@ -194,5 +201,18 @@ public class ProductForm extends Div {
         delete.setVisible(!product.isNewProduct());
         currentProduct = product;
         binder.readBean(product);
+    }
+
+    public void confirmDiscard() {
+        ConfirmDialog confirm = new ConfirmDialog();
+        confirm.setConfirmText("Discard");
+        confirm.setHeader("Discard changes");
+        confirm.setText("There are unsaved changes.");        
+        confirm.setCancelable(true);
+        confirm.setConfirmButtonTheme("warning");
+        confirm.addConfirmListener(e -> {
+            close();
+        });
+        confirm.open();
     }
 }

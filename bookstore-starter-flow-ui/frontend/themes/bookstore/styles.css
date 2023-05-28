@@ -62,8 +62,14 @@
     bottom: 0;
     height: 100%;
     overflow: auto;
-    background: var(--lumo-base-color);
+    top: 0;
+    left: auto;
     box-shadow: var(--overlay-box-shadow);
+}
+
+vaadin-dialog-overlay::part(overlay) {
+	border-radius: 0;
+	height: 100%;
 }
 
 vaadin-confirm-dialog-overlay::part(header) {

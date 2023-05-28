@@ -1,12 +1,7 @@
 package com.vaadin.samples.crud;
 
-import com.vaadin.cdi.annotation.CdiComponent;
-import com.vaadin.cdi.annotation.NormalRouteScoped;
-import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.component.UI;
-import com.vaadin.samples.MainLayout;
 import com.vaadin.samples.authentication.AccessControl;
-//import com.vaadin.samples.authentication.AccessControlFactory;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
@@ -24,8 +19,6 @@ import java.io.Serializable;
  * the system separately, and to e.g. provide alternative views for the same
  * data.
  */
-// @NormalRouteScoped
-// @RouteScopeOwner(MainLayout.class)
 @Dependent
 public class SampleCrudPresenter implements Serializable {
 

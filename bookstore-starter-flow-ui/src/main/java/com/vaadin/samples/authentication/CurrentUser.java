@@ -2,9 +2,6 @@ package com.vaadin.samples.authentication;
 
 import java.io.Serializable;
 
-import com.vaadin.cdi.annotation.CdiComponent;
-
-import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.SessionScoped;
 
 /**

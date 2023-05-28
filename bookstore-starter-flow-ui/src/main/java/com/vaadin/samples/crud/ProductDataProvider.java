@@ -4,18 +4,13 @@ import java.util.Locale;
 import java.util.Objects;
 
 import com.vaadin.cdi.annotation.CdiComponent;
-import com.vaadin.cdi.annotation.NormalRouteScoped;
-import com.vaadin.cdi.annotation.RouteScopeOwner;
 import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.samples.MainLayout;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 
-//@NormalRouteScoped
-//@RouteScopeOwner(MainLayout.class)
 @Dependent
 @CdiComponent
 public class ProductDataProvider extends ListDataProvider<Product> {

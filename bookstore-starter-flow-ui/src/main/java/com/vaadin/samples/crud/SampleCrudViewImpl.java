@@ -142,6 +142,9 @@ public class SampleCrudViewImpl extends HorizontalLayout
             dataProvider.delete(product);
             showSaveNotification(product.getProductName() + " removed");
         });
+        confirm.addCancelListener(e -> {
+            editProduct(product);
+        });
         confirm.open();
     }
 
@@ -151,14 +154,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
     }
 
     public void showForm(boolean show) {
-        form.setVisible(show);
-
-        /*
-         * FIXME The following line should be uncommented when the CheckboxGroup
-         * issue is resolved. The category CheckboxGroup throws an
-         * IllegalArgumentException when the form is disabled.
-         */
-        // form.setEnabled(show);
+        form.setOpened(show);
     }
 
     @Override

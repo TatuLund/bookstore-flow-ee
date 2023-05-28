@@ -1,25 +1,19 @@
 package com.vaadin.samples;
 
 import com.vaadin.cdi.annotation.CdiComponent;
-import com.vaadin.cdi.annotation.UIScoped;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.router.RouteBaseData;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.Command;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;
 import com.vaadin.samples.about.AboutView;
 import com.vaadin.samples.authentication.AccessControl;
 import com.vaadin.samples.crud.SampleCrudViewImpl;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 
