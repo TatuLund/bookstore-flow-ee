@@ -1,10 +1,12 @@
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin-flow/Lobby#?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+# Bookstore App Starter for Vaadin Flow / Java EE
 
-# Bookstore App Starter for Vaadin Flow
+A project example for a Vaadin application that requires a Servlet 6 container to run. The UI is built mostly with Java only.
 
-A project example for a Vaadin application that only requires a Servlet 3.1 container to run (no other JEE dependencies). The UI is built with Java only.
+Vaadin 24 supports Servlet 6 and Jakarta EE 10. This demo app demonstrates many use cases with Java EE and CDI such as
 
-The easiest way of using it is via [https://vaadin.com/start](https://vaadin.com/start) - you can choose the package naming you want.
+- Dependency injection and inversion of control
+- How to apply model view presenter architecture in Vaadin app using CDI
+- EAR packaging
 
 ## Prerequisites
 
@@ -29,10 +31,11 @@ Other basic workflow steps:
 
 - getting started
 - compiling the whole project
-  - run `mvn install` in parent project
+  - run `mvn clean install` in parent project
 - developing the application
   - edit code in the ui module
-  - run `mvn wildfly:run` in ear module 
+  - run `mvn clean install` in ui project
+  - run `mvn clean wildfly:run` in ear module 
   - open http://localhost:8080/bookstore-starter-flow-ui/
 - creating a production mode war
   - run `mvn package` ear module
@@ -40,4 +43,4 @@ Other basic workflow steps:
   - production mode is used by default
    
 ### Branching information:
-* `master` the latest version of the starter, using the latest platform version
+* `v24` the latest version of the starter, using the latest platform version

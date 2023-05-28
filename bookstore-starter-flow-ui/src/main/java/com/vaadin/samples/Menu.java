@@ -52,7 +52,7 @@ public class Menu extends FlexLayout {
         top.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         top.setClassName("menu-header");
 
-        H3 title = new H3("My CRUD");
+        H3 title = new H3("Bookstore");
 
         String resolvedImage = VaadinServletService.getCurrent()
                 .resolveResource("img/table-logo.png");
