@@ -8,9 +8,15 @@ Vaadin 24 supports Servlet 6 and Jakarta EE 10. This demo app demonstrates many 
 - How to apply model view presenter architecture in Vaadin app using CDI
 - EAR packaging
 
+## Other useful Vaadin tips demoed
+
+- How to build custom app layout when not using AppLayout component
+- How to build CRUD view without using Crud component
+- How to use Dialog as Offcanvas style modal view
+
 ## Prerequisites
 
-The project can be imported into the IDE of your choice, with Java 8 or 11 installed, as a Maven project.
+The project can be imported into the IDE of your choice, with Java 17 installed, as a Maven project.
 
 ## Project Structure
 
