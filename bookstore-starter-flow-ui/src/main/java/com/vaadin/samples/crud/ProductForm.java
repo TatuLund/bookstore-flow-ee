@@ -131,6 +131,8 @@ public class ProductForm extends Dialog {
 
         category = new CheckboxGroup<>();
         category.setLabel("Categories");
+        category.addClassName("scroll");
+        category.setWidth("100%");
         category.setId("category");
         category.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
         content.add(category);

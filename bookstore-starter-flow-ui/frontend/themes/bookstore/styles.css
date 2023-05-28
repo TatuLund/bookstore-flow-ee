@@ -89,6 +89,11 @@ vaadin-connection-indicator {
     left: 40%;
 }
 
+vaadin-checkbox-group.scroll::part(group-field) {
+	height: 200px;
+	overflow: auto;
+}
+
 .v-loading-indicator {
     position: unset !important;
     height: 10px;
@@ -165,6 +170,10 @@ vaadin-connection-indicator {
         /* Prevent text-fields from overflowing on narrow screens */
         --vaadin-text-field-default-width: 6em;
     }
+
+	vaadin-dialog-overlay::part(overlay) {
+		width: 100%;
+	}
 }
 
 /* Color codes for the availability statuses of the products */
