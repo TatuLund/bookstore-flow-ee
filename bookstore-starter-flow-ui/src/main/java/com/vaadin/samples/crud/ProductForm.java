@@ -186,6 +186,8 @@ public class ProductForm extends Dialog {
         addDialogCloseActionListener(e -> {
             if (binder.hasChanges()) {
                 confirmDiscard();
+            } else {
+                close();
             }
         });
     }
