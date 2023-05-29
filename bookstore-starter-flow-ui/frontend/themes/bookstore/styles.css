@@ -92,6 +92,9 @@ vaadin-connection-indicator {
 vaadin-checkbox-group.scroll::part(group-field) {
 	height: 200px;
 	overflow: auto;
+    width: 420px;
+    display: grid;
+    grid-template-columns: 200px 200px;	
 }
 
 .v-loading-indicator {

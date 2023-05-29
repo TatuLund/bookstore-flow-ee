@@ -14,6 +14,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,6 +27,7 @@ import com.vaadin.flow.data.converter.StringToBigDecimalConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.samples.backend.data.Availability;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
@@ -153,7 +155,6 @@ public class ProductForm extends Dialog {
         });
 
         save = new Button("Save");
-        save.setWidth("100%");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener(event -> {
             if (currentProduct != null
@@ -163,15 +164,13 @@ public class ProductForm extends Dialog {
         });
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
 
-        discard = new Button("Discard changes");
-        discard.setWidth("100%");
+        discard = new Button("Discard");
         discard.addClickListener(event -> {
             hasChanges = false;
             presenter.editProduct(currentProduct);
         });
 
         cancel = new Button("Cancel");
-        cancel.setWidth("100%");
         cancel.addClickListener(event -> presenter.cancelProduct());
         cancel.addClickShortcut(Key.ESCAPE);
         getElement()
@@ -179,7 +178,6 @@ public class ProductForm extends Dialog {
                 .setFilter("event.key == 'Escape'");
 
         delete = new Button("Delete");
-        delete.setWidth("100%");
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
                 ButtonVariant.LUMO_PRIMARY);
         delete.addClickListener(event -> {
@@ -188,7 +186,12 @@ public class ProductForm extends Dialog {
             }
         });
 
-        content.add(save, discard, delete, cancel);
+        HorizontalLayout buttons = new HorizontalLayout();
+        buttons.setPadding(false);
+        buttons.setWidth("100%");
+        buttons.add(delete, discard, cancel, save);
+        buttons.addClassName(LumoUtility.JustifyContent.BETWEEN);
+        content.add(buttons);
 
         addDialogCloseActionListener(e -> {
             if (binder.hasChanges()) {
