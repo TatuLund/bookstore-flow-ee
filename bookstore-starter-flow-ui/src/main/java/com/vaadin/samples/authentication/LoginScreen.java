@@ -6,10 +6,12 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
+import com.vaadin.flow.component.login.LoginI18n.Form;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.server.VaadinService;
@@ -23,10 +25,9 @@ import jakarta.inject.Inject;
  * UI content when the user is not logged in yet.
  */
 @Route("Login")
-@PageTitle("Login")
 @RouteScoped
 @CdiComponent
-public class LoginScreen extends FlexLayout {
+public class LoginScreen extends FlexLayout implements HasDynamicTitle {
 
     private AccessControl accessControl;
 
@@ -44,7 +45,9 @@ public class LoginScreen extends FlexLayout {
         LoginForm loginForm = new LoginForm();
         loginForm.addLoginListener(this::login);
         loginForm.addForgotPasswordListener(
-                event -> Notification.show("Hint: same as username"));
+                event -> Notification.show(getTranslation("hint")));
+
+        loginForm.setI18n(getI18n());
 
         // layout to center login form when there is sufficient screen space
         FlexLayout centeringLayout = new FlexLayout();
@@ -60,16 +63,25 @@ public class LoginScreen extends FlexLayout {
         add(centeringLayout);
     }
 
+    private LoginI18n getI18n() {
+        LoginI18n i18n = new LoginI18n();
+        Form form = new Form();
+        form.setForgotPassword(getTranslation("forgot-password"));
+        form.setPassword(getTranslation("password"));
+        form.setUsername(getTranslation("username"));
+        form.setTitle(getTranslation("login"));
+        form.setSubmit(getTranslation("login-button"));
+        i18n.setForm(form);
+        return i18n;
+    }
+
     private Component buildLoginInformation() {
         VerticalLayout loginInformation = new VerticalLayout();
         loginInformation.setClassName("login-information");
 
-        H1 loginInfoHeader = new H1("Login Information");
+        H1 loginInfoHeader = new H1(getTranslation("login-info"));
         loginInfoHeader.setWidth("100%");
-        Span loginInfoText = new Span(
-                "Log in as \"admin\" to have full access. Log in with any "
-                        + "other username to have read-only access. For all "
-                        + "users, the password is same as the username.");
+        Span loginInfoText = new Span(getTranslation("login-info-text"));
         loginInfoText.setWidth("100%");
         loginInformation.add(loginInfoHeader);
         loginInformation.add(loginInfoText);
@@ -99,6 +111,11 @@ public class LoginScreen extends FlexLayout {
             // as logout will purge the session route registry, no need to
             // unregister the view on logout
         }
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation("login");
     }
 
 }

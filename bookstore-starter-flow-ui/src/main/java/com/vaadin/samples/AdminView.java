@@ -19,6 +19,7 @@ import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
 
@@ -34,7 +35,7 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
 @RouteScoped
 @RouteScopeOwner(MainLayout.class)
 @CdiComponent
-public class AdminView extends VerticalLayout {
+public class AdminView extends VerticalLayout implements HasDynamicTitle {
 
     public static final String VIEW_NAME = "admin";
 
@@ -59,15 +60,16 @@ public class AdminView extends VerticalLayout {
         categoriesListing.setRenderer(
                 new ComponentRenderer<>(this::createCategoryEditor));
 
-        newCategoryButton = new Button("Add New Category", event -> {
-            Category category = new Category();
-            dataProvider.getItems().add(category);
-            dataProvider.refreshAll();
-        });
+        newCategoryButton = new Button(getTranslation("add-new-ategory"),
+                event -> {
+                    Category category = new Category();
+                    dataProvider.getItems().add(category);
+                    dataProvider.refreshAll();
+                });
         newCategoryButton.setDisableOnClick(true);
 
-        add(new H2("Hello Admin"), new H4("Edit Categories"), newCategoryButton,
-                categoriesListing);
+        add(new H2(getTranslation("admin")), new H4(getTranslation("edit-categories")),
+                newCategoryButton, categoriesListing);
     }
 
     private Component createCategoryEditor(Category category) {
@@ -81,7 +83,7 @@ public class AdminView extends VerticalLayout {
                     dataService.deleteCategory(category.getId());
                     dataProvider.getItems().remove(category);
                     dataProvider.refreshAll();
-                    Notification.show("Category Deleted.");
+                    Notification.show(getTranslation("category-deleted"));
                 });
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
@@ -94,7 +96,7 @@ public class AdminView extends VerticalLayout {
                 dataService.updateCategory(category);
                 deleteButton.setEnabled(true);
                 newCategoryButton.setEnabled(true);
-                Notification.show("Category Saved.");
+                Notification.show(getTranslation("category-saved"));
             }
         });
         deleteButton.setEnabled(category.getId() > 0);
@@ -104,4 +106,8 @@ public class AdminView extends VerticalLayout {
         return layout;
     }
 
+    @Override
+    public String getPageTitle() {
+        return getTranslation(VIEW_NAME);
+    }
 }

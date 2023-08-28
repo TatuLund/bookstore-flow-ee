@@ -36,9 +36,10 @@ public class MainLayout extends FlexLayout implements RouterLayout {
         this.menu = menu;
         setSizeFull();
         setClassName("main-layout");
-        menu.addView(SampleCrudViewImpl.class, SampleCrudViewImpl.VIEW_NAME,
+        menu.addView(SampleCrudViewImpl.class,
+                getTranslation(SampleCrudViewImpl.VIEW_NAME),
                 VaadinIcon.EDIT.create());
-        menu.addView(AboutView.class, AboutView.VIEW_NAME,
+        menu.addView(AboutView.class, getTranslation(AboutView.VIEW_NAME),
                 VaadinIcon.INFO_CIRCLE.create());
         add(menu);
     }
@@ -53,7 +54,8 @@ public class MainLayout extends FlexLayout implements RouterLayout {
         // add the admin view menu item if/when it is registered dynamically
         if (addAdminMenuItemCommand == null) {
             addAdminMenuItemCommand = () -> menu.addView(AdminView.class,
-                    AdminView.VIEW_NAME, VaadinIcon.DOCTOR.create());
+                    getTranslation(AdminView.VIEW_NAME),
+                    VaadinIcon.DOCTOR.create());
         }
         RouteConfiguration sessionScopedConfiguration = RouteConfiguration
                 .forSessionScope();

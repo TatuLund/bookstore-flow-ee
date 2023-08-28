@@ -43,8 +43,12 @@ public class CustomI18NProvider implements I18NProvider {
             return "";
         }
 
-        final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_PREFIX,
-                locale);
+        ResourceBundle bundle;
+        if (getProvidedLocales().contains(locale)) {
+            bundle = ResourceBundle.getBundle(BUNDLE_PREFIX, locale);
+        } else {
+            bundle = ResourceBundle.getBundle(BUNDLE_PREFIX, LOCALE_EN);
+        }
 
         String value;
         try {

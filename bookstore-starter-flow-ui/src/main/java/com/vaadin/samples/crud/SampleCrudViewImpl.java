@@ -16,6 +16,7 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent.ContinueNavigationAction;
 import com.vaadin.flow.router.BeforeLeaveObserver;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
@@ -32,14 +33,15 @@ import jakarta.inject.Inject;
  * See also {@link SampleCrudPresenter} for fetching the data, the actual CRUD
  * operations and controlling the view based on events from outside.
  */
-@Route(value = "Inventory", layout = MainLayout.class)
+@Route(value = "inventory", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @RouteScoped
 @CdiComponent
-public class SampleCrudViewImpl extends HorizontalLayout implements
-        HasUrlParameter<String>, SampleCrudView, BeforeLeaveObserver {
+public class SampleCrudViewImpl extends HorizontalLayout
+        implements HasUrlParameter<String>, SampleCrudView, BeforeLeaveObserver,
+        HasDynamicTitle {
 
-    public static final String VIEW_NAME = "Inventory";
+    public static final String VIEW_NAME = "inventory";
     private ProductGrid grid;
     private ProductForm form;
     private TextField filter;
@@ -90,7 +92,7 @@ public class SampleCrudViewImpl extends HorizontalLayout implements
                 event -> dataProvider.setFilter(event.getValue()));
         filter.addFocusShortcut(Key.KEY_F, KeyModifier.CONTROL);
 
-        newProduct = new Button("New product");
+        newProduct = new Button(getTranslation("new-product"));
         newProduct.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         newProduct.setIcon(VaadinIcon.PLUS_CIRCLE.create());
         newProduct.addClickListener(click -> presenter.newProduct());
@@ -172,5 +174,10 @@ public class SampleCrudViewImpl extends HorizontalLayout implements
             ContinueNavigationAction action = event.postpone();
             form.confirmDiscard(() -> action.proceed());
         }
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation(VIEW_NAME);
     }
 }

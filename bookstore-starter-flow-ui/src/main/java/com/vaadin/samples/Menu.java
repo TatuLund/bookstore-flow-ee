@@ -35,7 +35,7 @@ public class Menu extends FlexLayout {
         setClassName("menu-bar");
 
         // Button for toggling the menu visibility on small screens
-        final Button showMenu = new Button("Menu", event -> {
+        final Button showMenu = new Button(getTranslation("menu"), event -> {
             if (sideNav.getClassNames().contains(SHOW_TABS)) {
                 sideNav.removeClassName(SHOW_TABS);
             } else {
@@ -52,7 +52,7 @@ public class Menu extends FlexLayout {
         top.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         top.setClassName("menu-header");
 
-        H3 title = new H3("Bookstore");
+        H3 title = new H3(getTranslation("bookstore"));
 
         String resolvedImage = VaadinServletService.getCurrent()
                 .resolveResource("img/table-logo.png");
@@ -68,10 +68,11 @@ public class Menu extends FlexLayout {
         add(sideNav);
 
         // logout menu item
-        Button logoutButton = new Button("Logout",
+        Button logoutButton = new Button(getTranslation("logout"),
                 VaadinIcon.SIGN_OUT.create());
         logoutButton.addClickListener(event -> accessControl.signOut());
-        logoutButton.addClassNames(LumoUtility.Margin.Top.AUTO, LumoUtility.Padding.MEDIUM);
+        logoutButton.addClassNames(LumoUtility.Margin.Top.AUTO,
+                LumoUtility.Padding.MEDIUM);
 
         logoutButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         add(logoutButton);

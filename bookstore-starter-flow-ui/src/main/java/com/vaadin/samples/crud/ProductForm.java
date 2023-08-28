@@ -14,7 +14,6 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -104,18 +103,18 @@ public class ProductForm extends Dialog {
 
         presenter = sampleCrudLogic;
 
-        productName = new TextField("Product name");
+        productName = new TextField(getTranslation("product-name"));
         productName.setWidth("100%");
         productName.setRequired(true);
         productName.setValueChangeMode(ValueChangeMode.EAGER);
         content.add(productName);
 
-        price = new TextField("Price");
+        price = new TextField(getTranslation("price"));
         price.setSuffixComponent(new Span("€"));
         price.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         price.setValueChangeMode(ValueChangeMode.EAGER);
 
-        stockCount = new TextField("In stock");
+        stockCount = new TextField(getTranslation("in-stock"));
         stockCount.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         stockCount.setValueChangeMode(ValueChangeMode.EAGER);
 
@@ -126,13 +125,13 @@ public class ProductForm extends Dialog {
         content.add(horizontalLayout);
 
         availability = new Select<>();
-        availability.setLabel("Availability");
+        availability.setLabel(getTranslation("availability"));
         availability.setWidth("100%");
         availability.setItems(Availability.values());
         content.add(availability);
 
         category = new CheckboxGroup<>();
-        category.setLabel("Categories");
+        category.setLabel(getTranslation("categories"));
         category.addClassName("scroll");
         category.setWidth("100%");
         category.setId("category");
@@ -154,7 +153,7 @@ public class ProductForm extends Dialog {
             discard.setEnabled(hasChanges);
         });
 
-        save = new Button("Save");
+        save = new Button(getTranslation("save"));
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener(event -> {
             if (currentProduct != null
@@ -164,20 +163,20 @@ public class ProductForm extends Dialog {
         });
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
 
-        discard = new Button("Discard");
+        discard = new Button(getTranslation("discard"));
         discard.addClickListener(event -> {
             hasChanges = false;
             presenter.editProduct(currentProduct);
         });
 
-        cancel = new Button("Cancel");
+        cancel = new Button(getTranslation("cancel"));
         cancel.addClickListener(event -> presenter.cancelProduct());
         cancel.addClickShortcut(Key.ESCAPE);
         getElement()
                 .addEventListener("keydown", event -> presenter.cancelProduct())
                 .setFilter("event.key == 'Escape'");
 
-        delete = new Button("Delete");
+        delete = new Button(getTranslation("delete"));
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
                 ButtonVariant.LUMO_PRIMARY);
         delete.addClickListener(event -> {
