@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>bookstore-starter-flow</artifactId>
@@ -10,9 +11,6 @@
 	<artifactId>bookstore-starter-flow-ui</artifactId>
 	<name>bookstore-starter-flow-ui</name>
 	<packaging>war</packaging>
-	<properties>
-		<vaadin.productionMode>true</vaadin.productionMode>
-	</properties>
 	<dependencies>
 		<!-- Versions for these are configured in the parent POM -->
 		<dependency>
@@ -47,10 +45,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<artifactId>flow-server-production-mode</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
 			<!-- Replace artifactId with vaadin-core to use only free components -->
 			<artifactId>vaadin</artifactId>
 		</dependency>
@@ -61,16 +55,17 @@
 			<artifactId>slf4j-simple</artifactId>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
-				<version>4.0.0.Final</version>
-				<configuration>
-					<version>27.0.0.Final</version>
-				</configuration>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.wildfly.plugins</groupId>-->
+<!--				<artifactId>wildfly-maven-plugin</artifactId>-->
+<!--				<version>4.0.0.Final</version>-->
+<!--				<configuration>-->
+<!--					<version>27.0.0.Final</version>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -92,42 +87,67 @@
 					<execution>
 						<goals>
 							<goal>prepare-frontend</goal>
-							<goal>build-frontend</goal>
+							<!--							<goal>build-frontend</goal>-->
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-	<!--     <profiles> -->
-	<!--         <profile> -->
-	<!--             Production mode is activated using -Pproduction -->
-	<!--             <id>production</id> -->
-	<!--             <properties> -->
-	<!--                 <vaadin.productionMode>true</vaadin.productionMode> -->
-	<!--             </properties> -->
-	<!--             <dependencies> -->
-	<!--                 <dependency> -->
-	<!--                     <groupId>com.vaadin</groupId> -->
-	<!--                     <artifactId>flow-server-production-mode</artifactId> -->
-	<!--                 </dependency> -->
-	<!--             </dependencies> -->
-	<!--             <build> -->
-	<!--                 <plugins> -->
-	<!--                     <plugin> -->
-	<!--                         <groupId>com.vaadin</groupId> -->
-	<!--                         <artifactId>vaadin-maven-plugin</artifactId> -->
-	<!--                         <executions> -->
-	<!--                             <execution> -->
-	<!--                                 <goals> -->
-	<!--                                     <goal>build-frontend</goal> -->
-	<!--                                 </goals> -->
-	<!--                                 <phase>compile</phase> -->
-	<!--                             </execution> -->
-	<!--                         </executions> -->
-	<!--                     </plugin> -->
-	<!--                 </plugins> -->
-	<!--             </build> -->
-	<!--         </profile> -->
-	<!--     </profiles> -->
+
+
+	<profiles>
+		<profile>
+			<id>runWar</id>
+			<dependencies>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>bookstore-starter-flow-backend</artifactId>
+					<version>${project.version}</version>
+					<scope>compile</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<version>4.0.0.Final</version>
+						<configuration>
+							<version>27.0.0.Final</version>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- Production mode is activated using -Pproduction -->
+			<id>production</id>
+			<properties>
+				<vaadin.productionMode>true</vaadin.productionMode>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.vaadin</groupId>
+					<artifactId>flow-server-production-mode</artifactId>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.vaadin</groupId>
+						<artifactId>vaadin-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>build-frontend</goal>
+								</goals>
+								<phase>compile</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

@@ -31,20 +31,29 @@ The project consists of the following three modules:
 
 ## Workflow
 
+### Development version as WAR
+
+To compile the entire project, run "mvn install" in the parent project.
+
+  - run `mvn clean wildfly:run -PrunWar` in ui module 
+  - open http://localhost:8080/bookstore-starter-flow-ui-1.1-SNAPSHOT/
+
+### Production version as EAR
+
 To compile the entire project, run "mvn install" in the parent project.
 
 Other basic workflow steps:
 
 - getting started
 - compiling the whole project
-  - run `mvn clean install` in parent project
-- developing the application
+  - run `mvn clean install -Production` in parent project
+- running in production mode
   - edit code in the ui module
-  - run `mvn clean install` in ui project
-  - run `mvn clean wildfly:run` in ear module 
+  - run `mvn clean install -Pproduction` in ui project
+  - run `mvn clean wildfly:run -Pproduction` in ear module 
   - open http://localhost:8080/bookstore-starter-flow-ui/
 - creating a production mode war
-  - run `mvn package` ear module
+  - run `mvn package -Pproduction` ear module
 - running in production mode
   - production mode is used by default
    

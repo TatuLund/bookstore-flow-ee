@@ -19,8 +19,9 @@ public class ProductGrid extends Grid<Product> {
     public ProductGrid() {
         setSizeFull();
 
-        addColumn(Product::getProductName).setHeader("Product name")
-                .setFlexGrow(20).setSortable(true);
+        addColumn(Product::getProductName)
+                .setHeader(getTranslation("product-name")).setFlexGrow(20)
+                .setSortable(true);
 
         // Format and add " €" to price
         final DecimalFormat decimalFormat = new DecimalFormat();
@@ -31,7 +32,7 @@ public class ProductGrid extends Grid<Product> {
         final String priceTemplate = "<div style='text-align: right'>${item.price}</div>";
         addColumn(LitRenderer.<Product> of(priceTemplate).withProperty("price",
                 product -> decimalFormat.format(product.getPrice()) + " €"))
-                        .setHeader("Price")
+                        .setHeader(getTranslation("price"))
                         .setComparator(Comparator.comparing(Product::getPrice))
                         .setFlexGrow(3);
 
@@ -44,7 +45,7 @@ public class ProductGrid extends Grid<Product> {
         addColumn(LitRenderer.<Product> of(availabilityTemplate).withProperty(
                 "availability",
                 product -> product.getAvailability().toString()))
-                        .setHeader("Availability")
+                        .setHeader(getTranslation("availability"))
                         .setComparator(
                                 Comparator.comparing(Product::getAvailability))
                         .setFlexGrow(5);
@@ -55,13 +56,14 @@ public class ProductGrid extends Grid<Product> {
                 "stockCount",
                 product -> product.getStockCount() == 0 ? "-"
                         : Integer.toString(product.getStockCount())))
-                                .setHeader("Stock count")
+                                .setHeader(getTranslation("in-stock"))
                                 .setComparator(Comparator
                                         .comparingInt(Product::getStockCount))
                                 .setFlexGrow(3);
 
         // Show all categories the product is in, separated by commas
-        addColumn(this::formatCategories).setHeader("Category").setFlexGrow(12);
+        addColumn(this::formatCategories)
+                .setHeader(getTranslation("categories")).setFlexGrow(12);
     }
 
     public Product getSelectedRow() {
