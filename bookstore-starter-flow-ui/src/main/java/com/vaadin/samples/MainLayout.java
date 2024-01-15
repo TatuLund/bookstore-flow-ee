@@ -1,39 +1,51 @@
 package com.vaadin.samples;
 
+import java.util.Locale;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+
 import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.RouteBaseData;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.Command;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.samples.about.AboutView;
 import com.vaadin.samples.authentication.AccessControl;
 import com.vaadin.samples.crud.SampleCrudViewImpl;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.Cookie;
 
 /**
  * The main layout. Contains the navigation menu.
  */
+@SuppressWarnings("serial")
 @Dependent
 @CdiComponent
-public class MainLayout extends FlexLayout implements RouterLayout {
+public class MainLayout extends FlexLayout
+        implements RouterLayout, AfterNavigationObserver {
 
     private Menu menu;
-
     private AccessControl accessControl;
-
     private Command addAdminMenuItemCommand;
+    private Logger logger;
 
     @Inject
-    public MainLayout(Menu menu, AccessControl accessControl) {
+    public MainLayout(Menu menu, AccessControl accessControl, Logger logger) {
         this.accessControl = accessControl;
         this.menu = menu;
+        this.logger = logger;
         setSizeFull();
         setClassName("main-layout");
         menu.addView(SampleCrudViewImpl.class,
@@ -69,6 +81,21 @@ public class MainLayout extends FlexLayout implements RouterLayout {
                     }
                 }
             });
+        }
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        Cookie localeCookie = CookieUtil.getCookieByName("language",
+                VaadinRequest.getCurrent());
+        if (localeCookie != null && localeCookie.getValue() != null) {
+            logger.info("Using stored locale {} from cookie.",
+                    localeCookie.getValue());
+            Optional<Locale> locale = CustomI18NProvider.locales.stream()
+                    .filter(loc -> loc.getLanguage()
+                            .equals(localeCookie.getValue()))
+                    .findFirst();
+            event.getLocationChangeEvent().getUI().setLocale(locale.get());
         }
     }
 }

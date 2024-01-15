@@ -12,6 +12,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent.ContinueNavigationAction;
@@ -39,7 +41,7 @@ import jakarta.inject.Inject;
 @CdiComponent
 public class SampleCrudViewImpl extends HorizontalLayout
         implements HasUrlParameter<String>, SampleCrudView, BeforeLeaveObserver,
-        HasDynamicTitle {
+        HasDynamicTitle, LocaleChangeObserver {
 
     public static final String VIEW_NAME = "inventory";
     private ProductGrid grid;
@@ -85,7 +87,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     public HorizontalLayout createTopBar() {
         filter = new TextField();
-        filter.setPlaceholder("Filter name, availability or category");
+        filter.setPlaceholder(getTranslation("filter"));
         // Apply the filter to grid's data provider. TextField value is never
         // null
         filter.addValueChangeListener(
@@ -179,5 +181,11 @@ public class SampleCrudViewImpl extends HorizontalLayout
     @Override
     public String getPageTitle() {
         return getTranslation(VIEW_NAME);
+    }
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        newProduct.setText(getTranslation("new-product"));
+        filter.setPlaceholder(getTranslation("filter"));
     }
 }

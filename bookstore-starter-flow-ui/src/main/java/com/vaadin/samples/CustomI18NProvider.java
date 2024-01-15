@@ -25,10 +25,10 @@ public class CustomI18NProvider implements I18NProvider {
 
     private static final String BUNDLE_PREFIX = "translate";
 
-    private final Locale LOCALE_FI = new Locale("fi", "FI");
-    private final Locale LOCALE_EN = new Locale("en", "GB");
+    public static final Locale LOCALE_FI = new Locale("fi", "FI");
+    public static final Locale LOCALE_EN = new Locale("en", "GB");
 
-    private List<Locale> locales = Collections
+    public static List<Locale> locales = Collections
             .unmodifiableList(Arrays.asList(LOCALE_FI, LOCALE_EN));
 
     @Override

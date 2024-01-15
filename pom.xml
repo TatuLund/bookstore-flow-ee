@@ -14,7 +14,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
-		<vaadin.version>24.1.6</vaadin.version>
+		<vaadin.version>24.3.2</vaadin.version>
 	</properties>
 	<prerequisites>
 		<maven>3</maven>
@@ -64,10 +64,6 @@
 			<url>https://maven.vaadin.com/vaadin-prereleases</url>
 		</repository>
 		<!-- Repository needed for the snapshot versions of Vaadin -->
-		<repository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<!-- Main Maven repository -->
@@ -81,13 +77,6 @@
 		<pluginRepository>
 			<id>Vaadin prereleases</id>
 			<url>https://maven.vaadin.com/vaadin-prereleases</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
 		</pluginRepository>
 	</pluginRepositories>
 	<modules>

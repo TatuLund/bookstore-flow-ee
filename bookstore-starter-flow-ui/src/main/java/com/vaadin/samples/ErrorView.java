@@ -23,7 +23,7 @@ public class ErrorView extends VerticalLayout
     private Span explanation;
 
     public ErrorView() {
-        H1 header = new H1("The view could not be found.");
+        H1 header = new H1(getTranslation("view-not-found"));
         header.addClassName(LumoUtility.TextColor.ERROR);
         add(header);
 
@@ -34,8 +34,8 @@ public class ErrorView extends VerticalLayout
     @Override
     public int setErrorParameter(BeforeEnterEvent event,
             ErrorParameter<NotFoundException> parameter) {
-        explanation.setText("Could not navigate to '"
-                + event.getLocation().getPath() + "'.");
+        explanation.setText(
+                getTranslation("cant-navigate", event.getLocation().getPath()));
         return HttpServletResponse.SC_NOT_FOUND;
     }
 }

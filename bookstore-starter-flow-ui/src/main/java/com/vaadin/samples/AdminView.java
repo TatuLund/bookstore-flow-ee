@@ -19,6 +19,8 @@ import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
@@ -32,10 +34,12 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
  * <p>
  * Allows CRUD operations for the book categories.
  */
+@SuppressWarnings("serial")
 @RouteScoped
 @RouteScopeOwner(MainLayout.class)
 @CdiComponent
-public class AdminView extends VerticalLayout implements HasDynamicTitle {
+public class AdminView extends VerticalLayout
+        implements HasDynamicTitle, LocaleChangeObserver {
 
     public static final String VIEW_NAME = "admin";
 
@@ -43,6 +47,8 @@ public class AdminView extends VerticalLayout implements HasDynamicTitle {
     private final ListDataProvider<Category> dataProvider;
     private final Button newCategoryButton;
     private DataService dataService;
+    private H2 h2;
+    private H4 h4;
 
     @Inject
     public AdminView(DataService dataService) {
@@ -60,7 +66,7 @@ public class AdminView extends VerticalLayout implements HasDynamicTitle {
         categoriesListing.setRenderer(
                 new ComponentRenderer<>(this::createCategoryEditor));
 
-        newCategoryButton = new Button(getTranslation("add-new-ategory"),
+        newCategoryButton = new Button(getTranslation("add-new-category"),
                 event -> {
                     Category category = new Category();
                     dataProvider.getItems().add(category);
@@ -68,8 +74,10 @@ public class AdminView extends VerticalLayout implements HasDynamicTitle {
                 });
         newCategoryButton.setDisableOnClick(true);
 
-        add(new H2(getTranslation("admin")), new H4(getTranslation("edit-categories")),
-                newCategoryButton, categoriesListing);
+        h2 = new H2(getTranslation("admin"));
+        h4 = new H4(getTranslation("edit-categories"));
+
+        add(h2, h4, newCategoryButton, categoriesListing);
     }
 
     private Component createCategoryEditor(Category category) {
@@ -109,5 +117,12 @@ public class AdminView extends VerticalLayout implements HasDynamicTitle {
     @Override
     public String getPageTitle() {
         return getTranslation(VIEW_NAME);
+    }
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        h2.setText(getTranslation("admin"));
+        h4.setText(getTranslation("edit-categories"));
+        newCategoryButton.setText(getTranslation("add-new-category"));
     }
 }

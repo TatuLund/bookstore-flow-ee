@@ -11,6 +11,7 @@ import com.vaadin.samples.backend.data.Product;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 
+@SuppressWarnings("serial")
 @Dependent
 @CdiComponent
 public class ProductDataProvider extends ListDataProvider<Product> {

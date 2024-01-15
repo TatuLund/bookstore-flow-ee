@@ -2,6 +2,8 @@ package com.vaadin.samples.crud;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.renderer.LitRenderer;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
@@ -14,14 +16,14 @@ import java.util.stream.Collectors;
  * items. This version uses an in-memory data source that is suitable for small
  * data sets.
  */
-public class ProductGrid extends Grid<Product> {
+public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
     public ProductGrid() {
         setSizeFull();
 
         addColumn(Product::getProductName)
                 .setHeader(getTranslation("product-name")).setFlexGrow(20)
-                .setSortable(true);
+                .setKey("product-name").setSortable(true);
 
         // Format and add " €" to price
         final DecimalFormat decimalFormat = new DecimalFormat();
@@ -32,7 +34,7 @@ public class ProductGrid extends Grid<Product> {
         final String priceTemplate = "<div style='text-align: right'>${item.price}</div>";
         addColumn(LitRenderer.<Product> of(priceTemplate).withProperty("price",
                 product -> decimalFormat.format(product.getPrice()) + " €"))
-                        .setHeader(getTranslation("price"))
+                        .setHeader(getTranslation("price")).setKey("price")
                         .setComparator(Comparator.comparing(Product::getPrice))
                         .setFlexGrow(3);
 
@@ -46,6 +48,7 @@ public class ProductGrid extends Grid<Product> {
                 "availability",
                 product -> product.getAvailability().toString()))
                         .setHeader(getTranslation("availability"))
+                        .setKey("availability")
                         .setComparator(
                                 Comparator.comparing(Product::getAvailability))
                         .setFlexGrow(5);
@@ -63,7 +66,8 @@ public class ProductGrid extends Grid<Product> {
 
         // Show all categories the product is in, separated by commas
         addColumn(this::formatCategories)
-                .setHeader(getTranslation("categories")).setFlexGrow(12);
+                .setHeader(getTranslation("categories")).setKey("categories")
+                .setFlexGrow(12);
     }
 
     public Product getSelectedRow() {
@@ -81,5 +85,9 @@ public class ProductGrid extends Grid<Product> {
         return product.getCategory().stream()
                 .sorted(Comparator.comparing(Category::getId))
                 .map(Category::getName).collect(Collectors.joining(", "));
+    }
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
     }
 }

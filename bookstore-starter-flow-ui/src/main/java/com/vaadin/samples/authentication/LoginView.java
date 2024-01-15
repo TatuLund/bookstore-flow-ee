@@ -1,8 +1,14 @@
 package com.vaadin.samples.authentication;
 
+import java.util.Locale;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+
 import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
@@ -11,28 +17,46 @@ import com.vaadin.flow.component.login.LoginI18n.Form;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.samples.AdminView;
+import com.vaadin.samples.CookieUtil;
+import com.vaadin.samples.CustomI18NProvider;
 import com.vaadin.samples.MainLayout;
 
 import jakarta.inject.Inject;
+import jakarta.servlet.http.Cookie;
 
 /**
  * UI content when the user is not logged in yet.
  */
+@SuppressWarnings("serial")
 @Route("Login")
 @RouteScoped
 @CdiComponent
-public class LoginScreen extends FlexLayout implements HasDynamicTitle {
+public class LoginView extends FlexLayout implements HasDynamicTitle,
+        LocaleChangeObserver, AfterNavigationObserver {
 
     private AccessControl accessControl;
+    private LoginForm loginForm;
+    private Logger logger;
+    private Span loginInfoText;
+    private H1 loginInfoHeader;
+    private Optional<Locale> locale;
+    private Select<Locale> lang;;
 
     @Inject
-    public LoginScreen(AccessControl accessControl) {
+    public LoginView(AccessControl accessControl, Logger logger) {
+        this.logger = logger;
         this.accessControl = accessControl;
         buildUI();
     }
@@ -42,7 +66,7 @@ public class LoginScreen extends FlexLayout implements HasDynamicTitle {
         setClassName("login-screen");
 
         // login form, centered in the available part of the screen
-        LoginForm loginForm = new LoginForm();
+        loginForm = new LoginForm();
         loginForm.addLoginListener(this::login);
         loginForm.addForgotPasswordListener(
                 event -> Notification.show(getTranslation("hint")));
@@ -79,12 +103,27 @@ public class LoginScreen extends FlexLayout implements HasDynamicTitle {
         VerticalLayout loginInformation = new VerticalLayout();
         loginInformation.setClassName("login-information");
 
-        H1 loginInfoHeader = new H1(getTranslation("login-info"));
+        loginInfoHeader = new H1(getTranslation("login-info"));
         loginInfoHeader.setWidth("100%");
-        Span loginInfoText = new Span(getTranslation("login-info-text"));
+        loginInfoText = new Span(getTranslation("login-info-text"));
         loginInfoText.setWidth("100%");
         loginInformation.add(loginInfoHeader);
         loginInformation.add(loginInfoText);
+        lang = new Select<>();
+        lang.setItems(CustomI18NProvider.locales);
+        lang.setItemLabelGenerator(item -> item.toString());
+        loginInformation.add(lang);
+        lang.addValueChangeListener(e -> {
+            if (e.isFromClient()) {
+                getUI().ifPresent(ui -> {
+                    ui.getSession().setAttribute("locale",
+                            e.getValue().getLanguage());
+                    ui.setLocale(e.getValue());
+                    logger.info("Changing locale to {}",
+                            e.getValue().getLanguage());
+                });
+            }
+        });
 
         return loginInformation;
     }
@@ -101,6 +140,7 @@ public class LoginScreen extends FlexLayout implements HasDynamicTitle {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void registerAdminViewIfApplicable() {
         // register the admin view dynamically only for any admin user logged in
         if (accessControl.isUserInRole(AccessControl.ADMIN_ROLE_NAME)
@@ -116,6 +156,29 @@ public class LoginScreen extends FlexLayout implements HasDynamicTitle {
     @Override
     public String getPageTitle() {
         return getTranslation("login");
+    }
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        loginForm.setI18n(getI18n());
+        loginInfoText.setText(getTranslation("login-info-text"));
+        loginInfoHeader.setText(getTranslation("login-info"));
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        Cookie localeCookie = CookieUtil.getCookieByName("language",
+                VaadinRequest.getCurrent());
+        if (localeCookie != null && localeCookie.getValue() != null) {
+            logger.info("Using stored locale {} from cookie.",
+                    localeCookie.getValue());
+            locale = CustomI18NProvider.locales.stream()
+                    .filter(loc -> loc.getLanguage()
+                            .equals(localeCookie.getValue()))
+                    .findFirst();
+            lang.setValue(locale.get());
+            event.getLocationChangeEvent().getUI().setLocale(locale.get());
+        }
     }
 
 }
