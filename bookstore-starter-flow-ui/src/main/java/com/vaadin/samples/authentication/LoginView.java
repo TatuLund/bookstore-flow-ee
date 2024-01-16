@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
@@ -46,6 +45,14 @@ import jakarta.servlet.http.Cookie;
 public class LoginView extends FlexLayout implements HasDynamicTitle,
         LocaleChangeObserver, AfterNavigationObserver {
 
+    private static final String LOGIN_INFO = "login-info";
+    private static final String LOGIN_INFO_TEXT = "login-info-text";
+    private static final String LOGIN_BUTTON = "login-button";
+    private static final String LOGIN = "login";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String FORGOT_PASSWORD = "forgot-password";
+    private static final String HINT = "hint";
     private AccessControl accessControl;
     private LoginForm loginForm;
     private Logger logger;
@@ -69,7 +76,7 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
         loginForm = new LoginForm();
         loginForm.addLoginListener(this::login);
         loginForm.addForgotPasswordListener(
-                event -> Notification.show(getTranslation("hint")));
+                event -> Notification.show(getTranslation(HINT)));
 
         loginForm.setI18n(getI18n());
 
@@ -90,11 +97,11 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
     private LoginI18n getI18n() {
         LoginI18n i18n = new LoginI18n();
         Form form = new Form();
-        form.setForgotPassword(getTranslation("forgot-password"));
-        form.setPassword(getTranslation("password"));
-        form.setUsername(getTranslation("username"));
-        form.setTitle(getTranslation("login"));
-        form.setSubmit(getTranslation("login-button"));
+        form.setForgotPassword(getTranslation(FORGOT_PASSWORD));
+        form.setPassword(getTranslation(PASSWORD));
+        form.setUsername(getTranslation(USERNAME));
+        form.setTitle(getTranslation(LOGIN));
+        form.setSubmit(getTranslation(LOGIN_BUTTON));
         i18n.setForm(form);
         return i18n;
     }
@@ -103,9 +110,9 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
         VerticalLayout loginInformation = new VerticalLayout();
         loginInformation.setClassName("login-information");
 
-        loginInfoHeader = new H1(getTranslation("login-info"));
+        loginInfoHeader = new H1(getTranslation(LOGIN_INFO));
         loginInfoHeader.setWidth("100%");
-        loginInfoText = new Span(getTranslation("login-info-text"));
+        loginInfoText = new Span(getTranslation(LOGIN_INFO_TEXT));
         loginInfoText.setWidth("100%");
         loginInformation.add(loginInfoHeader);
         loginInformation.add(loginInfoText);
@@ -155,14 +162,14 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
 
     @Override
     public String getPageTitle() {
-        return getTranslation("login");
+        return getTranslation(LOGIN);
     }
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
         loginForm.setI18n(getI18n());
-        loginInfoText.setText(getTranslation("login-info-text"));
-        loginInfoHeader.setText(getTranslation("login-info"));
+        loginInfoText.setText(getTranslation(LOGIN_INFO_TEXT));
+        loginInfoHeader.setText(getTranslation(LOGIN_INFO));
     }
 
     @Override

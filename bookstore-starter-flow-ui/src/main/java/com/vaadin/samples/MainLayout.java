@@ -9,7 +9,6 @@ import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -89,7 +88,7 @@ public class MainLayout extends FlexLayout
         Cookie localeCookie = CookieUtil.getCookieByName("language",
                 VaadinRequest.getCurrent());
         if (localeCookie != null && localeCookie.getValue() != null) {
-            logger.info("Using stored locale {} from cookie.",
+            logger.trace("Using stored locale {} from cookie.",
                     localeCookie.getValue());
             Optional<Locale> locale = CustomI18NProvider.locales.stream()
                     .filter(loc -> loc.getLanguage()

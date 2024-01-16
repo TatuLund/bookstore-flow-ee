@@ -15,7 +15,9 @@ public interface SampleCrudView {
 
     public void updateProduct(Product product);
 
-    public void showSaveNotification(String msg);
+    public void showSaveNotification(String book);
+
+    public void showUpdateNotification(String book);
 
     public void editProduct(Product product);
 

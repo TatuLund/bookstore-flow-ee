@@ -13,13 +13,13 @@ import com.vaadin.samples.MainLayout;
 @Route(value = "about", layout = MainLayout.class)
 public class AboutView extends VerticalLayout implements HasDynamicTitle {
 
+    private static final String INFO_TEXT = "info-text";
     public static final String VIEW_NAME = "about";
 
     public AboutView() {
         HorizontalLayout hl = new HorizontalLayout();
         hl.add(VaadinIcon.INFO_CIRCLE.create());
-        hl.add(new Span(" This application is using Vaadin Flow "
-                + Version.getFullVersion() + "."));
+        hl.add(new Span(getTranslation(INFO_TEXT, Version.getFullVersion())));
 
         hl.setSizeFull();
         hl.setJustifyContentMode(JustifyContentMode.CENTER);

@@ -41,7 +41,13 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
 public class AdminView extends VerticalLayout
         implements HasDynamicTitle, LocaleChangeObserver {
 
-    public static final String VIEW_NAME = "admin";
+    private static final String CATEGORY_DELETED = "category-deleted";
+    private static final String CATEGORY_SAVED = "category-saved";
+    private static final String ADD_NEW_CATEGORY = "add-new-category";
+    private static final String ADMIN = "admin";
+    private static final String EDIT_CATEGORIES = "edit-categories";
+
+    public static final String VIEW_NAME = ADMIN;
 
     private final VirtualList<Category> categoriesListing;
     private final ListDataProvider<Category> dataProvider;
@@ -66,7 +72,7 @@ public class AdminView extends VerticalLayout
         categoriesListing.setRenderer(
                 new ComponentRenderer<>(this::createCategoryEditor));
 
-        newCategoryButton = new Button(getTranslation("add-new-category"),
+        newCategoryButton = new Button(getTranslation(ADD_NEW_CATEGORY),
                 event -> {
                     Category category = new Category();
                     dataProvider.getItems().add(category);
@@ -74,8 +80,8 @@ public class AdminView extends VerticalLayout
                 });
         newCategoryButton.setDisableOnClick(true);
 
-        h2 = new H2(getTranslation("admin"));
-        h4 = new H4(getTranslation("edit-categories"));
+        h2 = new H2(getTranslation(ADMIN));
+        h4 = new H4(getTranslation(EDIT_CATEGORIES));
 
         add(h2, h4, newCategoryButton, categoriesListing);
     }
@@ -91,7 +97,7 @@ public class AdminView extends VerticalLayout
                     dataService.deleteCategory(category.getId());
                     dataProvider.getItems().remove(category);
                     dataProvider.refreshAll();
-                    Notification.show(getTranslation("category-deleted"));
+                    Notification.show(getTranslation(CATEGORY_DELETED));
                 });
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
@@ -104,7 +110,7 @@ public class AdminView extends VerticalLayout
                 dataService.updateCategory(category);
                 deleteButton.setEnabled(true);
                 newCategoryButton.setEnabled(true);
-                Notification.show(getTranslation("category-saved"));
+                Notification.show(getTranslation(CATEGORY_SAVED));
             }
         });
         deleteButton.setEnabled(category.getId() > 0);
@@ -121,8 +127,8 @@ public class AdminView extends VerticalLayout
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        h2.setText(getTranslation("admin"));
-        h4.setText(getTranslation("edit-categories"));
-        newCategoryButton.setText(getTranslation("add-new-category"));
+        h2.setText(getTranslation(ADMIN));
+        h4.setText(getTranslation(EDIT_CATEGORIES));
+        newCategoryButton.setText(getTranslation(ADD_NEW_CATEGORY));
     }
 }

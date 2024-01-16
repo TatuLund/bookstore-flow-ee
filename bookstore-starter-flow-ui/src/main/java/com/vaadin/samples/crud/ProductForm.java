@@ -39,6 +39,18 @@ import com.vaadin.samples.backend.data.Product;
  */
 public class ProductForm extends Dialog {
 
+    private static final String UNSAVED_CHANGES = "unsaved-changes";
+    private static final String DISCARD_CHANGES = "discard-changes";
+    private static final String SAVE = "save";
+    private static final String CANCEL = "cancel";
+    private static final String CANNOT_CONVERT = "cannot-convert";
+    private static final String CATEGORIES = "categories";
+    private static final String DISCARD = "discard";
+    private static final String AVAILABILITY = "availability";
+    private static final String IN_STOCK = "in-stock";
+    private static final String PRICE = "price";
+    private static final String PRODUCT_NAME = "product-name";
+
     private VerticalLayout content;
 
     private TextField productName;
@@ -59,8 +71,8 @@ public class ProductForm extends Dialog {
 
     private static class PriceConverter extends StringToBigDecimalConverter {
 
-        public PriceConverter() {
-            super(BigDecimal.ZERO, "Cannot convert value to a number.");
+        public PriceConverter(String errorMessage) {
+            super(BigDecimal.ZERO, errorMessage);
         }
 
         @Override
@@ -77,9 +89,8 @@ public class ProductForm extends Dialog {
 
     private static class StockCountConverter extends StringToIntegerConverter {
 
-        public StockCountConverter() {
-            super(0, "Could not convert value to " + Integer.class.getName()
-                    + ".");
+        public StockCountConverter(String errorMessage) {
+            super(0, errorMessage);
         }
 
         @Override
@@ -106,18 +117,18 @@ public class ProductForm extends Dialog {
 
         presenter = sampleCrudLogic;
 
-        productName = new TextField(getTranslation("product-name"));
+        productName = new TextField(getTranslation(PRODUCT_NAME));
         productName.setWidth("100%");
         productName.setRequired(true);
         productName.setValueChangeMode(ValueChangeMode.EAGER);
         content.add(productName);
 
-        price = new TextField(getTranslation("price"));
+        price = new TextField(getTranslation(PRICE));
         price.setSuffixComponent(new Span("€"));
         price.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         price.setValueChangeMode(ValueChangeMode.EAGER);
 
-        stockCount = new TextField(getTranslation("in-stock"));
+        stockCount = new TextField(getTranslation(IN_STOCK));
         stockCount.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         stockCount.setValueChangeMode(ValueChangeMode.EAGER);
 
@@ -128,13 +139,13 @@ public class ProductForm extends Dialog {
         content.add(horizontalLayout);
 
         availability = new Select<>();
-        availability.setLabel(getTranslation("availability"));
+        availability.setLabel(getTranslation(AVAILABILITY));
         availability.setWidth("100%");
         availability.setItems(Availability.values());
         content.add(availability);
 
         category = new CheckboxGroup<>();
-        category.setLabel(getTranslation("categories"));
+        category.setLabel(getTranslation(CATEGORIES));
         category.addClassName("scroll");
         category.setWidth("100%");
         category.setId("category");
@@ -142,9 +153,12 @@ public class ProductForm extends Dialog {
         content.add(category);
 
         binder = new BeanValidationBinder<>(Product.class);
-        binder.forField(price).withConverter(new PriceConverter())
-                .bind("price");
-        binder.forField(stockCount).withConverter(new StockCountConverter())
+        binder.forField(price)
+                .withConverter(
+                        new PriceConverter(getTranslation(CANNOT_CONVERT)))
+                .bind(PRICE);
+        binder.forField(stockCount).withConverter(
+                new StockCountConverter(getTranslation(CANNOT_CONVERT)))
                 .bind("stockCount");
         binder.bindInstanceFields(this);
 
@@ -162,7 +176,7 @@ public class ProductForm extends Dialog {
             discard.setEnabled(hasChanges);
         });
 
-        save = new Button(getTranslation("save"));
+        save = new Button(getTranslation(SAVE));
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener(event -> {
             if (currentProduct != null
@@ -172,14 +186,14 @@ public class ProductForm extends Dialog {
         });
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
 
-        discard = new Button(getTranslation("discard"));
+        discard = new Button(getTranslation(DISCARD));
         discard.addThemeName("warning");
         discard.addClickListener(event -> {
             hasChanges = false;
             presenter.editProduct(currentProduct);
         });
 
-        cancel = new Button(getTranslation("cancel"));
+        cancel = new Button(getTranslation(CANCEL));
         cancel.addClickListener(event -> presenter.cancelProduct());
         cancel.addClickShortcut(Key.ESCAPE);
         getElement()
@@ -226,9 +240,10 @@ public class ProductForm extends Dialog {
 
     public void confirmDiscard(SerializableRunnable action) {
         ConfirmDialog confirm = new ConfirmDialog();
-        confirm.setConfirmText("Discard");
-        confirm.setHeader("Discard changes");
-        confirm.setText("There are unsaved changes.");
+        confirm.setConfirmText(getTranslation(DISCARD));
+        confirm.setCancelText(getTranslation(CANCEL));
+        confirm.setHeader(DISCARD_CHANGES);
+        confirm.setText(UNSAVED_CHANGES);
         confirm.setCancelable(true);
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {

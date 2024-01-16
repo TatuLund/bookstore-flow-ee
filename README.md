@@ -10,9 +10,14 @@ Vaadin 24 supports Servlet 6 and Jakarta EE 10. This demo app demonstrates many 
 
 ## Other useful Vaadin tips demoed
 
+These tips are not specific to CDI or JavaEE
+
 - How to build custom app layout when not using AppLayout component
 - How to build CRUD view without using Crud component
 - How to use Dialog as Offcanvas style modal view
+- How to highlight changed fields in the Form
+- How to use CustomI18NProvider with multiple supported languages
+- How to persist chosen language in a cookie
 
 ## Prerequisites
 

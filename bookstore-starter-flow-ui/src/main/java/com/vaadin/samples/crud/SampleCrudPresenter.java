@@ -93,8 +93,11 @@ public class SampleCrudPresenter implements Serializable {
         view.clearSelection();
         view.updateProduct(product);
         setFragmentParameter("");
-        view.showSaveNotification(product.getProductName()
-                + (newProduct ? " created" : " updated"));
+        if (newProduct) {
+            view.showSaveNotification(product.getProductName());
+        } else {
+            view.showUpdateNotification(product.getProductName());
+        }
     }
 
     public void deleteProduct(Product product) {

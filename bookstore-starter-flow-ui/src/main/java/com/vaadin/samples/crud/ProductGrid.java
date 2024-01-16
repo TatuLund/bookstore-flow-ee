@@ -18,12 +18,18 @@ import java.util.stream.Collectors;
  */
 public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
+    private static final String CATEGORIES = "categories";
+    private static final String IN_STOCK = "in-stock";
+    private static final String AVAILABILITY = "availability";
+    private static final String PRICE = "price";
+    private static final String PRODUCT_NAME = "product-name";
+
     public ProductGrid() {
         setSizeFull();
 
         addColumn(Product::getProductName)
-                .setHeader(getTranslation("product-name")).setFlexGrow(20)
-                .setKey("product-name").setSortable(true);
+                .setHeader(getTranslation(PRODUCT_NAME)).setFlexGrow(20)
+                .setKey(PRODUCT_NAME).setSortable(true);
 
         // Format and add " €" to price
         final DecimalFormat decimalFormat = new DecimalFormat();
@@ -32,9 +38,9 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
         // To change the text alignment of the column, a template is used.
         final String priceTemplate = "<div style='text-align: right'>${item.price}</div>";
-        addColumn(LitRenderer.<Product> of(priceTemplate).withProperty("price",
+        addColumn(LitRenderer.<Product> of(priceTemplate).withProperty(PRICE,
                 product -> decimalFormat.format(product.getPrice()) + " €"))
-                        .setHeader(getTranslation("price")).setKey("price")
+                        .setHeader(getTranslation(PRICE)).setKey(PRICE)
                         .setComparator(Comparator.comparing(Product::getPrice))
                         .setFlexGrow(3);
 
@@ -47,8 +53,8 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
         addColumn(LitRenderer.<Product> of(availabilityTemplate).withProperty(
                 "availability",
                 product -> product.getAvailability().toString()))
-                        .setHeader(getTranslation("availability"))
-                        .setKey("availability")
+                        .setHeader(getTranslation(AVAILABILITY))
+                        .setKey(AVAILABILITY)
                         .setComparator(
                                 Comparator.comparing(Product::getAvailability))
                         .setFlexGrow(5);
@@ -59,15 +65,14 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
                 "stockCount",
                 product -> product.getStockCount() == 0 ? "-"
                         : Integer.toString(product.getStockCount())))
-                                .setHeader(getTranslation("in-stock"))
+                                .setHeader(getTranslation(IN_STOCK))
                                 .setComparator(Comparator
                                         .comparingInt(Product::getStockCount))
                                 .setFlexGrow(3);
 
         // Show all categories the product is in, separated by commas
-        addColumn(this::formatCategories)
-                .setHeader(getTranslation("categories")).setKey("categories")
-                .setFlexGrow(12);
+        addColumn(this::formatCategories).setHeader(getTranslation(CATEGORIES))
+                .setKey(CATEGORIES).setFlexGrow(12);
     }
 
     public Product getSelectedRow() {
@@ -89,5 +94,7 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
+        getColumns().forEach(
+                column -> column.setHeader(getTranslation(column.getKey())));
     }
 }

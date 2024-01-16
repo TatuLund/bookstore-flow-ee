@@ -43,6 +43,14 @@ public class SampleCrudViewImpl extends HorizontalLayout
         implements HasUrlParameter<String>, SampleCrudView, BeforeLeaveObserver,
         HasDynamicTitle, LocaleChangeObserver {
 
+    private static final String UPDATED = "updated";
+    private static final String CREATED = "created";
+    private static final String REMOVED = "removed";
+    private static final String WILL_DELETE = "will-delete";
+    private static final String CONFIRM = "confirm";
+    private static final String DELETE = "delete";
+    private static final String NEW_PRODUCT = "new-product";
+    private static final String FILTER = "filter";
     public static final String VIEW_NAME = "inventory";
     private ProductGrid grid;
     private ProductForm form;
@@ -87,14 +95,14 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     public HorizontalLayout createTopBar() {
         filter = new TextField();
-        filter.setPlaceholder(getTranslation("filter"));
+        filter.setPlaceholder(getTranslation(FILTER));
         // Apply the filter to grid's data provider. TextField value is never
         // null
         filter.addValueChangeListener(
                 event -> dataProvider.setFilter(event.getValue()));
         filter.addFocusShortcut(Key.KEY_F, KeyModifier.CONTROL);
 
-        newProduct = new Button(getTranslation("new-product"));
+        newProduct = new Button(getTranslation(NEW_PRODUCT));
         newProduct.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         newProduct.setIcon(VaadinIcon.PLUS_CIRCLE.create());
         newProduct.addClickListener(click -> presenter.newProduct());
@@ -114,8 +122,16 @@ public class SampleCrudViewImpl extends HorizontalLayout
         Notification.show(msg);
     }
 
-    public void showSaveNotification(String msg) {
-        Notification.show(msg);
+    public void showSaveNotification(String book) {
+        Notification.show(getTranslation(CREATED, book));
+    }
+
+    public void showUpdateNotification(String book) {
+        Notification.show(getTranslation(UPDATED, book));
+    }
+
+    private void showNotification(String book) {
+        Notification.show(getTranslation(UPDATED, book));
     }
 
     public void setNewProductEnabled(boolean enabled) {
@@ -140,14 +156,15 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     public void removeProduct(Product product) {
         ConfirmDialog confirm = new ConfirmDialog();
-        confirm.setConfirmText("Delete");
-        confirm.setHeader("Confirm");
-        confirm.setText(product.getProductName() + " will be deleted.");
+        confirm.setConfirmText(getTranslation(DELETE));
+        confirm.setHeader(getTranslation(CONFIRM));
+        confirm.setText(getTranslation(WILL_DELETE, product.getProductName()));
         confirm.setCancelable(true);
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
             dataProvider.delete(product);
-            showSaveNotification(product.getProductName() + " removed");
+            showNotification(
+                    getTranslation(REMOVED, product.getProductName()));
         });
         confirm.addCancelListener(e -> {
             editProduct(product);
@@ -185,7 +202,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        newProduct.setText(getTranslation("new-product"));
-        filter.setPlaceholder(getTranslation("filter"));
+        newProduct.setText(getTranslation(NEW_PRODUCT));
+        filter.setPlaceholder(getTranslation(FILTER));
     }
 }

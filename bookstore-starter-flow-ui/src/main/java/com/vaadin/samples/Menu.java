@@ -24,6 +24,9 @@ import jakarta.inject.Inject;
 @Dependent
 public class Menu extends FlexLayout implements LocaleChangeObserver {
 
+    private static final String LOGOUT = "logout";
+    private static final String MENU = "menu";
+    private static final String BOOKSTORE = "bookstore";
     private static final String SHOW_TABS = "show-tabs";
     private SideNav sideNav;
     private H3 title;
@@ -35,7 +38,7 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
         setClassName("menu-bar");
 
         // Button for toggling the menu visibility on small screens
-        showMenu = new Button(getTranslation("menu"), event -> {
+        showMenu = new Button(getTranslation(MENU), event -> {
             if (sideNav.getClassNames().contains(SHOW_TABS)) {
                 sideNav.removeClassName(SHOW_TABS);
             } else {
@@ -52,7 +55,7 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
         top.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         top.setClassName("menu-header");
 
-        title = new H3(getTranslation("bookstore"));
+        title = new H3(getTranslation(BOOKSTORE));
 
         String resolvedImage = VaadinServletService.getCurrent()
                 .resolveResource("img/table-logo.png");
@@ -68,7 +71,7 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
         add(sideNav);
 
         // logout menu item
-        logoutButton = new Button(getTranslation("logout"),
+        logoutButton = new Button(getTranslation(LOGOUT),
                 VaadinIcon.SIGN_OUT.create());
         logoutButton.addClickListener(event -> accessControl.signOut());
         logoutButton.addClassNames(LumoUtility.Margin.Top.AUTO,
@@ -96,8 +99,8 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        title.setText(getTranslation("bookstore"));
-        showMenu.setText(getTranslation("menu"));
-        logoutButton.setText(getTranslation("logout"));        
+        title.setText(getTranslation(BOOKSTORE));
+        showMenu.setText(getTranslation(MENU));
+        logoutButton.setText(getTranslation(LOGOUT));        
     }
 }
