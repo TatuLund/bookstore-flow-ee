@@ -1,6 +1,8 @@
 package com.vaadin.samples.crud;
 
+import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
  * items. This version uses an in-memory data source that is suitable for small
  * data sets.
  */
+@Uses(Icon.class)
 public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
     private static final String CATEGORIES = "categories";
@@ -49,7 +52,7 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
         // Available, Coming and Discontinued, are defined in shared-styles.css
         // and are
         // used here in availabilityTemplate.
-        final String availabilityTemplate = "<vaadin-icon icon=\"vaadin:circle\" class=\"${item.availability}\"></vaadin-icon> ${item.availability}";
+        final String availabilityTemplate = "<vaadin-icon icon=\"vaadin:circle\" class=\"${item.availability} mr-s\"></vaadin-icon> ${item.availability}";
         addColumn(LitRenderer.<Product> of(availabilityTemplate).withProperty(
                 "availability",
                 product -> product.getAvailability().toString()))

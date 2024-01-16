@@ -181,15 +181,15 @@ vaadin-checkbox-group.scroll::part(group-field) {
 
 /* Color codes for the availability statuses of the products */
 .Available {
-    color: #2dd085;
+    color: var(--lumo-success-color,#2dd085);
 }
 
 .Coming {
-    color: #ffc66e;
+    color: var(--lumo-warning-color,#ffc66e);
 }
 
 .Discontinued {
-    color: #f54993;
+    color: var(--lumo-error-color, #f54993);
 }
 
 .dirty::part(input-field) {

@@ -10,6 +10,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -17,6 +18,8 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -27,6 +30,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToBigDecimalConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -142,6 +146,13 @@ public class ProductForm extends Dialog {
         availability.setLabel(getTranslation(AVAILABILITY));
         availability.setWidth("100%");
         availability.setItems(Availability.values());
+        availability.setRenderer(new ComponentRenderer<Span, Availability>(item -> {
+            Icon icon = VaadinIcon.CIRCLE.create();
+            icon.addClassNames(item.toString(), LumoUtility.Margin.Right.SMALL);
+            Span span = new Span();
+            span.add(icon, new Text(item.toString()));
+            return span;
+        }));
         content.add(availability);
 
         category = new CheckboxGroup<>();
@@ -242,8 +253,8 @@ public class ProductForm extends Dialog {
         ConfirmDialog confirm = new ConfirmDialog();
         confirm.setConfirmText(getTranslation(DISCARD));
         confirm.setCancelText(getTranslation(CANCEL));
-        confirm.setHeader(DISCARD_CHANGES);
-        confirm.setText(UNSAVED_CHANGES);
+        confirm.setHeader(getTranslation(DISCARD_CHANGES));
+        confirm.setText(getTranslation(UNSAVED_CHANGES));
         confirm.setCancelable(true);
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
