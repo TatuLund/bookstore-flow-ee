@@ -6,6 +6,8 @@ import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Locale;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
@@ -18,6 +20,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.shared.InputField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -145,10 +148,16 @@ public class ProductForm extends Dialog {
                 .bind("stockCount");
         binder.bindInstanceFields(this);
 
+        binder.getFields().forEach(field -> addDirtyCheck(field));
+
         // enable/disable save button while editing
         binder.addStatusChangeListener(event -> {
             boolean isValid = !event.hasValidationErrors();
             hasChanges = binder.hasChanges();
+            if (!hasChanges) {
+                binder.getFields().forEach(
+                        field -> ((Component) field).removeClassName("dirty"));
+            }
             save.setEnabled(hasChanges && isValid);
             discard.setEnabled(hasChanges);
         });
@@ -164,6 +173,7 @@ public class ProductForm extends Dialog {
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
 
         discard = new Button(getTranslation("discard"));
+        discard.addThemeName("warning");
         discard.addClickListener(event -> {
             hasChanges = false;
             presenter.editProduct(currentProduct);
@@ -230,5 +240,13 @@ public class ProductForm extends Dialog {
 
     public boolean hasChanges() {
         return hasChanges;
+    }
+
+    private static void addDirtyCheck(HasValue<?, ?> field) {
+        field.addValueChangeListener(e -> {
+            if (e.isFromClient()) {
+                ((Component) field).addClassName("dirty");
+            }
+        });
     }
 }

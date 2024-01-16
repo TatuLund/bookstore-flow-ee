@@ -191,3 +191,18 @@ vaadin-checkbox-group.scroll::part(group-field) {
 .Discontinued {
     color: #f54993;
 }
+
+.dirty::part(input-field) {
+	background: var(--lumo-warning-color-10pct);
+	border: 1px dashed var(--lumo-warning-color);
+}
+
+.dirty::part(group-field) {
+	border: 1px dashed var(--lumo-warning-color);
+}
+
+.dirty > vaadin-checkbox {
+    --lumo-contrast-20pct: var(--lumo-warning-color-10pct);
+    --lumo-primary-color: var(--lumo-warning-text-color);
+    --lumo-contrast-30pct: var(--lumo-warning-color);
+}
