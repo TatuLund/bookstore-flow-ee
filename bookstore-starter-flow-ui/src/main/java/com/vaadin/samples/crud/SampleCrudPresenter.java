@@ -19,6 +19,7 @@ import java.io.Serializable;
  * the system separately, and to e.g. provide alternative views for the same
  * data.
  */
+@SuppressWarnings("serial")
 @Dependent
 public class SampleCrudPresenter implements Serializable {
 

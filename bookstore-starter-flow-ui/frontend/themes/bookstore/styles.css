@@ -123,7 +123,7 @@ vaadin-checkbox-group.scroll::part(group-field) {
 
     .menu-bar {
         flex-direction: row;
-        align-items: center;
+        align-items: baseline;
         justify-content: space-between;
         height: var(--top-bar-height);
         margin: 0 var(--top-bar-margin);
@@ -163,9 +163,12 @@ vaadin-checkbox-group.scroll::part(group-field) {
         height: calc(100% - var(--top-bar-height));
     }
 
+    .availability-label {
+        display: none;
+    }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 570px) {
 
     .product-form {
         width: 100%;
@@ -177,6 +180,11 @@ vaadin-checkbox-group.scroll::part(group-field) {
 	vaadin-dialog-overlay::part(overlay) {
 		width: 100%;
 	}
+
+	vaadin-confirm-dialog-overlay::part(overlay) {
+		width: 50%;
+	}
+
 }
 
 /* Color codes for the availability statuses of the products */

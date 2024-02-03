@@ -54,7 +54,7 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
 
         // header of the menu
         final HorizontalLayout top = new HorizontalLayout();
-        top.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        top.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         top.setClassName("menu-header");
 
         title = new H3(getTranslation(BOOKSTORE));

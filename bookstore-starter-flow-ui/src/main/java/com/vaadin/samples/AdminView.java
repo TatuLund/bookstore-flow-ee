@@ -41,6 +41,7 @@ import static com.vaadin.samples.AdminView.VIEW_NAME;
 public class AdminView extends VerticalLayout
         implements HasDynamicTitle, LocaleChangeObserver {
 
+    private static final String DELETE = "delete";
     private static final String CATEGORY_DELETED = "category-deleted";
     private static final String CATEGORY_SAVED = "category-saved";
     private static final String ADD_NEW_CATEGORY = "add-new-category";
@@ -100,6 +101,7 @@ public class AdminView extends VerticalLayout
                     Notification.show(getTranslation(CATEGORY_DELETED));
                 });
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        deleteButton.setTooltipText(getTranslation(DELETE));
 
         BeanValidationBinder<Category> binder = new BeanValidationBinder<>(
                 Category.class);

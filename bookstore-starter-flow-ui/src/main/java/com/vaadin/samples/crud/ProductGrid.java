@@ -1,6 +1,7 @@
 package com.vaadin.samples.crud;
 
 import com.vaadin.flow.component.dependency.Uses;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.data.renderer.LitRenderer;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
  * items. This version uses an in-memory data source that is suitable for small
  * data sets.
  */
+@SuppressWarnings("serial")
 @Uses(Icon.class)
 public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
@@ -32,7 +34,8 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
         addColumn(Product::getProductName)
                 .setHeader(getTranslation(PRODUCT_NAME)).setFlexGrow(20)
-                .setKey(PRODUCT_NAME).setSortable(true);
+                .setKey(PRODUCT_NAME).setSortable(true)
+                .setTooltipGenerator(item -> item.getProductName());
 
         // Format and add " €" to price
         final DecimalFormat decimalFormat = new DecimalFormat();
@@ -52,30 +55,33 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
         // Available, Coming and Discontinued, are defined in shared-styles.css
         // and are
         // used here in availabilityTemplate.
-        final String availabilityTemplate = "<vaadin-icon icon=\"vaadin:circle\" class=\"${item.availability} mr-s\"></vaadin-icon> ${item.availability}";
-        addColumn(LitRenderer.<Product> of(availabilityTemplate).withProperty(
-                "availability",
-                product -> product.getAvailability().toString()))
-                        .setHeader(getTranslation(AVAILABILITY))
-                        .setKey(AVAILABILITY)
-                        .setComparator(
-                                Comparator.comparing(Product::getAvailability))
-                        .setFlexGrow(5);
+        final String availabilityTemplate = """
+                <vaadin-icon icon="vaadin:circle" class="${item.class} mr-s"></vaadin-icon>
+                <span class="availability-label">${item.availability}</span>
+                """;
+        var availability = addColumn(LitRenderer
+                .<Product> of(availabilityTemplate)
+                .withProperty("class",
+                        product -> product.getAvailability().toString())
+                .withProperty("availability", product -> getTranslation(
+                        product.getAvailability().toString().toLowerCase())));
+        availability.setHeader(getTranslation(AVAILABILITY))
+                .setKey(AVAILABILITY)
+                .setComparator(Comparator.comparing(Product::getAvailability))
+                .setFlexGrow(2).setTooltipGenerator(item -> getTranslation(
+                        item.getAvailability().toString().toLowerCase()));
 
-        // To change the text alignment of the column, a template is used.
-        final String stockCountTemplate = "<div style='text-align: right'>${item.stockCount}</div>";
-        addColumn(LitRenderer.<Product> of(stockCountTemplate).withProperty(
-                "stockCount",
-                product -> product.getStockCount() == 0 ? "-"
-                        : Integer.toString(product.getStockCount())))
-                                .setHeader(getTranslation(IN_STOCK))
-                                .setComparator(Comparator
-                                        .comparingInt(Product::getStockCount))
-                                .setFlexGrow(3);
+        addColumn(product -> product.getStockCount() == 0 ? "-"
+                : Integer.toString(product.getStockCount()))
+                        .setHeader(getTranslation(IN_STOCK))
+                        .setComparator(
+                                Comparator.comparingInt(Product::getStockCount))
+                        .setFlexGrow(2).setTextAlign(ColumnTextAlign.END);
 
         // Show all categories the product is in, separated by commas
         addColumn(this::formatCategories).setHeader(getTranslation(CATEGORIES))
-                .setKey(CATEGORIES).setFlexGrow(12);
+                .setKey(CATEGORIES).setFlexGrow(12)
+                .setTooltipGenerator(this::formatCategories);
     }
 
     public Product getSelectedRow() {

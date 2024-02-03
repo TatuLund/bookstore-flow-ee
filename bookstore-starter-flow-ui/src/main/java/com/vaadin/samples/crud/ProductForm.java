@@ -7,14 +7,16 @@ import java.util.Collection;
 import java.util.Locale;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.Shortcuts;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
-import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox.AutoExpandMode;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Span;
@@ -23,7 +25,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.shared.InputField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -41,6 +42,7 @@ import com.vaadin.samples.backend.data.Product;
 /**
  * A form for editing a single product.
  */
+@SuppressWarnings("serial")
 public class ProductForm extends Dialog {
 
     private static final String UNSAVED_CHANGES = "unsaved-changes";
@@ -61,7 +63,7 @@ public class ProductForm extends Dialog {
     private TextField price;
     private TextField stockCount;
     private Select<Availability> availability;
-    private CheckboxGroup<Category> category;
+    private MultiSelectComboBox<Category> category;
     private Button save;
     private Button discard;
     private Button cancel;
@@ -73,6 +75,7 @@ public class ProductForm extends Dialog {
 
     private boolean hasChanges;
 
+    @SuppressWarnings("serial")
     private static class PriceConverter extends StringToBigDecimalConverter {
 
         public PriceConverter(String errorMessage) {
@@ -117,6 +120,7 @@ public class ProductForm extends Dialog {
 
         content = new VerticalLayout();
         content.setSizeUndefined();
+        content.setHeightFull();
         add(content);
 
         presenter = sampleCrudLogic;
@@ -138,6 +142,7 @@ public class ProductForm extends Dialog {
 
         HorizontalLayout horizontalLayout = new HorizontalLayout(price,
                 stockCount);
+        horizontalLayout.addClassName(LumoUtility.FlexWrap.WRAP);
         horizontalLayout.setWidth("100%");
         horizontalLayout.setFlexGrow(1, price, stockCount);
         content.add(horizontalLayout);
@@ -146,21 +151,23 @@ public class ProductForm extends Dialog {
         availability.setLabel(getTranslation(AVAILABILITY));
         availability.setWidth("100%");
         availability.setItems(Availability.values());
-        availability.setRenderer(new ComponentRenderer<Span, Availability>(item -> {
-            Icon icon = VaadinIcon.CIRCLE.create();
-            icon.addClassNames(item.toString(), LumoUtility.Margin.Right.SMALL);
-            Span span = new Span();
-            span.add(icon, new Text(item.toString()));
-            return span;
-        }));
+        availability
+                .setRenderer(new ComponentRenderer<Span, Availability>(item -> {
+                    Icon icon = VaadinIcon.CIRCLE.create();
+                    icon.addClassNames(item.toString(),
+                            LumoUtility.Margin.Right.SMALL);
+                    Span span = new Span();
+                    span.add(icon, new Text(
+                            getTranslation(item.toString().toLowerCase())));
+                    return span;
+                }));
         content.add(availability);
 
-        category = new CheckboxGroup<>();
+        category = new MultiSelectComboBox<>();
         category.setLabel(getTranslation(CATEGORIES));
-        category.addClassName("scroll");
         category.setWidth("100%");
         category.setId("category");
-        category.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+        category.setAutoExpand(AutoExpandMode.VERTICAL);
         content.add(category);
 
         binder = new BeanValidationBinder<>(Product.class);
@@ -168,9 +175,15 @@ public class ProductForm extends Dialog {
                 .withConverter(
                         new PriceConverter(getTranslation(CANNOT_CONVERT)))
                 .bind(PRICE);
-        binder.forField(stockCount).withConverter(
-                new StockCountConverter(getTranslation(CANNOT_CONVERT)))
+        binder.forField(stockCount)
+                .withConverter(
+                        new StockCountConverter(getTranslation(CANNOT_CONVERT)))
                 .bind("stockCount");
+
+        binder.withValidator(
+                product -> product.getAvailability() == Availability.AVAILABLE
+                        && product.getStockCount() > 0,
+                "Error");
         binder.bindInstanceFields(this);
 
         binder.getFields().forEach(field -> addDirtyCheck(field));
@@ -188,32 +201,42 @@ public class ProductForm extends Dialog {
         });
 
         save = new Button(getTranslation(SAVE));
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
+                ButtonVariant.LUMO_SMALL);
         save.addClickListener(event -> {
             if (currentProduct != null
                     && binder.writeBeanIfValid(currentProduct)) {
                 presenter.saveProduct(currentProduct);
+            } else {
+                if (binder.getFields()
+                        .filter(field -> ((HasValidation) field).isInvalid())
+                        .count() == 0) {
+                    stockCount.setInvalid(true);
+                    stockCount.setErrorMessage(
+                            getTranslation("availability-mismatch"));
+                }
             }
         });
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
 
         discard = new Button(getTranslation(DISCARD));
-        discard.addThemeName("warning");
+        discard.addThemeNames("warning", "small");
         discard.addClickListener(event -> {
             hasChanges = false;
             presenter.editProduct(currentProduct);
         });
 
         cancel = new Button(getTranslation(CANCEL));
-        cancel.addClickListener(event -> presenter.cancelProduct());
+        cancel.addClickListener(event -> cancelProduct());
         cancel.addClickShortcut(Key.ESCAPE);
-        getElement()
-                .addEventListener("keydown", event -> presenter.cancelProduct())
-                .setFilter("event.key == 'Escape'");
+        cancel.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        Shortcuts
+                .addShortcutListener(this, event -> cancelProduct(), Key.ESCAPE)
+                .listenOn(this);
 
         delete = new Button(getTranslation("delete"));
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
-                ButtonVariant.LUMO_PRIMARY);
+                ButtonVariant.LUMO_SMALL);
         delete.addClickListener(event -> {
             if (currentProduct != null) {
                 presenter.deleteProduct(currentProduct);
@@ -224,7 +247,9 @@ public class ProductForm extends Dialog {
         buttons.setPadding(false);
         buttons.setWidth("100%");
         buttons.add(delete, discard, cancel, save);
-        buttons.addClassName(LumoUtility.JustifyContent.BETWEEN);
+        buttons.addClassNames(LumoUtility.JustifyContent.BETWEEN,
+                LumoUtility.Margin.Top.AUTO, LumoUtility.FlexWrap.WRAP);
+        buttons.setFlexGrow(1, save);
         content.add(buttons);
 
         addDialogCloseActionListener(e -> {
@@ -234,6 +259,14 @@ public class ProductForm extends Dialog {
                 close();
             }
         });
+    }
+
+    private void cancelProduct() {
+        if (hasChanges) {
+            confirmDiscard(() -> presenter.cancelProduct());
+        } else {
+            presenter.cancelProduct();
+        }
     }
 
     public void setCategories(Collection<Category> categories) {
