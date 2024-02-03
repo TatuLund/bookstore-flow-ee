@@ -1,5 +1,7 @@
 package com.vaadin.samples.authentication;
 
+import org.slf4j.Logger;
+
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -11,11 +13,14 @@ import jakarta.inject.Inject;
  * accepts any string as a password, and considers the user "admin" as the only
  * administrator.
  */
+@SuppressWarnings("serial")
 @SessionScoped
 public class BasicAccessControl implements AccessControl {
 
     @Inject
     CurrentUser currentUser;
+    @Inject
+    Logger logger;
 
     public BasicAccessControl() {    
     }
@@ -27,8 +32,8 @@ public class BasicAccessControl implements AccessControl {
 
         if (!username.equals(password))
             return false;
-
         currentUser.set(username);
+        logger.info("User {} logged in", currentUser.get());
         return true;
     }
 
@@ -41,7 +46,9 @@ public class BasicAccessControl implements AccessControl {
     public boolean isUserInRole(String role) {
         if ("admin".equals(role)) {
             // Only the "admin" user is in the "admin" role
-            return getPrincipalName().equals("admin");
+            boolean hasRole = getPrincipalName().equals("admin");
+            logger.info("User {}, admin={}", currentUser.get(), hasRole);
+            return hasRole;
         }
 
         // All users are in all non-admin roles

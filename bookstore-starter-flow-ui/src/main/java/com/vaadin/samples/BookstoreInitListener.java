@@ -1,12 +1,12 @@
 package com.vaadin.samples;
 
-import java.util.Locale;
+import java.io.Serializable;
+
+import org.slf4j.Logger;
 
 import com.vaadin.flow.server.ServiceInitEvent;
-import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.samples.authentication.AccessControl;
-import com.vaadin.samples.authentication.LoginView;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.Cookie;
@@ -17,23 +17,19 @@ import jakarta.servlet.http.Cookie;
  * It is registered in a file named
  * com.vaadin.flow.server.VaadinServiceInitListener in META-INF/services.
  */
-public class BookstoreInitListener {
+@SuppressWarnings("serial")
+@Dependent
+public class BookstoreInitListener implements Serializable {
 
     @Inject
-    AccessControl accessControl;
+    Logger logger;
     private String locale;
 
     // ServiceInitEvent CDI event is dispatched by CDI add-on upon
     // VaadinService start, no listener registration is needed when using this
     @SuppressWarnings("unused")
     private void onServiceInit(@Observes ServiceInitEvent initEvent) {
-        initEvent.getSource().addUIInitListener(uiInitEvent -> {
-            uiInitEvent.getUI().addBeforeEnterListener(enterEvent -> {
-                if (!accessControl.isUserSignedIn() && !LoginView.class
-                        .equals(enterEvent.getNavigationTarget()))
-                    enterEvent.rerouteTo(LoginView.class);
-            });
-        });
+        logger.info("Service started");
 
         initEvent.addRequestHandler((session, request, response) -> {
             Cookie localeCookie = CookieUtil.getCookieByName("language",

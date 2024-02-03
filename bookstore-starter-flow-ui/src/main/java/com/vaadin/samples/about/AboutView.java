@@ -10,6 +10,7 @@ import com.vaadin.flow.server.Version;
 import com.vaadin.samples.BookstoreTitle;
 import com.vaadin.samples.MainLayout;
 
+@SuppressWarnings("serial")
 @Route(value = "about", layout = MainLayout.class)
 public class AboutView extends VerticalLayout implements HasDynamicTitle {
 

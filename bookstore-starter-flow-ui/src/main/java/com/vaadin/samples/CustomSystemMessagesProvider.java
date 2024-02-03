@@ -7,6 +7,7 @@ import com.vaadin.flow.server.SystemMessages;
 import com.vaadin.flow.server.SystemMessagesInfo;
 import com.vaadin.flow.server.SystemMessagesProvider;
 
+@SuppressWarnings("serial")
 @VaadinServiceEnabled
 @VaadinServiceScoped
 public class CustomSystemMessagesProvider implements SystemMessagesProvider {

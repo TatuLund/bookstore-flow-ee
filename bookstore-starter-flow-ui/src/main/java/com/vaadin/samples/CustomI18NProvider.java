@@ -16,6 +16,7 @@ import com.vaadin.flow.i18n.I18NProvider;
 
 import jakarta.inject.Inject;
 
+@SuppressWarnings("serial")
 @VaadinServiceEnabled
 @VaadinServiceScoped
 public class CustomI18NProvider implements I18NProvider {

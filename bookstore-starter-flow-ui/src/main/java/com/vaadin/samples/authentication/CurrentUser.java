@@ -8,6 +8,7 @@ import jakarta.enterprise.context.SessionScoped;
  * Class for retrieving and setting the name of the current user of the current
  * session (without using JAAS).
  */
+@SuppressWarnings("serial")
 @SessionScoped
 public class CurrentUser implements Serializable {
 

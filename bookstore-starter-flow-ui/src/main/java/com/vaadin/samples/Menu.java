@@ -1,5 +1,6 @@
 package com.vaadin.samples;
 
+import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -22,6 +23,7 @@ import jakarta.inject.Inject;
 
 @SuppressWarnings("serial")
 @Dependent
+@CdiComponent
 public class Menu extends FlexLayout implements LocaleChangeObserver {
 
     private static final String LOGOUT = "logout";
