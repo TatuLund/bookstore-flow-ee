@@ -75,7 +75,6 @@ public class ProductForm extends Dialog {
 
     private boolean hasChanges;
 
-    @SuppressWarnings("serial")
     private static class PriceConverter extends StringToBigDecimalConverter {
 
         public PriceConverter(String errorMessage) {
@@ -218,13 +217,15 @@ public class ProductForm extends Dialog {
             }
         });
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
+        save.setEnabled(false);
 
         discard = new Button(getTranslation(DISCARD));
         discard.addThemeNames("warning", "small");
         discard.addClickListener(event -> {
-            hasChanges = false;
             presenter.editProduct(currentProduct);
+            hasChanges = false;
         });
+        discard.setEnabled(false);
 
         cancel = new Button(getTranslation(CANCEL));
         cancel.addClickListener(event -> cancelProduct());
@@ -265,6 +266,7 @@ public class ProductForm extends Dialog {
         if (hasChanges) {
             confirmDiscard(() -> presenter.cancelProduct());
         } else {
+            currentProduct = null;
             presenter.cancelProduct();
         }
     }
@@ -307,5 +309,9 @@ public class ProductForm extends Dialog {
                 ((Component) field).addClassName("dirty");
             }
         });
+    }
+
+    public Product getCurrentProduct() {
+        return this.currentProduct;
     }
 }

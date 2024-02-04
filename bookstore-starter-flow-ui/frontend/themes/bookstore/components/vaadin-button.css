@@ -4,3 +4,8 @@
     font-weight: 600;
     min-width: calc(var(--lumo-button-size) * 2.5);
 }
+
+:host([theme~='warning'][disabled]) {
+    background-color: var(--lumo-contrast-30pct);
+    color: var(--lumo-base-color);
+}

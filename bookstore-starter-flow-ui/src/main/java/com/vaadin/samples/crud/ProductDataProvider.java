@@ -1,5 +1,7 @@
 package com.vaadin.samples.crud;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -21,10 +23,25 @@ public class ProductDataProvider extends ListDataProvider<Product> {
     /** Text filter that can be changed separately. */
     private String filterText = "";
 
+    private Collection<Product> products;
+    private long timestamp = 0;
+
     @Inject
     public ProductDataProvider(DataService dataService) {
-        super(dataService.getAllProducts());
+        super(new ArrayList<>());
         this.dataService = dataService;
+    }
+
+    public void loadData() {
+        // Cache time 15mins
+        long age = (System.currentTimeMillis() - timestamp) / 1000 / 60;
+        if (timestamp == 0 || age > 15) {
+            products = dataService.getAllProducts();
+        }
+        timestamp = System.currentTimeMillis();
+        getItems().clear();
+        getItems().addAll(products);
+        refreshAll();
     }
 
     /**
@@ -34,10 +51,11 @@ public class ProductDataProvider extends ListDataProvider<Product> {
      *            the updated or new product
      */
     public void save(Product product) {
-        boolean newProduct = product.isNewProduct();
+        boolean isNewProduct = product.isNewProduct();
 
-        dataService.updateProduct(product);
-        if (newProduct) {
+        Product newProduct = dataService.updateProduct(product);
+        if (isNewProduct) {
+            getItems().add(newProduct);
             refreshAll();
         } else {
             refreshItem(product);
@@ -51,6 +69,7 @@ public class ProductDataProvider extends ListDataProvider<Product> {
      *            the product to be deleted
      */
     public void delete(Product product) {
+        getItems().remove(product);
         dataService.deleteProduct(product.getId());
         refreshAll();
     }

@@ -1,5 +1,7 @@
 package com.vaadin.samples.crud;
 
+import java.util.Collection;
+
 import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Key;
@@ -14,6 +16,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent.ContinueNavigationAction;
@@ -25,6 +29,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.samples.MainLayout;
 import com.vaadin.samples.backend.DataService;
+import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
 import jakarta.inject.Inject;
@@ -35,13 +40,14 @@ import jakarta.inject.Inject;
  * See also {@link SampleCrudPresenter} for fetching the data, the actual CRUD
  * operations and controlling the view based on events from outside.
  */
+@SuppressWarnings("serial")
 @Route(value = "inventory", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @RouteScoped
 @CdiComponent
 public class SampleCrudViewImpl extends HorizontalLayout
         implements HasUrlParameter<String>, SampleCrudView, BeforeLeaveObserver,
-        HasDynamicTitle, LocaleChangeObserver {
+        AfterNavigationObserver, HasDynamicTitle, LocaleChangeObserver {
 
     private static final String UPDATED = "updated";
     private static final String CREATED = "created";
@@ -77,7 +83,6 @@ public class SampleCrudViewImpl extends HorizontalLayout
                 event -> presenter.rowSelected(event.getValue()));
 
         form = new ProductForm(presenter);
-        form.setCategories(dataService.getAllCategories());
 
         VerticalLayout barAndGridLayout = new VerticalLayout();
         barAndGridLayout.add(topLayout);
@@ -163,8 +168,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
             dataProvider.delete(product);
-            showNotification(
-                    getTranslation(REMOVED, product.getProductName()));
+            showNotification(getTranslation(REMOVED, product.getProductName()));
         });
         confirm.addCancelListener(e -> {
             editProduct(product);
@@ -189,7 +193,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
-        if (form.hasChanges()) {
+        if (form.getCurrentProduct() != null && form.hasChanges()) {
             ContinueNavigationAction action = event.postpone();
             form.confirmDiscard(() -> action.proceed());
         }
@@ -204,5 +208,21 @@ public class SampleCrudViewImpl extends HorizontalLayout
     public void localeChange(LocaleChangeEvent event) {
         newProduct.setText(getTranslation(NEW_PRODUCT));
         filter.setPlaceholder(getTranslation(FILTER));
+    }
+
+    @Override
+    public void setCatgories(Collection<Category> categories) {
+        form.setCategories(categories);
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        dataProvider.loadData();
+        presenter.requestCategories();
+    }
+
+    @Override
+    public Product getCurrentProduct() {
+        return form.getCurrentProduct();
     }
 }

@@ -1,6 +1,8 @@
 package com.vaadin.samples.crud;
 
-import com.vaadin.flow.function.SerializableRunnable;
+import java.util.Collection;
+
+import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
 public interface SampleCrudView {
@@ -22,4 +24,8 @@ public interface SampleCrudView {
     public void editProduct(Product product);
 
     public void removeProduct(Product product);
+    
+    public void setCatgories(Collection<Category> collection);
+
+    public Product getCurrentProduct();
 }

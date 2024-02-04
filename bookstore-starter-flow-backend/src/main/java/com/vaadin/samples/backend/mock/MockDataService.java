@@ -2,6 +2,10 @@ package com.vaadin.samples.backend.mock;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
 
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
@@ -14,6 +18,7 @@ import jakarta.inject.Inject;
  * Mock data model. This implementation has very simplistic locking and does not
  * notify users of modifications.
  */
+@SuppressWarnings("serial")
 @ApplicationScoped
 public class MockDataService implements DataService {
 
@@ -21,6 +26,10 @@ public class MockDataService implements DataService {
     private List<Category> categories;
     private int nextProductId = 0;
     private int nextCategoryId = 0;
+    private Random random = new Random();
+
+    @Inject
+    Logger logger;
 
     @Inject
     public MockDataService(MockDataGenerator mockDataGenerator) {
@@ -32,29 +41,35 @@ public class MockDataService implements DataService {
 
     @Override
     public synchronized List<Product> getAllProducts() {
-        sleep(5);
-        return Collections.unmodifiableList(products);
+        randomWait(12);
+        return products.stream().map(p -> new Product(p))
+                .collect(Collectors.toList());
     }
 
     @Override
     public synchronized List<Category> getAllCategories() {
-        sleep(3);
-        return Collections.unmodifiableList(categories);
+        randomWait(2);
+        return categories;
     }
 
     @Override
-    public synchronized void updateProduct(Product p) {
-        sleep(2);
+    public synchronized Product updateProduct(Product product) {
+        randomWait(1);
+        var p = new Product(product);
         if (p.getId() < 0) {
             // New product
             p.setId(nextProductId++);
             products.add(p);
-            return;
+            logger.info("Saved a new product ({}) {}", p.getId(),
+                    p.getProductName());
+            return p;
         }
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getId() == p.getId()) {
                 products.set(i, p);
-                return;
+                logger.info("Updated the product ({}) {}", p.getId(),
+                        p.getProductName());
+                return p;
             }
         }
 
@@ -64,10 +79,10 @@ public class MockDataService implements DataService {
 
     @Override
     public synchronized Product getProductById(int productId) {
-        sleep(1);
+        randomWait(1);
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getId() == productId) {
-                return products.get(i);
+                return new Product(products.get(i));
             }
         }
         return null;
@@ -75,7 +90,7 @@ public class MockDataService implements DataService {
 
     @Override
     public void updateCategory(Category category) {
-        sleep(2);
+        randomWait(1);
         if (category.getId() < 0) {
             category.setId(nextCategoryId++);
             categories.add(category);
@@ -84,7 +99,7 @@ public class MockDataService implements DataService {
 
     @Override
     public void deleteCategory(int categoryId) {
-        sleep(2);
+        randomWait(1);
         if (categories.removeIf(category -> category.getId() == categoryId)) {
             getAllProducts().forEach(product -> {
                 product.getCategory()
@@ -95,7 +110,7 @@ public class MockDataService implements DataService {
 
     @Override
     public synchronized void deleteProduct(int productId) {
-        sleep(2);
+        randomWait(1);
         Product p = getProductById(productId);
         if (p == null) {
             throw new IllegalArgumentException(
@@ -104,10 +119,11 @@ public class MockDataService implements DataService {
         products.remove(p);
     }
 
-    private void sleep(int x) {
+    private void randomWait(int count) {
+        int wait = 50 + random.nextInt(150);
         try {
-            Thread.sleep(x * 100);
+            Thread.sleep(wait * count);
         } catch (InterruptedException e) {
         }
     }
-}
+ }

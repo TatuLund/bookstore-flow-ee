@@ -2,6 +2,7 @@ package com.vaadin.samples.backend.data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.validation.constraints.Min;
@@ -23,6 +24,19 @@ public class Product implements Serializable {
     private int stockCount = 0;
     @NotNull(message = "{availability.required}")
     private Availability availability = Availability.COMING;
+
+    public Product() {
+        setId(-1);
+    }
+
+    public Product(Product other) {
+        setId(other.getId());
+        setProductName(other.getProductName());
+        setPrice(other.getPrice());
+        setStockCount(other.getStockCount());
+        setAvailability(other.getAvailability());
+        setCategory(other.getCategory());
+    }
 
     public int getId() {
         return id;
@@ -76,4 +90,20 @@ public class Product implements Serializable {
         return getId() == -1;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Product other = (Product) obj;
+        return id == other.id;
+    }
 }

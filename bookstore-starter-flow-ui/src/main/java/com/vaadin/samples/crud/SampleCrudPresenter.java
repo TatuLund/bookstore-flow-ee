@@ -52,6 +52,10 @@ public class SampleCrudPresenter implements Serializable {
         view.clearSelection();
     }
 
+    public void requestCategories() {
+        view.setCatgories(dataService.getAllCategories());
+    }
+
     /**
      * Update the fragment without causing navigator to change view
      */
@@ -110,7 +114,7 @@ public class SampleCrudPresenter implements Serializable {
     public void editProduct(Product product) {
         if (product == null) {
             setFragmentParameter("");
-        } else {
+        } else if (!product.equals(view.getCurrentProduct())) {
             setFragmentParameter(product.getId() + "");
         }
         view.editProduct(product);
