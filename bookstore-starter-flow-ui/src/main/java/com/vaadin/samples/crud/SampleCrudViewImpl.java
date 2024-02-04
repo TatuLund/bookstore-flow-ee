@@ -135,8 +135,8 @@ public class SampleCrudViewImpl extends HorizontalLayout
         Notification.show(getTranslation(UPDATED, book));
     }
 
-    private void showNotification(String book) {
-        Notification.show(getTranslation(UPDATED, book));
+    private void showNotification(String notification) {
+        Notification.show(notification);
     }
 
     public void setNewProductEnabled(boolean enabled) {
@@ -217,6 +217,8 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
+        // It is good practice to defer loading of the data until navigation is
+        // complete hence performing it in after navigation
         dataProvider.loadData();
         presenter.requestCategories();
     }

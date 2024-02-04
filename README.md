@@ -4,9 +4,11 @@ A project example for a Vaadin application that requires a Servlet 6 container t
 
 Vaadin 24 supports Servlet 6 and Jakarta EE 10. This demo app demonstrates many use cases with Java EE and CDI such as
 
-- Dependency injection and inversion of control
+- How to use dependency injection and inversion of control
 - How to apply model view presenter architecture in Vaadin app using CDI
-- EAR packaging
+- How to use Vaadin scopes when beans.xml has bean-discovery-mode="annotated"
+- How to use EAR packaging for production
+- How to use WAR packaging for development
 
 ## Other useful Vaadin tips demoed
 
@@ -18,6 +20,11 @@ These tips are not specific to CDI or JavaEE
 - How to highlight changed fields in the Form
 - How to use CustomI18NProvider with multiple supported languages
 - How to persist chosen language in a cookie
+- How to use localized error messages with JSR-303 and BeanValidationBinder
+- How to use bean level validator
+- How to implement caching data provider when backend is slow
+- How to use warning colors with Button and ConfirmDialog
+- How to create responsive design
 
 ## Prerequisites
 

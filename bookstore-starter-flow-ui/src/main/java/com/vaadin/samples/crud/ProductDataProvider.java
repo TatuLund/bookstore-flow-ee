@@ -32,8 +32,18 @@ public class ProductDataProvider extends ListDataProvider<Product> {
         this.dataService = dataService;
     }
 
+    /**
+     * Load data. Data is always loaded on initial load. Data is not reloaded
+     * unless it is more than 15mins old.
+     */
     public void loadData() {
+        // Crud view is bookmarkable, hence afterNavigation is called when
+        // product id url parameter change. The mock data service has simulated
+        // slowness. Hence it is good to optimize the UX with simple data
+        // caching.
+        //
         // Cache time 15mins
+
         long age = (System.currentTimeMillis() - timestamp) / 1000 / 60;
         if (timestamp == 0 || age > 15) {
             products = dataService.getAllProducts();

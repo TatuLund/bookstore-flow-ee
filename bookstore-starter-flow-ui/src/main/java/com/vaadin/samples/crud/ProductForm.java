@@ -271,10 +271,22 @@ public class ProductForm extends Dialog {
         }
     }
 
+    /**
+     * Set the categories used in categories selector.
+     * 
+     * @param categories
+     *            Collection of categories
+     */
     public void setCategories(Collection<Category> categories) {
         category.setItems(categories);
     }
 
+    /**
+     * Edit a product. If product is null, then new product will be created.
+     * 
+     * @param product
+     *            Product to edit, can be null.
+     */
     public void editProduct(Product product) {
         if (product == null) {
             product = new Product();
@@ -284,6 +296,13 @@ public class ProductForm extends Dialog {
         binder.readBean(product);
     }
 
+    /**
+     * Display confirm dialog with discard edits message, if confirm clicked
+     * action is run.
+     * 
+     * @param action
+     *            Runnable
+     */
     public void confirmDiscard(SerializableRunnable action) {
         ConfirmDialog confirm = new ConfirmDialog();
         confirm.setConfirmText(getTranslation(DISCARD));
@@ -299,6 +318,11 @@ public class ProductForm extends Dialog {
         confirm.open();
     }
 
+    /**
+     * Check if the form has changes.
+     * 
+     * @return boolean value
+     */
     public boolean hasChanges() {
         return hasChanges;
     }
@@ -311,6 +335,11 @@ public class ProductForm extends Dialog {
         });
     }
 
+    /**
+     * Get current product, can be null if cancelled, not loaded.
+     * 
+     * @return Product or null
+     */
     public Product getCurrentProduct() {
         return this.currentProduct;
     }
