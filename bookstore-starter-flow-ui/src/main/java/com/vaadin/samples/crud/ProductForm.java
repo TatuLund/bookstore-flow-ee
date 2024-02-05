@@ -264,7 +264,10 @@ public class ProductForm extends Dialog {
 
     private void cancelProduct() {
         if (hasChanges) {
-            confirmDiscard(() -> presenter.cancelProduct());
+            confirmDiscard(() -> {
+                currentProduct = null;
+                presenter.cancelProduct();
+            });
         } else {
             currentProduct = null;
             presenter.cancelProduct();
