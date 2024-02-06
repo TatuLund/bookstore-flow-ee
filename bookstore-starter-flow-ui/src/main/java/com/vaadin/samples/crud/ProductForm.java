@@ -29,10 +29,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.StatusChangeEvent;
 import com.vaadin.flow.data.converter.StringToBigDecimalConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.samples.backend.data.Availability;
@@ -45,6 +47,7 @@ import com.vaadin.samples.backend.data.Product;
 @SuppressWarnings("serial")
 public class ProductForm extends Dialog {
 
+    // Localization constants
     private static final String UNSAVED_CHANGES = "unsaved-changes";
     private static final String DISCARD_CHANGES = "discard-changes";
     private static final String SAVE = "save";
@@ -74,6 +77,17 @@ public class ProductForm extends Dialog {
     private Product currentProduct;
 
     private boolean hasChanges;
+
+    private ComponentRenderer<Span, Availability> availabilityRenderer = new ComponentRenderer<Span, Availability>(
+            item -> {
+                Icon icon = VaadinIcon.CIRCLE.create();
+                icon.addClassNames(item.toString(),
+                        LumoUtility.Margin.Right.SMALL);
+                Span span = new Span();
+                span.add(icon, new Text(
+                        getTranslation(item.toString().toLowerCase())));
+                return span;
+            });
 
     private static class PriceConverter extends StringToBigDecimalConverter {
 
@@ -150,16 +164,7 @@ public class ProductForm extends Dialog {
         availability.setLabel(getTranslation(AVAILABILITY));
         availability.setWidth("100%");
         availability.setItems(Availability.values());
-        availability
-                .setRenderer(new ComponentRenderer<Span, Availability>(item -> {
-                    Icon icon = VaadinIcon.CIRCLE.create();
-                    icon.addClassNames(item.toString(),
-                            LumoUtility.Margin.Right.SMALL);
-                    Span span = new Span();
-                    span.add(icon, new Text(
-                            getTranslation(item.toString().toLowerCase())));
-                    return span;
-                }));
+        availability.setRenderer(availabilityRenderer);
         content.add(availability);
 
         category = new MultiSelectComboBox<>();
@@ -179,50 +184,21 @@ public class ProductForm extends Dialog {
                         new StockCountConverter(getTranslation(CANNOT_CONVERT)))
                 .bind("stockCount");
 
-        binder.withValidator(product -> (product
-                .getAvailability() == Availability.AVAILABLE
-                && product.getStockCount() > 0)
-                || (product.getAvailability() == Availability.DISCONTINUED
-                        && product.getStockCount() == 0)
-                || (product.getAvailability() == Availability.COMING
-                        && product.getStockCount() == 0),
-                "Error");
+        // Add bean level validation for Availability vs. Stock count cross
+        // checking.
+        binder.withValidator(this::checkAvailabilityVsStockCount, "Error");
+
         binder.bindInstanceFields(this);
 
         binder.getFields().forEach(field -> addDirtyCheck(field));
 
         // enable/disable save button while editing
-        binder.addStatusChangeListener(event -> {
-            boolean isValid = !event.hasValidationErrors();
-            hasChanges = binder.hasChanges();
-            if (!hasChanges) {
-                binder.getFields().forEach(
-                        field -> ((Component) field).removeClassName("dirty"));
-            }
-            save.setEnabled(hasChanges && isValid);
-            discard.setEnabled(hasChanges);
-        });
+        binder.addStatusChangeListener(this::handleBinderStatusChange);
 
         save = new Button(getTranslation(SAVE));
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
                 ButtonVariant.LUMO_SMALL);
-        save.addClickListener(event -> {
-            if (currentProduct != null
-                    && binder.writeBeanIfValid(currentProduct)) {
-                presenter.saveProduct(currentProduct);
-            } else {
-                if (binder.getFields()
-                        .filter(field -> ((HasValidation) field).isInvalid())
-                        .count() == 0) {
-                    stockCount.setInvalid(true);
-                    stockCount.setErrorMessage(
-                            getTranslation("availability-mismatch"));
-                    availability.setInvalid(true);
-                    availability.setErrorMessage(
-                            getTranslation("availability-mismatch"));
-                }
-            }
-        });
+        save.addClickListener(event -> saveButtonClicked());
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
         save.setEnabled(false);
 
@@ -267,6 +243,49 @@ public class ProductForm extends Dialog {
                 close();
             }
         });
+    }
+
+    private void saveButtonClicked() {
+        if (currentProduct != null
+                && binder.writeBeanIfValid(currentProduct)) {
+            presenter.saveProduct(currentProduct);
+        } else if (binderHasInvalidFieldsBound()) {
+            flagStockCountAndAvailabilityInvalid();
+
+        }
+    }
+
+    private void flagStockCountAndAvailabilityInvalid() {
+        stockCount.setInvalid(true);
+        stockCount.setErrorMessage(getTranslation("availability-mismatch"));
+        availability.setInvalid(true);
+        availability.setErrorMessage(getTranslation("availability-mismatch"));
+    }
+
+    private boolean binderHasInvalidFieldsBound() {
+        return binder.getFields()
+                .filter(field -> ((HasValidation) field).isInvalid())
+                .count() == 0;
+    }
+
+    private void handleBinderStatusChange(StatusChangeEvent event) {
+        boolean isValid = !event.hasValidationErrors();
+        hasChanges = binder.hasChanges();
+        if (!hasChanges) {
+            binder.getFields().forEach(
+                    field -> ((Component) field).removeClassName("dirty"));
+        }
+        save.setEnabled(hasChanges && isValid);
+        discard.setEnabled(hasChanges);
+    }
+
+    private boolean checkAvailabilityVsStockCount(Product product) {
+        return (product.getAvailability() == Availability.AVAILABLE
+                && product.getStockCount() > 0)
+                || (product.getAvailability() == Availability.DISCONTINUED
+                        && product.getStockCount() == 0)
+                || (product.getAvailability() == Availability.COMING
+                        && product.getStockCount() == 0);
     }
 
     private void cancelProduct() {
@@ -357,4 +376,5 @@ public class ProductForm extends Dialog {
     public void clearProduct() {
         currentProduct = null;
     }
+
 }

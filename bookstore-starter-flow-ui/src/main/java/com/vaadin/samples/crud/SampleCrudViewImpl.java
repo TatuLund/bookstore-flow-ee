@@ -71,7 +71,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     @Inject
     public SampleCrudViewImpl(ProductDataProvider dataProvider,
-            DataService dataService, SampleCrudPresenter presenter) {
+            SampleCrudPresenter presenter) {
         this.dataProvider = dataProvider;
         this.presenter = presenter;
         presenter.setView(this);
@@ -186,10 +186,10 @@ public class SampleCrudViewImpl extends HorizontalLayout
         showForm(product != null);
         if (product == null) {
             setFragmentParameter("");
+        } else if (product.isNewProduct()) {
+            setFragmentParameter("new");
         } else if (!product.equals(getCurrentProduct())) {
             setFragmentParameter(product.getId() + "");
-        } else if (product.getId() == -1) {
-            setFragmentParameter("new");
         }
         form.editProduct(product);
     }
