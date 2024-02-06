@@ -3,6 +3,7 @@ package com.vaadin.samples.crud;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -31,6 +32,9 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
     public ProductGrid() {
         setSizeFull();
+
+        addThemeVariants(GridVariant.LUMO_ROW_STRIPES,
+                GridVariant.LUMO_NO_ROW_BORDERS);
 
         addColumn(Product::getProductName)
                 .setHeader(getTranslation(PRODUCT_NAME)).setFlexGrow(20)

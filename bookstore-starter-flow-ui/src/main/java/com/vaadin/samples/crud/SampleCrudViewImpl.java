@@ -68,6 +68,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
     private Button newProduct;
 
     private ProductDataProvider dataProvider;
+    private String parameter;
 
     @Inject
     public SampleCrudViewImpl(ProductDataProvider dataProvider,
@@ -218,7 +219,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
     @Override
     public void setParameter(BeforeEvent event,
             @OptionalParameter String parameter) {
-        presenter.enter(parameter);
+        this.parameter = parameter;
     }
 
     @Override
@@ -251,6 +252,9 @@ public class SampleCrudViewImpl extends HorizontalLayout
         // complete hence performing it in after navigation
         dataProvider.loadData();
         presenter.requestCategories();
+        if (parameter != null) {
+            presenter.enter(parameter);
+        }
     }
 
     @Override

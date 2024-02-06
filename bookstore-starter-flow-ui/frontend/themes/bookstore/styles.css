@@ -166,9 +166,17 @@ vaadin-checkbox-group.scroll::part(group-field) {
     .availability-label {
         display: none;
     }
+
+    vaadin-grid {
+        --lumo-font-size-m: 0.8em;
+	}
 }
 
 @media (max-width: 570px) {
+
+    vaadin-grid::part(cell) {
+        text-wrap: wrap;
+	}
 
     .product-form {
         width: 100%;
@@ -176,6 +184,10 @@ vaadin-checkbox-group.scroll::part(group-field) {
         /* Prevent text-fields from overflowing on narrow screens */
         --vaadin-text-field-default-width: 6em;
     }
+
+    .product-form > vaadin-vertical-layout {
+		padding: 0px;
+	}
 
 	vaadin-dialog-overlay::part(overlay) {
 		width: 100%;
