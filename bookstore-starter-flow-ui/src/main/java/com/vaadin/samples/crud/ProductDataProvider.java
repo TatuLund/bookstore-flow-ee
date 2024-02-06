@@ -66,6 +66,7 @@ public class ProductDataProvider extends ListDataProvider<Product> {
         Product newProduct = dataService.updateProduct(product);
         if (isNewProduct) {
             getItems().add(newProduct);
+            products.add(newProduct);
             refreshAll();
         } else {
             refreshItem(product);
