@@ -48,26 +48,11 @@ public class SampleCrudPresenter implements Serializable {
     }
 
     public void cancelProduct() {
-        setFragmentParameter("");
         view.clearSelection();
     }
 
     public void requestCategories() {
-        view.setCatgories(dataService.getAllCategories());
-    }
-
-    /**
-     * Update the fragment without causing navigator to change view
-     */
-    private void setFragmentParameter(String productId) {
-        String fragmentParameter;
-        if (productId == null || productId.isEmpty()) {
-            fragmentParameter = "";
-        } else {
-            fragmentParameter = productId;
-        }
-
-        UI.getCurrent().navigate(SampleCrudViewImpl.class, fragmentParameter);
+        view.setCategories(dataService.getAllCategories());
     }
 
     public void enter(String productId) {
@@ -95,34 +80,26 @@ public class SampleCrudPresenter implements Serializable {
 
     public void saveProduct(Product product) {
         boolean newProduct = product.isNewProduct();
-        view.clearSelection();
         view.updateProduct(product);
-        setFragmentParameter("");
         if (newProduct) {
             view.showSaveNotification(product.getProductName());
         } else {
             view.showUpdateNotification(product.getProductName());
         }
+        view.clearSelection();
     }
 
     public void deleteProduct(Product product) {
-        view.clearSelection();
         view.removeProduct(product);
-        setFragmentParameter("");
+        view.clearSelection();
     }
 
     public void editProduct(Product product) {
-        if (product == null) {
-            setFragmentParameter("");
-        } else if (!product.equals(view.getCurrentProduct())) {
-            setFragmentParameter(product.getId() + "");
-        }
         view.editProduct(product);
     }
 
     public void newProduct() {
         view.clearSelection();
-        setFragmentParameter("new");
         view.editProduct(new Product());
     }
 

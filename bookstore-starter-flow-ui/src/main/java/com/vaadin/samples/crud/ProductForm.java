@@ -179,9 +179,13 @@ public class ProductForm extends Dialog {
                         new StockCountConverter(getTranslation(CANNOT_CONVERT)))
                 .bind("stockCount");
 
-        binder.withValidator(
-                product -> product.getAvailability() == Availability.AVAILABLE
-                        && product.getStockCount() > 0,
+        binder.withValidator(product -> (product
+                .getAvailability() == Availability.AVAILABLE
+                && product.getStockCount() > 0)
+                || (product.getAvailability() == Availability.DISCONTINUED
+                        && product.getStockCount() == 0)
+                || (product.getAvailability() == Availability.COMING
+                        && product.getStockCount() == 0),
                 "Error");
         binder.bindInstanceFields(this);
 
@@ -212,6 +216,9 @@ public class ProductForm extends Dialog {
                         .count() == 0) {
                     stockCount.setInvalid(true);
                     stockCount.setErrorMessage(
+                            getTranslation("availability-mismatch"));
+                    availability.setInvalid(true);
+                    availability.setErrorMessage(
                             getTranslation("availability-mismatch"));
                 }
             }
@@ -344,6 +351,10 @@ public class ProductForm extends Dialog {
      * @return Product or null
      */
     public Product getCurrentProduct() {
-        return this.currentProduct;
+        return currentProduct;
+    }
+
+    public void clearProduct() {
+        currentProduct = null;
     }
 }

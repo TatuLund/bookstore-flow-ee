@@ -1,6 +1,7 @@
 package com.vaadin.samples.crud;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScoped;
@@ -123,14 +124,12 @@ public class SampleCrudViewImpl extends HorizontalLayout
         return topLayout;
     }
 
-    public void showError(String msg) {
-        Notification.show(msg);
-    }
-
+    @Override
     public void showSaveNotification(String book) {
         Notification.show(getTranslation(CREATED, book));
     }
 
+    @Override
     public void showUpdateNotification(String book) {
         Notification.show(getTranslation(UPDATED, book));
     }
@@ -139,26 +138,31 @@ public class SampleCrudViewImpl extends HorizontalLayout
         Notification.show(notification);
     }
 
+    @Override
     public void setNewProductEnabled(boolean enabled) {
         newProduct.setEnabled(enabled);
     }
 
+    @Override
     public void clearSelection() {
+        setFragmentParameter("");
+        form.clearProduct();
         grid.getSelectionModel().deselectAll();
     }
 
+    @Override
     public void selectRow(Product row) {
         grid.getSelectionModel().select(row);
     }
 
-    public Product getSelectedRow() {
-        return grid.getSelectedRow();
-    }
-
+    @Override
     public void updateProduct(Product product) {
         dataProvider.save(product);
+        grid.scrollToIndex(grid.getListDataView().getItems()
+                .collect(Collectors.toList()).indexOf(product));
     }
 
+    @Override
     public void removeProduct(Product product) {
         ConfirmDialog confirm = new ConfirmDialog();
         confirm.setConfirmText(getTranslation(DELETE));
@@ -167,6 +171,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         confirm.setCancelable(true);
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
+            form.clearProduct();
             dataProvider.delete(product);
             showNotification(getTranslation(REMOVED, product.getProductName()));
         });
@@ -176,13 +181,37 @@ public class SampleCrudViewImpl extends HorizontalLayout
         confirm.open();
     }
 
+    @Override
     public void editProduct(Product product) {
         showForm(product != null);
+        if (product == null) {
+            setFragmentParameter("");
+        } else if (!product.equals(getCurrentProduct())) {
+            setFragmentParameter(product.getId() + "");
+        } else if (product.getId() == -1) {
+            setFragmentParameter("new");
+        }
         form.editProduct(product);
     }
 
+    @Override
     public void showForm(boolean show) {
         form.setOpened(show);
+    }
+
+    /**
+     * Update the fragment without causing navigator to change view
+     */
+    private void setFragmentParameter(String productId) {
+        String fragmentParameter;
+        if (productId == null || productId.isEmpty()) {
+            fragmentParameter = "";
+        } else {
+            fragmentParameter = productId;
+        }
+
+        getUI().ifPresent(
+                ui -> ui.navigate(SampleCrudViewImpl.class, fragmentParameter));
     }
 
     @Override
@@ -211,7 +240,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
     }
 
     @Override
-    public void setCatgories(Collection<Category> categories) {
+    public void setCategories(Collection<Category> categories) {
         form.setCategories(categories);
     }
 

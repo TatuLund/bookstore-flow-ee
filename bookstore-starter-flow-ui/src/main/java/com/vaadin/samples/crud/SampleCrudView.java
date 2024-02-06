@@ -25,7 +25,7 @@ public interface SampleCrudView {
 
     public void removeProduct(Product product);
     
-    public void setCatgories(Collection<Category> collection);
+    public void setCategories(Collection<Category> collection);
 
     public Product getCurrentProduct();
 }

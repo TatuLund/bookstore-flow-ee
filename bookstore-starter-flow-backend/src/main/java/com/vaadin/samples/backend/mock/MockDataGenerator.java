@@ -15,8 +15,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class MockDataGenerator {
-    private static int nextCategoryId = 1;
-    private static int nextProductId = 1;
+    private int nextCategoryId = 1;
+    private int nextProductId = 1;
     private static final Random random = new Random(1);
     private static final String categoryNames[] = new String[] {
             "Children's books", "Best sellers", "Romance", "Mystery",

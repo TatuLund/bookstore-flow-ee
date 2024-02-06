@@ -117,6 +117,8 @@ public class MockDataService implements DataService {
                     "Product with id " + productId + " not found");
         }
         products.remove(p);
+        logger.info("Removed the product ({}) {}", p.getId(),
+                p.getProductName());
     }
 
     private void randomWait(int count) {
