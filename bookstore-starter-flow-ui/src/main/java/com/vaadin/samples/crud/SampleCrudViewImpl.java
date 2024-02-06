@@ -101,6 +101,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     public HorizontalLayout createTopBar() {
         filter = new TextField();
+        filter.setPrefixComponent(VaadinIcon.SEARCH.create());
         filter.setPlaceholder(getTranslation(FILTER));
         // Apply the filter to grid's data provider. TextField value is never
         // null
