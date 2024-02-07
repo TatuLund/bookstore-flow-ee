@@ -46,7 +46,7 @@ public class ProductDataProvider extends ListDataProvider<Product> {
 
     /**
      * Load data. Data is always loaded on initial load. Data is not reloaded
-     * unless it is more than 15mins old.
+     * unless it is more than 1mins old.
      */
     public void loadData() {
         // Crud view is bookmarkable, hence afterNavigation is called when
@@ -57,12 +57,12 @@ public class ProductDataProvider extends ListDataProvider<Product> {
         // Cache time 15mins
 
         long age = (System.currentTimeMillis() - timestamp) / 1000 / 60;
-        if (timestamp == 0 || age > 15) {
+        if (timestamp == 0 || age > 1) {
             logger.info(
                     "Product data expired or first load, loading from backend.");
             products = dataService.getAllProducts();
+            timestamp = System.currentTimeMillis();
         }
-        timestamp = System.currentTimeMillis();
         getItems().clear();
         getItems().addAll(products);
         refreshAll();
