@@ -1,6 +1,5 @@
 package com.vaadin.samples.backend.mock;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;

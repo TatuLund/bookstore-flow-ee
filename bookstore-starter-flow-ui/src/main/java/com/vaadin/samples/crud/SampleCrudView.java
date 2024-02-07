@@ -28,4 +28,6 @@ public interface SampleCrudView {
     public void setCategories(Collection<Category> collection);
 
     public Product getCurrentProduct();
+
+    public void showNotValidProductIdNotification(String productId);
 }

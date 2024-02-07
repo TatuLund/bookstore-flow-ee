@@ -5,7 +5,10 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+
 import com.vaadin.cdi.annotation.CdiComponent;
+import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
@@ -14,7 +17,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 
 @SuppressWarnings("serial")
-@Dependent
+@VaadinSessionScoped
 @CdiComponent
 public class ProductDataProvider extends ListDataProvider<Product> {
 
@@ -27,9 +30,18 @@ public class ProductDataProvider extends ListDataProvider<Product> {
     private long timestamp = 0;
 
     @Inject
+    Logger logger;
+
+    @Inject
     public ProductDataProvider(DataService dataService) {
         super(new ArrayList<>());
         this.dataService = dataService;
+    }
+
+    // Inherited collection field is final, thus needing no-args
+    // constructor to enable this work with proxied scope
+    public ProductDataProvider() {
+        super(new ArrayList<>());
     }
 
     /**
@@ -46,6 +58,8 @@ public class ProductDataProvider extends ListDataProvider<Product> {
 
         long age = (System.currentTimeMillis() - timestamp) / 1000 / 60;
         if (timestamp == 0 || age > 15) {
+            logger.info(
+                    "Product data expired or first load, loading from backend.");
             products = dataService.getAllProducts();
         }
         timestamp = System.currentTimeMillis();

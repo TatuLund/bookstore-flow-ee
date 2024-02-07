@@ -12,6 +12,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -58,6 +60,8 @@ public class SampleCrudViewImpl extends HorizontalLayout
     private static final String DELETE = "delete";
     private static final String NEW_PRODUCT = "new-product";
     private static final String FILTER = "filter";
+    private static final String NOT_VALID_PID = "not-valid-pid";
+
     public static final String VIEW_NAME = "inventory";
     private ProductGrid grid;
     private ProductForm form;
@@ -260,5 +264,13 @@ public class SampleCrudViewImpl extends HorizontalLayout
     @Override
     public Product getCurrentProduct() {
         return form.getCurrentProduct();
+    }
+
+    @Override
+    public void showNotValidProductIdNotification(String productId) {
+        Notification
+                .show(getTranslation(NOT_VALID_PID, productId), 0,
+                        Position.MIDDLE)
+                .addThemeVariants(NotificationVariant.LUMO_ERROR);
     }
 }

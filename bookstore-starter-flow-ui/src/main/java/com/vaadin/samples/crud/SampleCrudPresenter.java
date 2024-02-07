@@ -1,6 +1,5 @@
 package com.vaadin.samples.crud;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.samples.authentication.AccessControl;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
@@ -65,8 +64,13 @@ public class SampleCrudPresenter implements Serializable {
                 try {
                     int pid = Integer.parseInt(productId);
                     Product product = findProduct(pid);
-                    view.selectRow(product);
+                    if (product != null) {
+                        view.selectRow(product);
+                    } else {
+                        view.showNotValidProductIdNotification(productId);                        
+                    }
                 } catch (NumberFormatException e) {
+                    view.showNotValidProductIdNotification(productId);
                 }
             }
         } else {
