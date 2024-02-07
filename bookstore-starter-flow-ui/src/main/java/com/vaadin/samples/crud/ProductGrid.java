@@ -77,7 +77,7 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
 
         addColumn(product -> product.getStockCount() == 0 ? "-"
                 : Integer.toString(product.getStockCount()))
-                        .setHeader(getTranslation(IN_STOCK))
+                        .setHeader(getTranslation(IN_STOCK)).setKey(IN_STOCK)
                         .setComparator(
                                 Comparator.comparingInt(Product::getStockCount))
                         .setFlexGrow(2).setTextAlign(ColumnTextAlign.END);

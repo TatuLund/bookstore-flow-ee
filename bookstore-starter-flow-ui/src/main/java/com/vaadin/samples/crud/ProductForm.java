@@ -48,6 +48,7 @@ import com.vaadin.samples.backend.data.Product;
 public class ProductForm extends Dialog {
 
     // Localization constants
+    private static final String AVAILABILITY_MISMATCH = "availability-mismatch";
     private static final String UNSAVED_CHANGES = "unsaved-changes";
     private static final String DISCARD_CHANGES = "discard-changes";
     private static final String SAVE = "save";
@@ -257,9 +258,9 @@ public class ProductForm extends Dialog {
 
     private void flagStockCountAndAvailabilityInvalid() {
         stockCount.setInvalid(true);
-        stockCount.setErrorMessage(getTranslation("availability-mismatch"));
+        stockCount.setErrorMessage(getTranslation(AVAILABILITY_MISMATCH));
         availability.setInvalid(true);
-        availability.setErrorMessage(getTranslation("availability-mismatch"));
+        availability.setErrorMessage(getTranslation(AVAILABILITY_MISMATCH));
     }
 
     private boolean binderHasInvalidFieldsBound() {

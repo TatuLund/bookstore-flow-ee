@@ -21,10 +21,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ErrorView extends VerticalLayout
         implements HasErrorParameter<NotFoundException> {
 
+    private static final String CANT_NAVIGATE = "cant-navigate";
+    private static final String VIEW_NOT_FOUND = "view-not-found";
+
     private Span explanation;
 
     public ErrorView() {
-        H1 header = new H1(getTranslation("view-not-found"));
+        H1 header = new H1(getTranslation(VIEW_NOT_FOUND));
         header.addClassName(LumoUtility.TextColor.ERROR);
         add(header);
 
@@ -36,7 +39,7 @@ public class ErrorView extends VerticalLayout
     public int setErrorParameter(BeforeEnterEvent event,
             ErrorParameter<NotFoundException> parameter) {
         explanation.setText(
-                getTranslation("cant-navigate", event.getLocation().getPath()));
+                getTranslation(CANT_NAVIGATE, event.getLocation().getPath()));
         return HttpServletResponse.SC_NOT_FOUND;
     }
 }
