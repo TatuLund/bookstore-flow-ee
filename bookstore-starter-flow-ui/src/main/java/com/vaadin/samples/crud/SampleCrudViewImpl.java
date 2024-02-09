@@ -7,6 +7,7 @@ import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScoped;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.Shortcuts;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -31,7 +32,6 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.samples.MainLayout;
-import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
@@ -101,7 +101,38 @@ public class SampleCrudViewImpl extends HorizontalLayout
         add(barAndGridLayout);
         add(form);
 
+        Shortcuts.addShortcutListener(form, e -> {
+            if (form.isOpened()) {
+                if (form.hasChanges()) {
+                    form.confirmDiscard(() -> editNext());
+                } else {
+                    editNext();
+                }
+            }
+        }, Key.PAGE_DOWN).listenOn(form);
+
+        Shortcuts.addShortcutListener(form, e -> {
+            if (form.isOpened()) {
+                if (form.hasChanges()) {
+                    form.confirmDiscard(() -> editPrevious());
+                } else {
+                    editPrevious();
+                }
+            }
+        }, Key.PAGE_UP).listenOn(form);
+
         presenter.init();
+    }
+
+    private void editNext() {
+        var product = grid.getListDataView().getNextItem(getCurrentProduct());
+        product.ifPresent(p -> editProduct(p));
+    }
+
+    private void editPrevious() {
+        var product = grid.getListDataView()
+                .getPreviousItem(getCurrentProduct());
+        product.ifPresent(p -> editProduct(p));
     }
 
     public HorizontalLayout createTopBar() {
@@ -228,6 +259,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
+        // TODO: Check if method is actually needed anymore
         if (form.getCurrentProduct() != null && form.hasChanges()) {
             ContinueNavigationAction action = event.postpone();
             form.confirmDiscard(() -> action.proceed());

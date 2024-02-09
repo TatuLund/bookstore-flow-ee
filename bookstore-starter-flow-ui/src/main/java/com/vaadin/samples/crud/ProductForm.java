@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValidation;
@@ -247,8 +248,7 @@ public class ProductForm extends Dialog {
     }
 
     private void saveButtonClicked() {
-        if (currentProduct != null
-                && binder.writeBeanIfValid(currentProduct)) {
+        if (currentProduct != null && binder.writeBeanIfValid(currentProduct)) {
             presenter.saveProduct(currentProduct);
         } else if (binderHasInvalidFieldsBound()) {
             flagStockCountAndAvailabilityInvalid();
@@ -328,12 +328,13 @@ public class ProductForm extends Dialog {
 
     /**
      * Display confirm dialog with discard edits message, if confirm clicked
-     * action is run.
+     * confirmAction is run.
      * 
-     * @param action
+     * @param confirmAction
      *            Runnable
      */
-    public void confirmDiscard(SerializableRunnable action) {
+    public void confirmDiscard(SerializableRunnable confirmAction) {
+        Objects.requireNonNull(confirmAction);
         ConfirmDialog confirm = new ConfirmDialog();
         confirm.setConfirmText(getTranslation(DISCARD));
         confirm.setCancelText(getTranslation(CANCEL));
@@ -343,7 +344,7 @@ public class ProductForm extends Dialog {
         confirm.setConfirmButtonTheme("warning");
         confirm.addConfirmListener(e -> {
             hasChanges = false;
-            action.run();
+            confirmAction.run();
         });
         confirm.open();
     }
