@@ -28,7 +28,7 @@ These tips are not specific to CDI or JavaEE
 
 ## Prerequisites
 
-The project can be imported into the IDE of your choice, with Java 17 installed, as a Maven project.
+The project can be imported into the IDE of your choice, with Java 21 installed, as a Maven project.
 
 ## Project Structure
 
