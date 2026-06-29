@@ -14,7 +14,7 @@ import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.server.VaadinServletService;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.samples.authentication.AccessControl;
 
@@ -59,7 +59,7 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
 
         title = new H3(getTranslation(BOOKSTORE));
 
-        String resolvedImage = VaadinServletService.getCurrent()
+        String resolvedImage = VaadinService.getCurrent()
                 .resolveResource("img/table-logo.png");
 
         Image image = new Image(resolvedImage, "");

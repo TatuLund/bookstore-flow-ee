@@ -22,7 +22,8 @@ public class BasicAccessControl implements AccessControl {
     @Inject
     Logger logger;
 
-    public BasicAccessControl() {    
+    public BasicAccessControl() {   
+        // Needed for CDI 
     }
 
     @Override

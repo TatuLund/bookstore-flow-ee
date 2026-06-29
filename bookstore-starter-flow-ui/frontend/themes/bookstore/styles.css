@@ -56,7 +56,7 @@
     display: none;
 }
 
-.product-form {
+vaadin-dialog.product-form::part(overlay) {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -67,17 +67,17 @@
     box-shadow: var(--overlay-box-shadow);
 }
 
-vaadin-dialog-overlay::part(overlay) {
+vaadin-dialog::part(overlay) {
 	border-radius: 0;
 	height: 100%;
 }
 
-vaadin-confirm-dialog-overlay::part(header) {
+vaadin-confirm-dialog::part(header) {
 	background-color: var(--lumo-warning-color-10pct);
     color: var(--lumo-warning-text-color);
 }
 
-vaadin-confirm-dialog-overlay::part(message) {
+vaadin-confirm-dialog::part(message) {
     padding-top: var(--lumo-size-s);
 }
 
@@ -189,11 +189,11 @@ vaadin-checkbox-group.scroll::part(group-field) {
 		padding: 0px;
 	}
 
-	vaadin-dialog-overlay::part(overlay) {
+	vaadin-dialog::part(overlay) {
 		width: 100%;
 	}
 
-	vaadin-confirm-dialog-overlay::part(overlay) {
+	vaadin-confirm-dialog::part(overlay) {
 		width: 50%;
 	}
 

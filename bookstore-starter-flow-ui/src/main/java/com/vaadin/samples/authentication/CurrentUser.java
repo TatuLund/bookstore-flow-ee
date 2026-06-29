@@ -15,6 +15,7 @@ public class CurrentUser implements Serializable {
     private String currentUser;
 
     public CurrentUser() {
+        // Needed for CDI
     }
 
     /**

@@ -23,6 +23,10 @@
 			<artifactId>vaadin-cdi</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-dev</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>bookstore-starter-flow-backend</artifactId>
 			<version>${project.version}</version>
@@ -124,9 +128,9 @@
 	    			<plugin>
 						<groupId>org.wildfly.plugins</groupId>
 						<artifactId>wildfly-maven-plugin</artifactId>
-						<version>4.0.0.Final</version>
+						<version>${wildfly.plugin.version}</version>
 						<configuration>
-							<version>27.0.0.Final</version>
+							<version>${wildfly.version}</version>
 							<javaOpts>-Dvaadin.frontend.hotdeploy=true</javaOpts>
 <!--							<add-user>-->
 <!--								<users>-->

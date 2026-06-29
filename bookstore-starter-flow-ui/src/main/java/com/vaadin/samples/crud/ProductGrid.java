@@ -39,7 +39,7 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
         addColumn(Product::getProductName)
                 .setHeader(getTranslation(PRODUCT_NAME)).setFlexGrow(20)
                 .setKey(PRODUCT_NAME).setSortable(true)
-                .setTooltipGenerator(item -> item.getProductName());
+                .setTooltipGenerator(Product::getProductName);
 
         // Format and add " €" to price
         final DecimalFormat decimalFormat = new DecimalFormat();

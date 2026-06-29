@@ -11,10 +11,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8
         </project.reporting.outputEncoding>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
-		<vaadin.version>24.3.12</vaadin.version>
+		<vaadin.version>25.2.0</vaadin.version>
+		<wildfly.version>40.0.0.Final</wildfly.version>
+		<wildfly.plugin.version>5.0.1.Final</wildfly.plugin.version>
+		<version.weld-junit>4.0.3.Final</version.weld-junit>
 	</properties>
 	<prerequisites>
 		<maven>3</maven>
@@ -29,7 +32,7 @@
 			<dependency>
 				<groupId>jakarta.platform</groupId>
 				<artifactId>jakarta.jakartaee-api</artifactId>
-				<version>10.0.0</version>
+				<version>11.0.0</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>

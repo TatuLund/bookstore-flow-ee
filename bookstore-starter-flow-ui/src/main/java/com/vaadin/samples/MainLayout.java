@@ -74,7 +74,7 @@ public class MainLayout extends FlexLayout
             addAdminMenuItemCommand.execute();
         } else {
             sessionScopedConfiguration.addRoutesChangeListener(event -> {
-                for (RouteBaseData data : event.getAddedRoutes()) {
+                for (RouteBaseData<?> data : event.getAddedRoutes()) {
                     if (data.getNavigationTarget().equals(AdminView.class)) {
                         addAdminMenuItemCommand.execute();
                     }

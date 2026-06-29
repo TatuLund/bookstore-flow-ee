@@ -19,6 +19,7 @@ public class AboutView extends VerticalLayout implements HasDynamicTitle {
 
     public AboutView() {
         HorizontalLayout hl = new HorizontalLayout();
+        hl.setId("info-layout");
         hl.add(VaadinIcon.INFO_CIRCLE.create());
         hl.add(new Span(getTranslation(INFO_TEXT, Version.getFullVersion())));
 

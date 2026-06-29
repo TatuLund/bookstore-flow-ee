@@ -27,8 +27,6 @@ import com.vaadin.samples.backend.data.Category;
 
 import jakarta.inject.Inject;
 
-import static com.vaadin.samples.AdminView.VIEW_NAME;
-
 /**
  * Admin view that is registered dynamically on admin user login.
  * <p>

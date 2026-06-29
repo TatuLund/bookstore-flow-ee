@@ -13,7 +13,6 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.samples.backend.DataService;
 import com.vaadin.samples.backend.data.Product;
 
-import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 
 @SuppressWarnings("serial")

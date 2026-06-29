@@ -59,7 +59,7 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
     private Span loginInfoText;
     private H1 loginInfoHeader;
     private Optional<Locale> locale;
-    private Select<Locale> lang;;
+    private Select<Locale> lang;
 
     @Inject
     public LoginView(AccessControl accessControl, Logger logger) {

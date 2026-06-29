@@ -1,7 +1,6 @@
 package com.vaadin.samples.crud;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import com.vaadin.cdi.annotation.CdiComponent;
 import com.vaadin.cdi.annotation.RouteScoped;
@@ -104,7 +103,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         Shortcuts.addShortcutListener(form, e -> {
             if (form.isOpened()) {
                 if (form.hasChanges()) {
-                    form.confirmDiscard(() -> editNext());
+                    form.confirmDiscard(this::editNext);
                 } else {
                     editNext();
                 }
@@ -114,7 +113,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         Shortcuts.addShortcutListener(form, e -> {
             if (form.isOpened()) {
                 if (form.hasChanges()) {
-                    form.confirmDiscard(() -> editPrevious());
+                    form.confirmDiscard(this::editPrevious);
                 } else {
                     editPrevious();
                 }
@@ -126,13 +125,13 @@ public class SampleCrudViewImpl extends HorizontalLayout
 
     private void editNext() {
         var product = grid.getListDataView().getNextItem(getCurrentProduct());
-        product.ifPresent(p -> editProduct(p));
+        product.ifPresent(this::editProduct);
     }
 
     private void editPrevious() {
         var product = grid.getListDataView()
                 .getPreviousItem(getCurrentProduct());
-        product.ifPresent(p -> editProduct(p));
+        product.ifPresent(this::editProduct);
     }
 
     public HorizontalLayout createTopBar() {
@@ -195,8 +194,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
     @Override
     public void updateProduct(Product product) {
         dataProvider.save(product);
-        grid.scrollToIndex(grid.getListDataView().getItems()
-                .collect(Collectors.toList()).indexOf(product));
+        grid.scrollToIndex(grid.getListDataView().getItems().toList().indexOf(product));
     }
 
     @Override
@@ -212,9 +210,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
             dataProvider.delete(product);
             showNotification(getTranslation(REMOVED, product.getProductName()));
         });
-        confirm.addCancelListener(e -> {
-            editProduct(product);
-        });
+        confirm.addCancelListener(e -> editProduct(product));
         confirm.open();
     }
 
@@ -262,7 +258,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         // TODO: Check if method is actually needed anymore
         if (form.getCurrentProduct() != null && form.hasChanges()) {
             ContinueNavigationAction action = event.postpone();
-            form.confirmDiscard(() -> action.proceed());
+            form.confirmDiscard(action::proceed);
         }
     }
  

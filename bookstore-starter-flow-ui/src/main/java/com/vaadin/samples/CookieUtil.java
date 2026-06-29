@@ -18,6 +18,7 @@ public class CookieUtil {
                 }
             }
         } catch (NullPointerException e) {
+            // NOP
         }
         return null;
     }

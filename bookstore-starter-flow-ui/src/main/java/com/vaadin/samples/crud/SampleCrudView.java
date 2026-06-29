@@ -1,11 +1,12 @@
 package com.vaadin.samples.crud;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
-public interface SampleCrudView {
+public interface SampleCrudView extends Serializable {
 
     public void setNewProductEnabled(boolean enabled);
 
