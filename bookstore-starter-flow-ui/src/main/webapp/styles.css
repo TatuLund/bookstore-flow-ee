@@ -1,3 +1,5 @@
+@import 'lumo/lumo.css';
+
 .login-information {
     min-width: 300px;
     flex: 0;
@@ -54,6 +56,14 @@
 
 .menu-button {
     display: none;
+}
+
+body, #outlet {
+    height: 98vh !important;
+}
+
+vaadin-icon {
+    margin-right: var(--lumo-space-xs);
 }
 
 vaadin-dialog.product-form::part(overlay) {
@@ -225,4 +235,16 @@ vaadin-checkbox-group.scroll::part(group-field) {
     --lumo-contrast-20pct: var(--lumo-warning-color-10pct);
     --lumo-primary-color: var(--lumo-warning-text-color);
     --lumo-contrast-30pct: var(--lumo-warning-color);
+}
+
+vaadin-button[theme~='warning'] {
+	background-color: var(--_lumo-button-primary-background-color, var(--lumo-warning-color));
+    color: var(--_lumo-button-primary-color, var(--lumo-warning-contrast-color));
+    font-weight: 600;
+    min-width: calc(var(--lumo-button-size) * 2.5);
+}
+
+vaadin-button[theme~='warning'][disabled] {
+    background-color: var(--lumo-contrast-30pct);
+    color: var(--lumo-base-color);
 }

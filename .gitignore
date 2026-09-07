@@ -12,3 +12,17 @@
 bookstore-starter-flow-ui/webpack.generated.js
 /bin/
 bookstore-starter-flow-ui/frontend/generated/
+bookstore-starter-flow.zip
+src/main/resources/rebel.xml
+.vscode/settings.json
+bookstore-starter-flow-my-component/package.json
+bookstore-starter-flow-ui/frontend/index.html
+bookstore-starter-flow-ui/.npmrc
+bookstore-starter-flow-ui/package.json
+bookstore-starter-flow-ui/pnpmfile.js
+bookstore-starter-flow-ui/pnpm-lock.yaml
+bookstore-starter-flow-ui/pnpm-workspace.yaml
+bookstore-starter-flow-ui/tsconfig.json
+bookstore-starter-flow-ui/types.d.ts
+bookstore-starter-flow-ui/vite.config.ts
+bookstore-starter-flow-ui/vite.generated.ts

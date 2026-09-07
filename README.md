@@ -58,7 +58,7 @@ Other basic workflow steps:
 
 - getting started
 - compiling the whole project
-  - run `mvn clean install -Production` in parent project
+  - run `mvn clean install -Pproduction` in parent project
 - running in production mode
   - edit code in the ui module
   - run `mvn clean install -Pproduction` in ui project
