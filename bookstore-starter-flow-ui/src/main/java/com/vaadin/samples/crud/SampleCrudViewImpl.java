@@ -138,6 +138,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         filter = new TextField();
         filter.setPrefixComponent(VaadinIcon.SEARCH.create());
         filter.setPlaceholder(getTranslation(FILTER));
+        filter.setId("filter");
         // Apply the filter to grid's data provider. TextField value is never
         // null
         filter.addValueChangeListener(
@@ -148,6 +149,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         newProduct.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         newProduct.setIcon(VaadinIcon.PLUS_CIRCLE.create());
         newProduct.addClickListener(click -> presenter.newProduct());
+        newProduct.setId("new-product");
         // CTRL+N will create a new window which is unavoidable
         newProduct.addClickShortcut(Key.KEY_N, KeyModifier.ALT);
 
@@ -194,7 +196,8 @@ public class SampleCrudViewImpl extends HorizontalLayout
     @Override
     public void updateProduct(Product product) {
         dataProvider.save(product);
-        grid.scrollToIndex(grid.getListDataView().getItems().toList().indexOf(product));
+        grid.scrollToIndex(
+                grid.getListDataView().getItems().toList().indexOf(product));
     }
 
     @Override
@@ -261,7 +264,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
             form.confirmDiscard(action::proceed);
         }
     }
- 
+
     @Override
     public String getPageTitle() {
         return getTranslation(VIEW_NAME);

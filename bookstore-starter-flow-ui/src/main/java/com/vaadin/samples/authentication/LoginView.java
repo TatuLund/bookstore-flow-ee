@@ -94,7 +94,7 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
         add(centeringLayout);
     }
 
-    private LoginI18n getI18n() {
+    protected LoginI18n getI18n() {
         LoginI18n i18n = new LoginI18n();
         Form form = new Form();
         form.setForgotPassword(getTranslation(FORGOT_PASSWORD));
@@ -118,7 +118,8 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
         loginInformation.add(loginInfoText);
         lang = new Select<>();
         lang.setItems(CustomI18NProvider.locales);
-        lang.setItemLabelGenerator(item -> item.toString());
+        lang.setId("language");
+        lang.setItemLabelGenerator(Object::toString);
         loginInformation.add(lang);
         lang.addValueChangeListener(e -> {
             if (e.isFromClient()) {
@@ -139,7 +140,11 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
         if (accessControl.signIn(event.getUsername(), event.getPassword())) {
             VaadinServletRequest request = (VaadinServletRequest) VaadinService
                     .getCurrentRequest();
-            request.getHttpServletRequest().changeSessionId();
+            try {
+                request.getHttpServletRequest().changeSessionId();
+            } catch (UnsupportedOperationException e) {
+                logger.warn("Failed to change session ID, this is ok in tests");
+            }
             registerAdminViewIfApplicable();
             getUI().get().navigate("");
         } else {
@@ -179,9 +184,8 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
         if (localeCookie != null && localeCookie.getValue() != null) {
             logger.info("Using stored locale {} from cookie.",
                     localeCookie.getValue());
-            locale = CustomI18NProvider.locales.stream()
-                    .filter(loc -> loc.getLanguage()
-                            .equals(localeCookie.getValue()))
+            locale = CustomI18NProvider.locales.stream().filter(
+                    loc -> loc.getLanguage().equals(localeCookie.getValue()))
                     .findFirst();
             lang.setValue(locale.get());
             event.getLocationChangeEvent().getUI().setLocale(locale.get());

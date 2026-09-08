@@ -103,7 +103,7 @@ public class SampleCrudPresenter implements Serializable {
     }
 
     public void newProduct() {
-        view.clearSelection();
+        // view.clearSelection();
         view.editProduct(new Product());
     }
 

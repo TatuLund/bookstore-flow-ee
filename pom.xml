@@ -17,7 +17,9 @@
 		<vaadin.version>25.2.7</vaadin.version>
 		<wildfly.version>41.0.1.Final</wildfly.version>
 		<wildfly.plugin.version>6.0.1.Final</wildfly.plugin.version>
-		<version.weld-junit>4.0.3.Final</version.weld-junit>
+		<version.weld-junit>5.0.3.Final</version.weld-junit>
+		<browserless-test.version>1.1.2</browserless-test.version>
+		<version.junit-jupiter>6.0.3</version.junit-jupiter>
 	</properties>
 	<prerequisites>
 		<maven>3</maven>
@@ -35,6 +37,20 @@
 				<version>11.0.0</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${version.junit-jupiter}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+        	<dependency>
+            	<groupId>com.vaadin</groupId>
+            	<artifactId>browserless-test-bom</artifactId>
+            	<version>${browserless-test.version}</version>
+            	<type>pom</type>
+            	<scope>import</scope>
+        	</dependency>
 			<dependency>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-bom</artifactId>

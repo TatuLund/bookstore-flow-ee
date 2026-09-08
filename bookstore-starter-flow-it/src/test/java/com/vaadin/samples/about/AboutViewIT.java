@@ -13,10 +13,10 @@ public class AboutViewIT extends AbstractViewTest {
     @Test
     public void openAboutView_showsFlowVersion() {
         // given authenticated as a regular user
-        $(LoginFormElement.class).first().login("user", "user");
+        $(LoginFormElement.class).single().login("user", "user");
 
         // when selecting "About" from the sidebar menu
-        final MainLayoutElement mainElem = $(MainLayoutElement.class).first();
+        final MainLayoutElement mainElem = $(MainLayoutElement.class).single();
         mainElem.clickMenuLink("About");
 
         // then the view contents a span with Flow version information

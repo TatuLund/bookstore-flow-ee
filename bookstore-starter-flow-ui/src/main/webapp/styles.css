@@ -1,4 +1,5 @@
 @import 'lumo/lumo.css';
+@import 'lumo/utility.css';
 
 .login-information {
     min-width: 300px;

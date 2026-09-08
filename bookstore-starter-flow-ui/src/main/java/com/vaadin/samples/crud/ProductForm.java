@@ -143,14 +143,17 @@ public class ProductForm extends Dialog {
         productName.setWidth("100%");
         productName.setRequired(true);
         productName.setValueChangeMode(ValueChangeMode.EAGER);
+        productName.setId("product-name");
         content.add(productName);
 
         price = new TextField(getTranslation(PRICE));
+        price.setId("price");
         price.setSuffixComponent(new Span("€"));
         price.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         price.setValueChangeMode(ValueChangeMode.EAGER);
 
         stockCount = new TextField(getTranslation(IN_STOCK));
+        stockCount.setId("stock-count");
         stockCount.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
         stockCount.setValueChangeMode(ValueChangeMode.EAGER);
 
@@ -166,6 +169,7 @@ public class ProductForm extends Dialog {
         availability.setWidth("100%");
         availability.setItems(Availability.values());
         availability.setRenderer(availabilityRenderer);
+        availability.setId("availability");
         content.add(availability);
 
         category = new MultiSelectComboBox<>();
@@ -191,7 +195,7 @@ public class ProductForm extends Dialog {
 
         binder.bindInstanceFields(this);
 
-        binder.getFields().forEach(field -> addDirtyCheck(field));
+        binder.getFields().forEach(ProductForm::addDirtyCheck);
 
         // enable/disable save button while editing
         binder.addStatusChangeListener(this::handleBinderStatusChange);
@@ -201,9 +205,11 @@ public class ProductForm extends Dialog {
                 ButtonVariant.LUMO_SMALL);
         save.addClickListener(event -> saveButtonClicked());
         save.addClickShortcut(Key.KEY_S, KeyModifier.CONTROL);
+        save.setId("save-button");
         save.setEnabled(false);
 
         discard = new Button(getTranslation(DISCARD));
+        discard.setId("discard-button");
         discard.addThemeNames("warning", "small");
         discard.addClickListener(event -> {
             presenter.editProduct(currentProduct);
@@ -212,6 +218,7 @@ public class ProductForm extends Dialog {
         discard.setEnabled(false);
 
         cancel = new Button(getTranslation(CANCEL));
+        cancel.setId("cancel-button");
         cancel.addClickListener(event -> cancelProduct());
         cancel.addClickShortcut(Key.ESCAPE);
         cancel.addThemeVariants(ButtonVariant.LUMO_SMALL);
@@ -220,6 +227,7 @@ public class ProductForm extends Dialog {
                 .listenOn(this);
 
         delete = new Button(getTranslation("delete"));
+        delete.setId("delete-button");
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR,
                 ButtonVariant.LUMO_SMALL);
         delete.addClickListener(event -> {
