@@ -1,37 +1,41 @@
 package com.vaadin.samples.authentication;
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.samples.AbstractViewTest;
+import org.junit.jupiter.api.Assertions;
 import com.vaadin.samples.MainLayoutElement;
+import com.vaadin.testbench.BrowserTest;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class LoginScreenIT extends AbstractViewTest {
 
-    @Test
+    @BrowserTest
     public void loginForm_isLumoThemed() {
-        LoginFormElement loginForm = $(LoginFormElement.class).first();
+        LoginFormElement loginForm = $(LoginFormElement.class).single();
         assertThemePresentOnElement(loginForm, Lumo.class);
     }
 
-    @Test
+    @BrowserTest
     public void loginAsAdmin_hasAdminViewLink() {
         // when authenticating as admin
-        $(LoginFormElement.class).first().login("admin", "admin");
+        $(LoginFormElement.class).single().login("admin", "admin");
 
         // then there is a link to admin's view
-        Assert.assertTrue("Expected link to admin view",
-                $(MainLayoutElement.class).first().hasMenuLink("admin"));
+        Assertions.assertTrue(
+                $(MainLayoutElement.class).single().hasMenuLink("admin"),
+                "Expected link to admin view");
     }
 
-    @Test
+    @BrowserTest
     public void loginAsUser_noAdminViewLink() {
         // when authenticating as a regular user
-        $(LoginFormElement.class).first().login("user", "user");
+        $(LoginFormElement.class).single().login("user", "user");
 
         // then there is no link to admin's view
-        Assert.assertFalse("Expected no link to admin view",
-                $(MainLayoutElement.class).first().hasMenuLink("admin"));
+        Assertions.assertFalse(
+                $(MainLayoutElement.class).single().hasMenuLink("admin"),
+                "Expected no link to admin view");
     }
 }

@@ -1,16 +1,19 @@
 package com.vaadin.samples.about;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.Assertions;
 
 import com.vaadin.flow.component.html.testbench.SpanElement;
 import com.vaadin.samples.AbstractViewTest;
 import com.vaadin.samples.MainLayoutElement;
 import com.vaadin.samples.authentication.LoginFormElement;
+import com.vaadin.testbench.BrowserTest;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class AboutViewIT extends AbstractViewTest {
 
-    @Test
+    @BrowserTest
     public void openAboutView_showsFlowVersion() {
         // given authenticated as a regular user
         $(LoginFormElement.class).single().login("user", "user");
@@ -22,7 +25,7 @@ public class AboutViewIT extends AbstractViewTest {
         // then the view contents a span with Flow version information
         final SpanElement aboutSpan = mainElem.$(SpanElement.class).last();
 
-        Assert.assertTrue("Expected link to admin view",
-                aboutSpan.getText().contains("Flow"));
+        Assertions.assertTrue(aboutSpan.getText().contains("Flow"),
+                "Expected link to admin view");
     }
 }
