@@ -2,20 +2,18 @@ package com.vaadin.samples.crud;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
-import com.vaadin.testbench.TestBenchElement;
+import com.vaadin.flow.component.dialog.testbench.DialogElement;
 import com.vaadin.testbench.annotations.Attribute;
-import com.vaadin.testbench.elementsbase.Element;
 
-@Element("div")
 @Attribute(name = "class", contains = "product-form")
-public class ProductFormElement extends TestBenchElement {
+public class ProductFormElement extends DialogElement {
 
     public TextFieldElement getProductNameElement() {
-        return $(TextFieldElement.class).single();
+        return $(TextFieldElement.class).id("product-name");
     }
 
     public ButtonElement getSaveButtonElement() {
-        return $(ButtonElement.class).single();
+        return $(ButtonElement.class).id("save-button");
     }
 
 

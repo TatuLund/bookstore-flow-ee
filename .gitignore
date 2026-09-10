@@ -26,3 +26,5 @@ bookstore-starter-flow-ui/tsconfig.json
 bookstore-starter-flow-ui/types.d.ts
 bookstore-starter-flow-ui/vite.config.ts
 bookstore-starter-flow-ui/vite.generated.ts
+bookstore-starter-flow-it/error-screenshots/JUnit Jupiter_SampleCrudViewIT_adminCreatesNewProduct_productIsAvailableInGird()_adminCreatesNewProduct_productIsAvailableInGird\[any_Chrome_\].png
+bookstore-starter-flow-it/error-screenshots/

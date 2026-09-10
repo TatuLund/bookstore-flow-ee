@@ -61,7 +61,7 @@ public abstract class AbstractViewTest extends BrowserTestBase
 
         Parameters.setScreenshotComparisonTolerance(0.05);
         Parameters.setScreenshotComparisonCursorDetection(true);
-        testBench().resizeViewPortTo(800, 600);
+        testBench().resizeViewPortTo(1280, 800);
         Parameters.setMaxScreenshotRetries(3);
         Parameters.setScreenshotRetryDelay(1000);
 
@@ -97,19 +97,27 @@ public abstract class AbstractViewTest extends BrowserTestBase
      * @param themeClass
      *            theme class (such as {@code Lumo.class}
      */
-    protected void assertThemePresentOnElement(WebElement element,
+    protected void assertTheme(
             Class<? extends AbstractTheme> themeClass) {
-        String themeName = themeClass.getSimpleName().toLowerCase();
-        Boolean hasStyle = (Boolean) executeScript(
-                "" + "var styles = Array.from(arguments[0]._template.content"
-                        + ".querySelectorAll('style'))"
-                        + ".filter(style => style.textContent.indexOf('"
-                        + themeName + "') > -1);" + "return styles.length > 0;",
-                element);
+        var themeName = themeClass.getSimpleName().toLowerCase();
+        var hasTheme = (String) executeScript(
+                """
+                        const rootElement = document.documentElement;
+                        const style = getComputedStyle(rootElement);
+                        let theme = "";
+                        theme =
+                            style.getPropertyValue("--vaadin-aura-theme").trim() === "1" ? "aura" : "";
+                        if (theme === "") {
+                            theme =
+                            style.getPropertyValue("--vaadin-lumo-theme").trim() === "1"
+                                ? "lumo"
+                                : "";
+                        }
+                        return theme;
+                        """);
 
-        Assertions.assertTrue(hasStyle,
-                "Element '" + element.getTagName() + "' should have"
-                        + " had theme '" + themeClass.getSimpleName() + "'.");
+        Assertions.assertEquals(themeName, hasTheme, "Document should have "
+                + themeName + " had theme '" + hasTheme + "'.");
     }
 
     /**
@@ -123,8 +131,10 @@ public abstract class AbstractViewTest extends BrowserTestBase
      * @return URL to route
      */
     private static String getURL(String route) {
-        return String.format("http://%s:%d/%s", getDeploymentHostname(),
-                SERVER_PORT, route);
+        var url = String.format("http://%s:%d/%s", getDeploymentHostname(),
+                SERVER_PORT, "bookstore-starter-flow-ui-1.1-SNAPSHOT/" + route);
+        System.out.println(url);
+        return url;
     }
 
     /**

@@ -68,6 +68,10 @@ Other basic workflow steps:
   - run `mvn package -Pproduction` ear module
 - running in production mode
   - production mode is used by default
-   
+
+### Run verification including E2E tests
+
+`mvn verify -pl bookstore-starter-flow-it -am -Pintegration-tests`
+
 ### Branching information:
-* `v24` the latest version of the starter, using the latest platform version
+* `v25` the latest version of the starter, using the latest platform version

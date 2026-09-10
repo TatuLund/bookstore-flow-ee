@@ -199,6 +199,7 @@ public class ProductForm extends Dialog {
 
         // enable/disable save button while editing
         binder.addStatusChangeListener(this::handleBinderStatusChange);
+        binder.setReadOnly(true);
 
         save = new Button(getTranslation(SAVE));
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY,
@@ -363,6 +364,12 @@ public class ProductForm extends Dialog {
      */
     public boolean hasChanges() {
         return hasChanges;
+    }
+
+    @Override 
+    public void setOpened(boolean opened) {
+        binder.setReadOnly(!opened);
+        super.setOpened(opened);
     }
 
     private static void addDirtyCheck(HasValue<?, ?> field) {
