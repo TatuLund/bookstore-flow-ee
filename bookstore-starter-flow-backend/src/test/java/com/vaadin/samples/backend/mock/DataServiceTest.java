@@ -1,19 +1,16 @@
 package com.vaadin.samples.backend.mock;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.samples.backend.data.Product;
-import com.vaadin.samples.backend.mock.MockDataGenerator;
-import com.vaadin.samples.backend.mock.MockDataService;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
@@ -24,10 +21,10 @@ public class DataServiceTest {
 
     private MockDataService service;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-    	service = new MockDataService(new MockDataGenerator());
-    	service.logger = LoggerFactory.getLogger("mock");
+        service = new MockDataService(new MockDataGenerator());
+        service.logger = LoggerFactory.getLogger("mock");
     }
 
     @Test
@@ -61,18 +58,19 @@ public class DataServiceTest {
         var newProduct = service.updateProduct(p);
         assertNotEquals(-1, newProduct.getId());
         assertEquals(oldSize + 1, service.getAllProducts().size());
-        
+
         var foundProduct = service.getProductById(newProduct.getId());
         assertTrue(foundProduct.equals(newProduct));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void updateNonExistentProduct() {
         Product p = new Product();
         p.setProductName("A new book");
         p.setPrice(new BigDecimal(10));
         p.setId(1000);
-        service.updateProduct(p);
+        assertThrows(IllegalArgumentException.class,
+                () -> service.updateProduct(p));
     }
 
     @Test
@@ -95,9 +93,10 @@ public class DataServiceTest {
         assertEquals(null, service.getProductById(1000));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void removeProductByNonExistentId() {
-        service.deleteProduct(1000);
+        assertThrows(IllegalArgumentException.class,
+                () -> service.deleteProduct(1000));
     }
 
 }
