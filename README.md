@@ -26,6 +26,10 @@ These tips are not specific to CDI or JavaEE
 - How to use warning colors with Button and ConfirmDialog
 - How to create responsive design
 
+## How Tos
+
+- [How to Use Vaadin BrowserlessTest in a Java EE CDI Project](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Use-Vaadin-BrowserlessTest-in-a-Java-EE-CDI-Project#how-to-use-vaadin-browserlesstest-in-a-java-ee-cdi-project)
+
 ## Prerequisites
 
 The project can be imported into the IDE of your choice, with Java 21 installed, as a Maven project.
