@@ -2,12 +2,16 @@ package com.vaadin.samples.crud;
 
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 
 import com.vaadin.flow.component.dialog.testbench.DialogElement;
+import com.deque.html.axecore.selenium.AxeBuilder;
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
@@ -99,4 +103,18 @@ public class SampleCrudViewIT extends AbstractViewTest {
                 .anyMatch(newTitle::equals);
         Assertions.assertTrue(foundInGrid, "Title not found in grid");
     }
+
+    @BrowserTest
+    public void accessibilityCheck() {
+        var axeBuilder = new AxeBuilder();
+        // False positives for these elements
+        axeBuilder.exclude("vaadin-connection-indicator");
+        axeBuilder.exclude("vaadin-select-value-button");
+        axeBuilder.exclude("vaadin-vertical-layout > span");
+
+        var axeResults = axeBuilder.analyze(getDriver());
+        logViolations(axeResults);
+        assertTrue(axeResults.violationFree());
+    }
+
 }

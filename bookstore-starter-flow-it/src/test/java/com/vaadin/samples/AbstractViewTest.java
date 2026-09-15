@@ -8,7 +8,10 @@ import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.deque.html.axecore.results.Results;
 import com.vaadin.flow.theme.AbstractTheme;
 import com.vaadin.testbench.BrowserTestBase;
 import com.vaadin.testbench.DriverSupplier;
@@ -97,8 +100,7 @@ public abstract class AbstractViewTest extends BrowserTestBase
      * @param themeClass
      *            theme class (such as {@code Lumo.class}
      */
-    protected void assertTheme(
-            Class<? extends AbstractTheme> themeClass) {
+    protected void assertTheme(Class<? extends AbstractTheme> themeClass) {
         var themeName = themeClass.getSimpleName().toLowerCase();
         var hasTheme = (String) executeScript(
                 """
@@ -137,7 +139,20 @@ public abstract class AbstractViewTest extends BrowserTestBase
         return url;
     }
 
+    public void logViolations(Results axeResults) {
+        axeResults.getViolations().forEach(violation -> {
+            logger.error("Accessibility violation: {} (ID: {})",
+                    violation.getDescription(), violation.getId());
+            violation.getNodes().forEach(node -> {
+                logger.error("  Affected node: {}", node.getTarget());
+                logger.error("  Failure summary: {}", node.getFailureSummary());
+                logger.error("  Help: {}", violation.getHelp());
+            });
+        });
+    }
+
     /**
+     * 
      * Returns whether we are using a test hub. This means that the starter is
      * running tests in Vaadin's CI environment, and uses TestBench to connect
      * to the testing hub.
@@ -157,4 +172,7 @@ public abstract class AbstractViewTest extends BrowserTestBase
     private static String getDeploymentHostname() {
         return isUsingHub() ? System.getenv("HOSTNAME") : "localhost";
     }
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(AbstractViewTest.class);
 }

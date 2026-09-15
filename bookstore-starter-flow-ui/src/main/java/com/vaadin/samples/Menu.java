@@ -38,6 +38,7 @@ public class Menu extends FlexLayout implements LocaleChangeObserver {
     @Inject
     public Menu(AccessControl accessControl) {
         setClassName("menu-bar");
+        getElement().setAttribute("role", "region");
 
         // Button for toggling the menu visibility on small screens
         showMenu = new Button(getTranslation(MENU), event -> {

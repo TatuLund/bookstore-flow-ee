@@ -131,10 +131,12 @@ public class ProductForm extends Dialog {
 
     public ProductForm(SampleCrudPresenter sampleCrudLogic) {
         setClassName("product-form");
+        setAriaLabel(getTranslation("product-form"));
 
         content = new VerticalLayout();
         content.setSizeUndefined();
         content.setHeightFull();
+        content.getElement().setAttribute("role", "form");
         add(content);
 
         presenter = sampleCrudLogic;
@@ -366,7 +368,7 @@ public class ProductForm extends Dialog {
         return hasChanges;
     }
 
-    @Override 
+    @Override
     public void setOpened(boolean opened) {
         binder.setReadOnly(!opened);
         super.setOpened(opened);

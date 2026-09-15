@@ -58,6 +58,7 @@ public class AdminView extends VerticalLayout
     @Inject
     public AdminView(DataService dataService) {
         this.dataService = dataService;
+        getElement().setAttribute("role", "main");
         categoriesListing = new VirtualList<>();
 
         dataProvider = new ListDataProvider<Category>(

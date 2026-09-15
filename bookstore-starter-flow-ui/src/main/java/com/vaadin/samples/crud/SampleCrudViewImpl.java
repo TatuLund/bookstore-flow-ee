@@ -80,6 +80,7 @@ public class SampleCrudViewImpl extends HorizontalLayout
         this.presenter = presenter;
         presenter.setView(this);
         setSizeFull();
+        getElement().setAttribute("role", "main");
         HorizontalLayout topLayout = createTopBar();
 
         grid = new ProductGrid();

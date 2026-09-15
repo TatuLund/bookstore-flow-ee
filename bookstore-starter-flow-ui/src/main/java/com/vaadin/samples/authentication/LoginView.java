@@ -65,6 +65,7 @@ public class LoginView extends FlexLayout implements HasDynamicTitle,
     public LoginView(AccessControl accessControl, Logger logger) {
         this.logger = logger;
         this.accessControl = accessControl;
+        getElement().setAttribute("role", "main");
         buildUI();
     }
 
