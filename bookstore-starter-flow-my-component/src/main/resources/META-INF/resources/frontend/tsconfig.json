@@ -18,12 +18,16 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "paths": {
+      "lit": ["../../../../../../../bookstore-starter-flow-ui/node_modules/lit"],
+      "lit/*": ["../../../../../../../bookstore-starter-flow-ui/node_modules/lit/*"],
+      "@vaadin/*": ["../../../../../../../bookstore-starter-flow-ui/node_modules/@vaadin/*"],
       "@vaadin/flow-frontend": ["../../../../../../../bookstore-starter-flow-ui/frontend/generated/jar-resources"],
       "@vaadin/flow-frontend/*": ["../../../../../../../bookstore-starter-flow-ui/frontend/generated/jar-resources/*"],
       "Frontend/*": ["../../../../../../../bookstore-starter-flow-ui/frontend/*"]
     }
   },
   "include": [
+    "src/**/*",
     "../../../../../../../bookstore-starter-flow-ui/frontend/**/*",
     "../../../../../../../bookstore-starter-flow-ui/types.d.ts"
   ],

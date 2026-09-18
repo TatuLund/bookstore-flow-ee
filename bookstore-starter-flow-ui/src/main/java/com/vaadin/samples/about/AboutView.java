@@ -23,7 +23,7 @@ public class AboutView extends VerticalLayout implements HasDynamicTitle {
         hl.add(VaadinIcon.INFO_CIRCLE.create());
         hl.add(new Span(getTranslation(INFO_TEXT, Version.getFullVersion())));
 
-        hl.setSizeFull();
+        hl.setWidthFull();
         hl.setJustifyContentMode(JustifyContentMode.CENTER);
         hl.setAlignItems(Alignment.CENTER);
         add(new BookstoreTitle(), hl);

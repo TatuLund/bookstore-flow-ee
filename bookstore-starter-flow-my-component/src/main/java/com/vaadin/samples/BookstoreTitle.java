@@ -7,7 +7,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 
 @Tag("bookstore-title")
 @JsModule("./src/bookstore-title.ts")
-@CssImport(value = "./styles/my-styles.css", themeFor = "bookstore-title")
+@CssImport(value = "./styles/my-styles.css")
 public class BookstoreTitle extends Component {
 
 }

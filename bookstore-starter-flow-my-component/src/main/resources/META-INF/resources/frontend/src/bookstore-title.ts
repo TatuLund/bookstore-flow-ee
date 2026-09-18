@@ -1,4 +1,4 @@
-import { css, html, LitElement, TemplateResult, nothing } from "lit";
+import { css, html, LitElement, type PropertyValueMap } from "lit";
 import { ThemableMixin } from "@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js";
 import { customElement, property } from "lit/decorators.js";
 
@@ -20,13 +20,13 @@ export class BookstoreTitle extends ThemableMixin(LitElement) {
   render() {
     return html`
       <div>
-        <h1>Bookstore</h1>
+        <h1 part="title">Bookstore</h1>
       </div>
     `;
   }
 
-  firstUpdated() {
-    super.firstUpdated();
+  firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+    super.firstUpdated(_changedProperties);
     console.log("firstUpdated");
   }
 

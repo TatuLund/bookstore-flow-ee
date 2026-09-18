@@ -10,35 +10,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
 /**
  * Simple unit test for the back-end data service.
  */
-public class DataServiceTest {
+class DataServiceTest {
 
     private MockDataService service;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         service = new MockDataService(new MockDataGenerator());
         service.logger = LoggerFactory.getLogger("mock");
     }
 
     @Test
-    public void canFetchProducts() throws Exception {
+    void canFetchProducts() {
         assertFalse(service.getAllProducts().isEmpty());
     }
 
     @Test
-    public void canFetchCategories() throws Exception {
+    void canFetchCategories() {
         assertFalse(service.getAllCategories().isEmpty());
     }
 
     @Test
-    public void updateTheProduct() throws Exception {
+    void updateTheProduct() {
         var oldSize = service.getAllProducts().size();
         var p = service.getAllProducts().iterator().next();
         p.setProductName("My Test Name");
@@ -49,7 +48,7 @@ public class DataServiceTest {
     }
 
     @Test
-    public void addNewProduct() throws Exception {
+    void addNewProduct() {
         var oldSize = service.getAllProducts().size();
         Product p = new Product();
         p.setProductName("A new book");
@@ -60,11 +59,11 @@ public class DataServiceTest {
         assertEquals(oldSize + 1, service.getAllProducts().size());
 
         var foundProduct = service.getProductById(newProduct.getId());
-        assertTrue(foundProduct.equals(newProduct));
+        assertEquals(foundProduct, newProduct);
     }
 
     @Test
-    public void updateNonExistentProduct() {
+    void updateNonExistentProduct() {
         Product p = new Product();
         p.setProductName("A new book");
         p.setPrice(new BigDecimal(10));
@@ -74,7 +73,7 @@ public class DataServiceTest {
     }
 
     @Test
-    public void removeProduct() throws Exception {
+    void removeProduct() {
         var oldSize = service.getAllProducts().size();
         var p = service.getAllProducts().iterator().next();
         var pid = p.getId();
@@ -84,17 +83,17 @@ public class DataServiceTest {
     }
 
     @Test
-    public void findProductById() {
+    void findProductById() {
         assertNotEquals(null, service.getProductById(1));
     }
 
     @Test
-    public void findProductByNonExistentId() {
+    void findProductByNonExistentId() {
         assertEquals(null, service.getProductById(1000));
     }
 
     @Test
-    public void removeProductByNonExistentId() {
+    void removeProductByNonExistentId() {
         assertThrows(IllegalArgumentException.class,
                 () -> service.deleteProduct(1000));
     }
