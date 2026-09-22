@@ -5,20 +5,20 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
 
 import com.vaadin.flow.component.dialog.testbench.DialogElement;
 import com.deque.html.axecore.selenium.AxeBuilder;
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
-import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.samples.AbstractViewTest;
 import com.vaadin.samples.MainLayoutElement;
 import com.vaadin.samples.authentication.LoginViewElement;
 import com.vaadin.testbench.BrowserTest;
+import com.vaadin.testbench.screenshot.ImageFileUtil;
 
 @Execution(ExecutionMode.SAME_THREAD)
 public class SampleCrudViewIT extends AbstractViewTest {
@@ -29,12 +29,11 @@ public class SampleCrudViewIT extends AbstractViewTest {
         $(LoginViewElement.class).single().login("user", "user");
 
         // given "Inventory" is selected from the sidebar menu
-        final MainLayoutElement mainLayout = $(MainLayoutElement.class)
-                .single();
+        var mainLayout = $(MainLayoutElement.class).single();
         mainLayout.clickMenuLink("Inventory");
 
         // when selecting an item from the product grid
-        GridElement grid = $(GridElement.class).single();
+        var grid = $(GridElement.class).single();
         grid.getCell(0, 0).click();
 
         // then the product data is not editable
@@ -51,20 +50,19 @@ public class SampleCrudViewIT extends AbstractViewTest {
         $(LoginViewElement.class).single().login("admin", "admin");
 
         // given "Inventory" is selected from the sidebar menu
-        final MainLayoutElement mainElem = $(MainLayoutElement.class).single();
+        var mainElem = $(MainLayoutElement.class).single();
         mainElem.clickMenuLink("Inventory");
 
         // when selecting an item from the product grid
-        GridElement grid = $(GridElement.class).single();
+        var grid = $(GridElement.class).single();
         grid.getCell(0, 0).click();
 
         // when altering the product name and clicking the save button
-        final ProductFormElement prodForm = $(ProductFormElement.class)
-                .single();
+        var prodForm = $(ProductFormElement.class).single();
         waitUntil(_ -> prodForm.isOpen());
         Assertions.assertTrue(prodForm.isOpen(),
                 "Product form should be visible");
-        final String newTitle = "Cronan's Guide to Nanomixology";
+        var newTitle = "Cronan's Guide to Nanomixology";
         prodForm.getProductNameElement().setValue(newTitle);
         prodForm.getSaveButtonElement().click();
 
@@ -79,7 +77,7 @@ public class SampleCrudViewIT extends AbstractViewTest {
         $(LoginViewElement.class).single().login("admin", "admin");
 
         // given "Inventory" is selected from the sidebar menu
-        final MainLayoutElement mainElem = $(MainLayoutElement.class).single();
+        var mainElem = $(MainLayoutElement.class).single();
         mainElem.clickMenuLink("Inventory");
 
         // when clicking the "New product" button
@@ -87,18 +85,17 @@ public class SampleCrudViewIT extends AbstractViewTest {
                 .click();
 
         // when entering new product data and saving the product
-        final ProductFormElement prodForm = $(ProductFormElement.class)
-                .single();
+        var prodForm = $(ProductFormElement.class).single();
         waitUntil(_ -> prodForm.isOpen());
         Assertions.assertTrue(prodForm.isOpen(),
                 "Product form should be visible");
-        final String newTitle = "Cronan's Guide to Nanomixology, 2nd ed.";
+        var newTitle = "Cronan's Guide to Nanomixology, 2nd ed.";
         prodForm.getProductNameElement().setValue(newTitle);
         prodForm.getSaveButtonElement().click();
 
         // then the new title is in the grid
-        GridElement grid = $(GridElement.class).single();
-        final boolean foundInGrid = IntStream.range(0, grid.getRowCount())
+        var grid = $(GridElement.class).single();
+        var foundInGrid = IntStream.range(0, grid.getRowCount())
                 .mapToObj(row -> grid.getCell(row, 0).getText())
                 .anyMatch(newTitle::equals);
         Assertions.assertTrue(foundInGrid, "Title not found in grid");
@@ -117,4 +114,19 @@ public class SampleCrudViewIT extends AbstractViewTest {
         assertTrue(axeResults.violationFree());
     }
 
+    @BrowserTest
+    public void responsiveVisualTest() throws IOException {
+        // given authenticated as an admin
+        $(LoginViewElement.class).single().login("admin", "admin");
+
+        var ui = $(MainLayoutElement.class).single();
+        Assertions.assertTrue(testBench().compareScreen(ImageFileUtil
+                .getReferenceScreenshotFile("crud-view-large.png")));
+        testBench().resizeViewPortTo(800, 600);
+        $(ButtonElement.class).withAttribute("class", "menu-button").single()
+                .click();
+        Assertions.assertTrue(testBench().compareScreen(ImageFileUtil
+                .getReferenceScreenshotFile("crud-view-small.png")));
+
+    }
 }
