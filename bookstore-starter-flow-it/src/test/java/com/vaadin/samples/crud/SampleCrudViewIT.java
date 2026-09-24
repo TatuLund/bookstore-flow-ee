@@ -62,6 +62,7 @@ public class SampleCrudViewIT extends AbstractViewTest {
         waitUntil(_ -> prodForm.isOpen());
         Assertions.assertTrue(prodForm.isOpen(),
                 "Product form should be visible");
+        var oldTitle = grid.getCell(0, 0).getText();
         var newTitle = "Cronan's Guide to Nanomixology";
         prodForm.getProductNameElement().setValue(newTitle);
         prodForm.getSaveButtonElement().click();
@@ -69,6 +70,18 @@ public class SampleCrudViewIT extends AbstractViewTest {
         // then the grid cell is updated to the new title
         Assertions.assertEquals(newTitle, grid.getCell(0, 0).getText(),
                 "Title in grid not updated");
+
+        // Revert the product title to the old value
+        grid.getCell(0, 0).click();
+        // Assert that vale is the new title in the form
+        Assertions.assertEquals(newTitle,
+                prodForm.getProductNameElement().getValue(),
+                "Product form should have the new title before reverting");
+        prodForm.getProductNameElement().setValue(oldTitle);
+        prodForm.getSaveButtonElement().click();
+        waitUntil(_ -> !prodForm.isOpen());
+        Assertions.assertFalse(prodForm.isOpen(),
+                "Product form should not be visible");
     }
 
     @BrowserTest
@@ -119,7 +132,6 @@ public class SampleCrudViewIT extends AbstractViewTest {
         // given authenticated as an admin
         $(LoginViewElement.class).single().login("admin", "admin");
 
-        var ui = $(MainLayoutElement.class).single();
         Assertions.assertTrue(testBench().compareScreen(ImageFileUtil
                 .getReferenceScreenshotFile("crud-view-large.png")));
         testBench().resizeViewPortTo(800, 600);
