@@ -38,6 +38,12 @@
 			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>bookstore-starter-flow-my-component</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Vaadin Testbench -->
         <dependency>
             <groupId>com.deque.html.axe-core</groupId>

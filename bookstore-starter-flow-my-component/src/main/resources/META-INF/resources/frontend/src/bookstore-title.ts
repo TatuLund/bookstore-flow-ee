@@ -20,7 +20,7 @@ export class BookstoreTitle extends ThemableMixin(LitElement) {
   render() {
     return html`
       <div>
-        <h1 part="title">Bookstore</h1>
+        <h1 id="title" part="title">Bookstore</h1>
       </div>
     `;
   }

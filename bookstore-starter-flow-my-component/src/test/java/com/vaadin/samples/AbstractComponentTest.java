@@ -17,11 +17,11 @@ import com.vaadin.testbench.ScreenshotOnFailureExtension;
  * <p>
  * The tests use Chrome driver (see pom.xml for integration-tests profile) to
  * run integration tests on a headless Chrome. If a property {@code test.use
- * .hub} is set to true, {@code AbstractComponentTest} will assume that the TestBench
- * test is running in a CI environment. In order to keep the this class light,
- * it makes certain assumptions about the CI environment (such as available
- * environment variables). It is not advisable to use this class as a base class
- * for you own TestBench tests.
+ * .hub} is set to true, {@code AbstractComponentTest} will assume that the
+ * TestBench test is running in a CI environment. In order to keep the this
+ * class light, it makes certain assumptions about the CI environment (such as
+ * available environment variables). It is not advisable to use this class as a
+ * base class for you own TestBench tests.
  * <p>
  * To learn more about TestBench, visit <a href=
  * "https://vaadin.com/docs/v10/testbench/testbench-overview.html">Vaadin

@@ -55,11 +55,15 @@
             <artifactId>vaadin</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-dev</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <scope>test</scope>
         </dependency>
-		<dependency>
+		<dependency>    
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-testbench-junit6</artifactId>
 			<scope>test</scope>
@@ -85,7 +89,43 @@
                     </archive>
                 </configuration>
             </plugin>
-
+			<plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.version}</version>
+				<configuration>
+					<pnpmEnable>true</pnpmEnable>
+					<requireHomeNodeExec>true</requireHomeNodeExec>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-frontend</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty.ee10</groupId>
+				<artifactId>jetty-ee10-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+	                <stopKey>${project.artifactId}</stopKey>
+    	            <stopPort>8081</stopPort>
+					<scan>3</scan>
+					<!-- Use test scope because the UI/demo classes are in
+                            the test package. -->
+					<useTestScope>true</useTestScope>
+					<supportedPackagings>
+						<supportedPackaging>jar</supportedPackaging>
+					</supportedPackagings>
+                    <webApp>
+                        <resourceBases>
+                            <baseResource>${project.basedir}/src/main/resources/META-INF/resources</baseResource>
+                        </resourceBases>
+                    </webApp>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 
@@ -175,6 +215,12 @@
                             </supportedPackagings>
                             <stopKey>${project.artifactId}</stopKey>
                             <stopPort>8081</stopPort>
+                            <!-- <useTestScope>true</useTestScope>
+                            <webApp>
+                                <resourceBases>
+                                    <baseResource>${project.basedir}/src/main/resources/META-INF/resources</baseResource>
+                               </resourceBases>
+                            </webApp> -->
                         </configuration>
                         <executions>
                             <execution>
@@ -209,12 +255,6 @@
                         <configuration>
                             <trimStackTrace>false</trimStackTrace>
                             <enableAssertions>true</enableAssertions>
-                            <systemPropertyVariables>
-                                <!-- Pass location of downloaded webdrivers to the tests -->
-                                <webdriver.chrome.driver>
-                                    ${webdriver.chrome.driver}
-                                </webdriver.chrome.driver>
-                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                     <plugin>

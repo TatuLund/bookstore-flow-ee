@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 
 import com.vaadin.flow.component.html.testbench.SpanElement;
 import com.vaadin.samples.AbstractViewTest;
+import com.vaadin.samples.BookstoreTitleElement;
 import com.vaadin.samples.MainLayoutElement;
 import com.vaadin.samples.authentication.LoginViewElement;
 import com.vaadin.testbench.BrowserTest;
