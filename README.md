@@ -29,10 +29,14 @@ These tips are not specific to CDI or JavaEE
 ## How Tos
 
 - [How to Use Vaadin BrowserlessTest in a Java EE CDI Project](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Use-Vaadin-BrowserlessTest-in-a-Java-EE-CDI-Project#how-to-use-vaadin-browserlesstest-in-a-java-ee-cdi-project)
+- [How to Use CDI Scopes and Events with Vaadin](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Use-CDI-Scopes-and-Events-with-Vaadin)
+- [How to Test Custom Vaadin Components in Isolation](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Test-Custom-Vaadin-Components-in-Isolation)
+- [How to Use EAR and WAR Builds for Vaadin Production and Development](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Use-EAR-and-WAR-Builds-for-Vaadin-Production-and-Development) 
+- [How to Run Vaadin E2E Tests with WildFly in a Java EE CDI Project](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Run-Vaadin-E2E-Tests-with-WildFly-in-a-Java-EE-CDI-Project) 
 
 ## Prerequisites
 
-The project can be imported into the IDE of your choice, with Java 21 installed, as a Maven project.
+The project can be imported into the IDE of your choice, with Java 25 installed, as a Maven project.
 
 ## Project Structure
 
@@ -40,9 +44,9 @@ The project consists of the following three modules:
 
 - parent project: common metadata and configuration
 - bookstore-starter-flow-ui: main application module that includes views (war)
-- bookstore-starter-flow-my-component: sub module for custom components (jar)
+- bookstore-starter-flow-my-component: sub module for custom components including tests (jar)
 - bookstore-starter-flow-backend: POJO classes and mock services being used in the ui (jar)
-- bookstore-starter-flow-it: TestBench test examples (ToDo: update to work)
+- bookstore-starter-flow-it: TestBench test examples
 - bookstore-starter-flow-ear: EAR packaging
 
 ## Workflow
