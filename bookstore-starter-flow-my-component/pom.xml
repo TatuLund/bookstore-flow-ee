@@ -264,30 +264,6 @@
                             <enableAssertions>true</enableAssertions>
                         </configuration>
                     </plugin>
-                    <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <!-- Since the view class is defined in test, after compilation
-                                copy it to the runtime classpath to ensure it gets visited by
-                                  vaadin-maven-plugin -->
-                                <id>copy-test-to-classes</id>
-                                <phase>process-test-classes</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.testOutputDirectory}</directory>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
