@@ -1,9 +1,8 @@
 package com.vaadin.samples;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.Assertions;
 import com.vaadin.testbench.BrowserTest;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -17,12 +16,11 @@ public class BookstoreTitleIT extends AbstractComponentTest {
     void testSplashAnimation() {
         var title = $(BookstoreTitleElement.class).waitForFirst();
 
-        Boolean hasAnimation = (Boolean) executeScript("""
-                return arguments[0]
-                    .getAnimations({ subtree: true }).length > 0;
-                """, title.getTitle());
+        String animationName = (String) executeScript("""
+                return getComputedStyle(arguments[0]).animationName;
+                    """, title.getTitle());
 
-        assertTrue(hasAnimation,
+        Assertions.assertEquals("title-color-splash", animationName,
                 "BookstoreTitle should have a splash animation");
     }
 }
