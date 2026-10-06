@@ -20,7 +20,17 @@ public class BookstoreTitleIT extends AbstractComponentTest {
                 return getComputedStyle(arguments[0]).animationName;
                     """, title.getTitle());
 
-        Assertions.assertEquals("title-color-splash", animationName,
-                "BookstoreTitle should have a splash animation");
+        // Windows GHA runners may prefer reduced motion even when the local
+        // development environment does not.
+        Boolean prefersReducedMotion = (Boolean) executeScript("""
+                return matchMedia('(prefers-reduced-motion: reduce)').matches;
+                """);
+
+        // The component intentionally disables its splash animation when the
+        // browser requests reduced motion.
+        String expectedAnimation = prefersReducedMotion ? "none"
+                : "title-color-splash";
+        Assertions.assertEquals(expectedAnimation, animationName,
+                "BookstoreTitle should respect the browser's motion preference");
     }
 }
