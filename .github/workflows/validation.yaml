@@ -43,7 +43,7 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots install -DskipTests
       - name: Run tests
-        run: mvn --batch-mode verify -Pintergration-tests
+        run: mvn --batch-mode verify -Pintegration-tests
       - name: Upload error screenshots
         if: always()
         uses: actions/upload-artifact@v7
@@ -51,13 +51,13 @@ jobs:
           name: error-screenshots
           path: bookstore-starter-flow-it/error-screenshots
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
           files: |
             bookstore-starter-flow-backend/target/surefire-reports/*.xml
-            bookstore-starter-flow-components/target/surefire-reports/*.xml
-            bookstore-starter-flow-components/target/failsafe-reports/TEST-*.xml
+            bookstore-starter-flow-my-component/target/surefire-reports/*.xml
+            bookstore-starter-flow-my-component/target/failsafe-reports/TEST-*.xml
             bookstore-starter-flow-ui/target/surefire-reports/*.xml
             bookstore-starter-flow-ui/target/failsafe-reports/TEST-*.xml
           
