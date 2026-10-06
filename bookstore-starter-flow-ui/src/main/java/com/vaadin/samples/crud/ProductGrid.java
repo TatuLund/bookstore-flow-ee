@@ -11,7 +11,7 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.samples.backend.data.Category;
 import com.vaadin.samples.backend.data.Product;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -41,16 +41,11 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
                 .setKey(PRODUCT_NAME).setSortable(true)
                 .setTooltipGenerator(Product::getProductName);
 
-        // Format and add " €" to price
-        final DecimalFormat decimalFormat = new DecimalFormat();
-        decimalFormat.setMaximumFractionDigits(2);
-        decimalFormat.setMinimumFractionDigits(2);
-
         // To change the text alignment of the column, a template is used.
         final String priceTemplate = "<div style='text-align: right'>${item.price}</div>";
         addColumn(LitRenderer.<Product> of(priceTemplate).withProperty(PRICE,
-                product -> decimalFormat.format(product.getPrice()) + " €"))
-                        .setHeader(getTranslation(PRICE)).setKey(PRICE)
+                this::formatPrice)).setHeader(getTranslation(PRICE))
+                        .setKey(PRICE)
                         .setComparator(Comparator.comparing(Product::getPrice))
                         .setFlexGrow(3);
 
@@ -96,6 +91,13 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
         getDataCommunicator().refresh(product);
     }
 
+    private String formatPrice(Product product) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(getLocale());
+        numberFormat.setMaximumFractionDigits(2);
+        numberFormat.setMinimumFractionDigits(2);
+        return numberFormat.format(product.getPrice()) + " €";
+    }
+
     private String formatCategories(Product product) {
         if (product.getCategory() == null || product.getCategory().isEmpty()) {
             return "";
@@ -109,5 +111,6 @@ public class ProductGrid extends Grid<Product> implements LocaleChangeObserver {
     public void localeChange(LocaleChangeEvent event) {
         getColumns().forEach(
                 column -> column.setHeader(getTranslation(column.getKey())));
+        getDataProvider().refreshAll();
     }
 }

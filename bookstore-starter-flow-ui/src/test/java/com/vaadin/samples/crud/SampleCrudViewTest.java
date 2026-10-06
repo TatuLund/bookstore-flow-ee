@@ -65,7 +65,7 @@ class SampleCrudViewTest extends AbstractViewTest {
 
         var grid = find(Grid.class).single();
         assertEquals("New Product", test(grid).getCellText(0, 0));
-        assertEquals("10,00 €", test(grid).getLitRendererPropertyValue(0, 1,
+        assertEquals("10.00 €", test(grid).getLitRendererPropertyValue(0, 1,
                 "price", String.class));
         assertEquals("Coming", test(grid).getLitRendererPropertyValue(0, 2,
                 "availability", String.class));
