@@ -33,6 +33,8 @@ These tips are not specific to CDI or JavaEE
 - [How to Test Custom Vaadin Components in Isolation](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Test-Custom-Vaadin-Components-in-Isolation)
 - [How to Use EAR and WAR Builds for Vaadin Production and Development](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Use-EAR-and-WAR-Builds-for-Vaadin-Production-and-Development) 
 - [How to Run Vaadin E2E Tests with WildFly in a Java EE CDI Project](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Run-Vaadin-E2E-Tests-with-WildFly-in-a-Java-EE-CDI-Project) 
+- [How to Run a Vaadin Validation Build with GitHub Actions and WildFly](https://github.com/TatuLund/bookstore-flow-ee/wiki/How-to-Run-a-Vaadin-Validation-Build-with-GitHub-Actions-and-WildFly)
+
 
 ## Prerequisites
 
